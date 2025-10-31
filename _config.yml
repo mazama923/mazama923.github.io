@@ -1,8 +1,27 @@
-title: Just the Docs Template
-description: A starter template for a Jeykll site using the Just the Docs theme!
+title: Mon Blog DevOps
+description: Partage d'expériences, POCs et tutoriels DevOps - Docker, Kubernetes, CI/CD
 theme: just-the-docs
 
 url: https://mazama923.github.io
 
 aux_links:
-  Template Repository: https://github.com/just-the-docs/just-the-docs-template
+  GitHub: https://github.com/mazama923
+
+collections:
+  posts:
+    output: true
+    permalink: /blog/:year/:month/:day/:title/
+
+permalink: /blog/:year/:month/:day/:title/
+
+paginate: 10
+paginate_path: "/blog/page:num/"
+
+nav_enabled: true
+nav_sort: case_insensitive
+
+footer_content: "Copyright &copy; 2024 Mon Blog DevOps. Propulsé par Jekyll et Just the Docs."
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
