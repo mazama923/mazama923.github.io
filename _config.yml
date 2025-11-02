@@ -20,8 +20,6 @@ paginate_path: "/blog/page:num/"
 nav_enabled: true
 nav_sort: case_insensitive
 
-footer_content: "Copyright &copy; 2024 Mon Blog DevOps. Propulsé par Jekyll et Just the Docs."
-
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
