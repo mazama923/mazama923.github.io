@@ -40,6 +40,8 @@ Je partagerai ici comment j'ai mis en place certains outils ainsi que des retour
 
 **{{ post.date | date: "%d %B %Y" }}** - {{ post.categories | join: ", " }}
 
+---
+
 {{ post.excerpt }}
 
 [Lire la suite →]({{ post.url }})
