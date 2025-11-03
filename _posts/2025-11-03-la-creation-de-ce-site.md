@@ -8,9 +8,9 @@ tags: [devops, blog]
 
 ## La création de ce site
 
-Bienvenue déjà, si tu es nouveau sur ce site !
+Bienvenue déjà, si tu es nouveau !
 
-Ceci est mon premier post sur mon site. Je voudrais ici expliquer pourquoi j'ai créé ce site.
+Ceci est mon premier post. Je voudrais ici expliquer pourquoi j'ai créé ce site.
 
 ### Qui suis-je ?
 
@@ -28,6 +28,6 @@ Toujours sur le chemin de la simplicité, j'utilise le thème de [**Just the Doc
 
 ---
 
-Donc voilà ! Merci d'avoir lu ces quelques lignes et bonne visite sur ce site. N'hésite pas à revenir régulièrement pour voir ce que je partage.
+Donc voilà ! Merci d'avoir lu ces quelques lignes et bonne visite. N'hésite pas à revenir régulièrement pour voir ce que je partage.
 
 **Bon DevOps à tous !** 🚀

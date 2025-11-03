@@ -2,19 +2,21 @@
 title: Mon passage d'Azerty à Qwerty
 layout: default
 parent: 🔭 Exploration
+categories: [Exploration]
+tags: [clavier, qwerty, azerty, devops]
 ---
 
-## Un peu de contexte
+## Un peu de contexte 🤔
 
 J'ai toujours travaillé sur macOS et oui, je suis un DevOps soja.
 
-Donc tu me vois peut-être arriver, mais le problème, c'est Windows :)
+Donc tu me vois peut-être arriver, mais le problème, c'est Windows 😁
 
 Bon ok, pas tout à fait, ça fait 3 ans que je travaille sur Windows chez mon employeur.
 
 Et en plus du switch d'interface je dois aussi switcher de clavier.
 
-## Le problème
+## Le problème 🧐
 
 Les claviers entre Windows et macOS en Azerty sont complètement différents.
 
@@ -22,17 +24,17 @@ C'est-à-dire que tous les caractères spéciaux sont à des endroits différent
 
 Donc, que ce soit pour l'écriture d'un simple mail ou du dev, je me fais toujours avoir par ma mémoire musculaire.
 
-## La solution
+## La solution 💡
 
 Cela fait presque 1 an que j'ai changé pour du Qwerty.
 
 Plus précisément, un clavier US international.
 
-Avant de crier au scandale "bouuu il utilise du US international, c'est pas du vrai Qwerty".
+Avant de crier au scandale "bouuu il utilise du US international, c'est pas du vrai Qwerty 😱".
 
-Je t'éxplique pourquoi.
+Je t'explique pourquoi.
 
-## Ce qui a motivé mon choix
+## Ce qui a motivé mon choix ✨
 
 Les dead key !
 
@@ -53,7 +55,7 @@ Mais bien pour le fait que le Qwerty Windows est le même que le Qwerty macOS.
 
 Ce monde n'est pas parfait mais c'est beaucoup mieux. Une vraie charge mentale en moins sur "où est ma touche".
 
-## Et les defauts ?
+## Et les defauts ? ⚠️
 
  Bon là, je vous ai vendu du rêve.
 
