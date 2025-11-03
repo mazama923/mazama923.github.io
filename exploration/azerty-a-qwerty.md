@@ -1,5 +1,7 @@
 ---
 title: Mon passage d'Azerty à Qwerty
+layout: default
+parent: 🔭 Exploration
 ---
 
 ## Un peu de contexte
