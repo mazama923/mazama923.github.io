@@ -4,7 +4,7 @@ layout: home
 nav_order: 1
 ---
 
-# 🚀 Bienvenue sur mon Blog DevOps
+# 🚀 Bienvenue sur mon Blog
 
 ## 👋 Qui suis-je ?
 
