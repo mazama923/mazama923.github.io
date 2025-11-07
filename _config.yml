@@ -20,6 +20,13 @@ paginate_path: "/blog/page:num/"
 nav_enabled: true
 nav_sort: case_insensitive
 
+callouts:
+  note:
+    title: Note
+    color: purple
+
+enable_copy_code_button: true
+
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
