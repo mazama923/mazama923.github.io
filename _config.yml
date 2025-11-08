@@ -30,3 +30,7 @@ enable_copy_code_button: true
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+
+# Google Analytics Tracking
+ga_tracking: G-PF6WHHLCHD
+ga_tracking_anonymize_ip: true # Use GDPR compliant Google Analytics settings
