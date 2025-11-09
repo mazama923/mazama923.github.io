@@ -30,6 +30,7 @@ enable_copy_code_button: true
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+  - jekyll-paginate
   - jekyll-sitemap
 
 # Google Analytics Tracking
