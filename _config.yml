@@ -4,6 +4,8 @@ theme: just-the-docs
 
 url: https://mazama923.github.io
 
+favicon_ico: "/assets/images/favicon.ico"
+
 aux_links:
   GitHub: https://github.com/mazama923
 

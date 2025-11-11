@@ -8,7 +8,7 @@ nav_order: 1
 
 ## 👋 Qui suis-je ?
 
-Je suis passionné de **DevOps** et je partage ici mes expériences, mes POCs (Proof of Concept) et mes apprentissages dans le monde de l'infrastructure moderne.
+| Je suis passionné de **DevOps** et je partage ici mes expériences, mes POCs (Proof of Concept) et mes apprentissages dans le monde de l'infrastructure moderne. | ![my memoji](./assets/images/memoji.avif) |
 
 ## 🎯 Ce que vous trouverez ici
 
