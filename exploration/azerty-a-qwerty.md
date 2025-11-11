@@ -4,6 +4,7 @@ layout: default
 parent: 🔭 Exploration
 categories: [Exploration]
 tags: [clavier, qwerty, azerty, devops]
+last_modified_date: Nov 3 2025
 ---
 
 ## Un peu de contexte 🤔

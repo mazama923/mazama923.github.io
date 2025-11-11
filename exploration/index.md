@@ -2,6 +2,7 @@
 title: 🔭 Exploration
 layout: default
 nav_order: 2
+last_modified_date: Nov 3 2025
 ---
 
 ## 🔭 Exploration

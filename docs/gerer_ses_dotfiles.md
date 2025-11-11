@@ -4,6 +4,7 @@ layout: default
 parent: 📖 Presque une doc
 categories: [docs]
 tags: [env, dotfiles]
+last_modified_date: Nov 7 2025
 ---
 
 Bon avant, je gérais pas mes dotfiles... mais ça, c'était avant.
