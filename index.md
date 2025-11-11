@@ -2,6 +2,7 @@
 title: Home
 layout: home
 nav_order: 1
+last_modified_date: Nov 12 2025
 ---
 
 # 🚀 Bienvenue sur mon Blog
