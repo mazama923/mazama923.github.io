@@ -28,12 +28,10 @@ De plus, sur ma machine pro j'utilise WSL2 et je me retrouve régulièrement ave
 
 ## Donc, quels sont mes besoins ? 🧐
 
-- Leger et rapide
 - Léger et rapide
 - Utilisable sur macOS et Windows
 - Maîtrise sur les mises à jour
 - LSP et autocomplétion
-- Sauvegarde de config sur git
 - Sauvegarde de config sur Git
 - Permet de rester tout le temps dans le terminal pour accélérer mon workflow
 
@@ -82,7 +80,6 @@ Essayer les Vim motions, c'est les adopter : le gain en productivité est énorm
 ### Retour d'expérience 📝
 
 Je ne retournerai pas en arriere !
-Je ne retournerai pas en arrière !
 
 Le fait d'avoir le contrôle total sur mon IDE est un vrai plus.
 De plus, les Vim motions sont bien mieux intégrées qu'une simple extension dans VSCode.
