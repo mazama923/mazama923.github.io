@@ -1,6 +1,7 @@
 ---
 title: 🔭 Exploration
 layout: default
+date: 2025-11-03
 nav_order: 2
 last_modified_date: Nov 3 2025
 ---

@@ -1,6 +1,7 @@
 ---
 title: 📖 Presque une doc
 layout: default
+date: 2025-11-07
 nav_order: 2
 last_modified_date: Nov 7 2025
 ---

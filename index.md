@@ -1,6 +1,7 @@
 ---
 title: Home
 layout: home
+date: 2025-11-12
 nav_order: 1
 last_modified_date: Nov 12 2025
 ---

@@ -4,6 +4,7 @@ title: "La création de ce site"
 date: 2025-11-03
 categories: [general, introduction]
 tags: [devops, blog]
+last_modified_date: Nov 3 2025
 ---
 
 ## La création de ce site

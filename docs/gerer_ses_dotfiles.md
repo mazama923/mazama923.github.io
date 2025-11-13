@@ -1,6 +1,7 @@
 ---
 title: Gérer ses dotfiles
 layout: default
+date: 2025-11-07
 parent: 📖 Presque une doc
 categories: [docs]
 tags: [env, dotfiles]

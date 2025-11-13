@@ -1,6 +1,7 @@
 ---
 title: Mon passage d'Azerty à Qwerty
 layout: default
+date: 2025-11-03
 parent: 🔭 Exploration
 categories: [Exploration]
 tags: [clavier, qwerty, azerty, devops]

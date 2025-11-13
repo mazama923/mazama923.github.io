@@ -1,6 +1,7 @@
 ---
 title: 📬 La poste
 layout: default
+date: 2025-11-07
 nav_order: 3
 last_modified_date: Nov 7 2025
 ---
