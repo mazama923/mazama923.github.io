@@ -1,96 +1,82 @@
 ---
-title: Mon passage de VSCode a Neovim
+title: Mon passage de VSCode à Neovim
 layout: default
 date: 2025-11-13
 parent: 🔭 Exploration
 categories: [Exploration]
 tags: [ide, neovim, vi, vim, devops]
-last_modified_date: Nov 13 2025
+last_modified_date: Nov 16 2025
 ---
 
-## Mon expérience avec les IDEs classiques 🤔
+# Mon passage de VSCode à Neovim 🚀
 
-J'ai longtemps utilisé VSCode.
+## Pourquoi changer d’IDE ? Un déclic inattendu ⚡
 
-Soyons honnêtes : c'est un très bon IDE.
+Un matin, j’ouvre VSCode sur mon repo préféré. Dix secondes… vingt secondes… *toujours* pas prêt.  
+C’est là que j’ai eu le déclic : est-ce vraiment normal de démarrer sa journée avec autant d’attente ? Moi qui optimise chaque commande, chaque déploiement, il était temps de trouver **un outil qui me ressemblait**.
 
-Il est très complet, personnalisable, et possède une énorme bibliothèque d'extensions.
+![Open VSCode](/assets/images/exploration/vscode_to_neovim/open_vscode.gif)
 
-Il répond à la plupart de mes besoins, surtout en tant que DevOps où l'on peut changer de langage et de techno très souvent.
+## VSCode : une belle histoire, mais…
 
-Sa grande force, c'est qu'il a une extension pour chaque besoin sans avoir besoin d'un IDE différent par langage. Et avouons-le, c'est quand même plus sexy que Notepad.
+VSCode, c’est le couteau suisse moderne : extensions à gogo, config modulable, et une communauté immense.  
+Mais à force, j’ai fini par me perdre dans les mises à jour, synchronisations à moitié faites entre pro et perso, et des démarrages de plus en plus lents — surtout sous WSL2.  
+Et puis, on va se l’avouer : un DevOps qui ne sauvegarde pas sa config dans Git, c’est comme un chef sans recette.  
 
-Mais, car il y a un mais, ce n'est pas le plus rapide et il est difficile de partager sa config ou même de la sauvegarder sur Git.
+## Ce que je recherche vraiment 🔍
 
-Bien sûr, il a la sync avec le compte Microsoft, mais si je veux séparer mon pro du perso en partageant les mêmes extensions, c'est pas possible.
+- Légèreté et rapidité
+- Utilisable partout (macOS, Windows, WSL)
+- Maîtrise des mises à jour
+- LSP et autocomplétion au top
+- Config versionnée sur Git
+- Workflow 100 % terminal
 
-De plus, sur ma machine pro j'utilise WSL2 et je me retrouve régulièrement avec des mises à jour lors de `code .`, ce qui ralentit grandement mon workflow car je switch souvent entre des repos différents.
+## À la recherche du nouvel IDE ✨
 
-## Donc, quels sont mes besoins ? 🧐
-
-- Léger et rapide
-- Utilisable sur macOS et Windows
-- Maîtrise sur les mises à jour
-- LSP et autocomplétion
-- Sauvegarde de config sur Git
-- Permet de rester tout le temps dans le terminal pour accélérer mon workflow
-
-## Mon exploration des IDEs 🧑‍💻
-
-J'ai testé plusieurs IDEs pendant 2 à 3 jours pour me faire un avis.
-
-Une liste non exhaustive :
+J’ai fait le tour : zed, emacs, puis… Neovim.
 
 | IDE | avis |
 |:---:|:----:|
-| zed | Bien plus rapide que VSCode mais très jeune encore et demande de sortir de mon terminal |
-| emacs | Trop lent sur mon Mac et je n'apprécie pas les raccourcis |
-| neovim | Attire grandement mon attention |
+| zed | Rapide, mais trop jeune et difficile à intégrer au terminal |
+| emacs | Lent sur Mac et raccourcis peu intuitifs |
+| neovim | Le coup de foudre : instantané, configurable et ultra-modulaire |
 
-## Mon choix : Neovim ! 🚀
 
-Plus précisément Neovim avec LazyVim comme config de base, car ce qu'apporte LazyVim simplifie grandement la configuration.
+## Pourquoi Neovim (et LazyVim) m’ont convaincu 🕵️‍♂️
 
-Pour ceux qui souhaitent ne plus prendre de douche, on peut configurer Neovim de zéro, mais cela va demander beaucoup de temps pour peu d'apport.
+Je voulais une config prête à l’emploi, mais évolutive. LazyVim, AstroNvim ou NvChad : ces frameworks font gagner un temps fou et offrent déjà tout ce qu’il faut — LSP, ai, lint, autocomplétion.
 
-Je conseille plutôt de passer par des configs préfaites comme [LazyVim](https://www.lazyvim.org/), [AstroNvim](https://astronvim.com/) ou [NvChad](https://nvchad.com/).
+> “J’ai ajouté Telescope pour la recherche de fichiers, Treesitter pour la coloration syntaxique, Mason pour la gestion des LSP. Trois plugins et je retrouve 80 % des fonctionnalités de VSCode, mais en un éclair !”
 
-Cela permet de se concentrer sur le plus important et que l'outil réponde au maximum à vos besoins.
+Et surtout, tout est versionné sur Git : je peux partager ma config pro/perso sans galérer.
 
-Une fois plus à l'aise, vous pourrez toujours modifier la config.
+## Le workflow DevOps rêvé 🎯
 
-Donc, pourquoi Neovim ?
+Tout dans le terminal. Ouverture instantanée.  
+Je jongle entre des dizaines de projets par jour : Neovim démarre à la vitesse de l’éclair, jamais de ralentissement.
 
-Déjà, il a une grosse communauté derrière lui.
-Utilisable sur macOS et Windows, il ne casse pas mon workflow : tout se passe dans mon terminal.
+Et **les Vim motions** : sur les serveurs, il n’y a que vi/vim. Les maîtriser, c’est un gain de productivité colossal.
 
-Il a de multiples préconfigs, ce qui fait gagner énormément de temps.
-LazyVim par exemple a déjà tout ce qu'il faut pour commencer.
-De plus, avec LazyVim, l'implémentation de LSP, AI, lint est beaucoup plus simple : les configs sont déjà faites.
-Cela permet de rester dans les standards et de ne pas se casser les dents à chaque mise à jour.
+![Kachow](/assets/images/exploration/vscode_to_neovim/Mcqueen.gif)
 
-Je vous invite grandement à jeter un œil à [LazyVim](https://www.lazyvim.org/) (je n'ai pas d'actions chez eux). Mais le projet est activement maintenu et fait partie des grands contributeurs de l'écosystème Neovim.
+## Et l’IA ? 😎
 
-Une autre force de Neovim, c'est qu'il s'ouvre en une fraction de seconde, ce qui est vraiment agréable tout au long de la journée.
-Durant une journée, je dois facilement ouvrir une cinquantaine de fois différents repos/projets, ce qui me permet de gagner en productivité.
+Pas de panique : Copilot, Codeium ou codecompanion s’intègrent déjà très bien.  
+Aujourd’hui, j’utilise codecompanion pour Copilot, et tout fonctionne aussi bien que sur VSCode.
 
-Mais aussi, retrouver les Vim motions comme sur les serveurs de prod : dans la plupart des sociétés, seuls vi ou vim sont installés, donc connaître les Vim motions est super important pour moi.
-Essayer les Vim motions, c'est les adopter : le gain en productivité est énorme.
+## Ma config pour commencer vite 🚦
 
-### Retour d'expérience 📝
+Je mets à dispo ma config LazyVim [GitHub](https://github.com/mazama923/lazyvim) — clone, `:Lazy sync` et c’est parti.
 
-Je ne retournerai pas en arriere !
+![Capture de mon neovim](/assets/images/exploration/vscode_to_neovim/my_neovim.avif)
 
-Le fait d'avoir le contrôle total sur mon IDE est un vrai plus.
-De plus, les Vim motions sont bien mieux intégrées qu'une simple extension dans VSCode.
-C'est vraiment devenu pour moi un outil indispensable.
+## Conclusion : adoptez la vitesse et l’efficacité 🔥
 
-Et pour les plus frileux sur la perte des outils IA, vous serez ravis : c'est exactement pareil. En ce moment j'utilise codecompanion pour le brancher avec Copilot, mais étant donné que ces outils bougent énormément, cela peut ne plus être le cas dans 1 jour, 1 mois ou même 1 an.
+Franchement, repasser à VSCode ? Impossible.  
+Gagner du temps sur chaque commande, contrôler totalement mon environnement… Neovim est devenu indispensable à mon workflow DevOps.
 
-Voici ma configuration [LazyVim](https://github.com/mazama923/lazyvim) que j'utilise actuellement, vous pouvez la retrouver sur mon GitHub.
-
----
-
-Merci de m'avoir lu jusqu'au bout !
+Et si tu veux tenter l’aventure, commence avec une préconfig, bidouille à ton rythme, et découvre ce que ça change au jour le jour.
 
 **Bon DevOps à tous !** 🚀
+
