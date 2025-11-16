@@ -3,6 +3,7 @@ description: Partage d'expériences, POCs et tutoriels DevOps - Docker, Kubernet
 theme: just-the-docs
 
 url: https://mazama923.github.io
+baseurl: ""
 
 favicon_ico: "/assets/images/favicon.ico"
 
@@ -33,7 +34,6 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-paginate
-  - jekyll-sitemap
 
 # Google Analytics Tracking
 ga_tracking: G-PF6WHHLCHD
