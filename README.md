@@ -73,10 +73,3 @@ Pour la personnalisation du thème : consulte la [doc Just the Docs](https://j
 
 > Si tu utilises ce template ou trouves des astuces : je serais ravi d’échanger !
 
----
-
-## 📝 Licence
-
-MIT License
-
----
