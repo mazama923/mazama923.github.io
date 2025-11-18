@@ -31,4 +31,4 @@ Toujours sur le chemin de la simplicité, j'utilise le thème de [**Just the Doc
 
 Donc voilà ! Merci d'avoir lu ces quelques lignes et bonne visite. N'hésite pas à revenir régulièrement pour voir ce que je partage.
 
-**Bon DevOps à tous !** 🚀
+**Ka-chow** 🚀

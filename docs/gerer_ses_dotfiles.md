@@ -129,4 +129,4 @@ Si tu veux t'inspirer, voici mon repo de [dotfiles](https://github.com/mazama923
 Donc voilà, vous savez tout !
 Cette méthode marche bien pour moi. Si tu ne sauvegardes pas encore tes fichiers de config, teste STOW : tu gagneras beaucoup de temps au prochain reset de ta machine.
 
-**Bon DevOps à tous !** 🚀
+**Ka-chow** 🚀

@@ -78,5 +78,5 @@ Gagner du temps sur chaque commande, contrôler totalement mon environnement… 
 
 Et si tu veux tenter l’aventure, commence avec une préconfig, bidouille à ton rythme, et découvre ce que ça change au jour le jour.
 
-**Bon DevOps à tous !** 🚀
+**Ka-chow** 🚀
 

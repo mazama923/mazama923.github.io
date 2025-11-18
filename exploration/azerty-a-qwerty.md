@@ -77,4 +77,4 @@ Donc voilà, vous savez tout ! Pour moi, cette perte de vitesse de frappe est ac
 
 Si vous êtes dans le même cas que le mien, n'hésitez pas à franchir le pas et tester !
 
-**Bon DevOps à tous !** 🚀
+**Ka-chow** 🚀
