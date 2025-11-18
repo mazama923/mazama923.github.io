@@ -7,6 +7,8 @@ tags: [git, ssh, keychain, macos, debug]
 last_modified_date: Nov 18 2025
 ---
 
+## Could not read from remote repository
+
 ## Problème
 
 En travaillant sur macOS, je me suis retrouvé face à l'erreur suivante en tentant de push/pull sur un dépôt GitHub :
@@ -33,19 +35,19 @@ Sur macOS, l’agent SSH peut “oublier” de charger automatiquement la clé p
 
 Rechargez la clé dans l’agent SSH avec :
 
-```fish
+```bash
 ssh-add --apple-use-keychain ~/.ssh/id_rsa_perso
 ```
 
 Vérifiez avec :
 
-```fish
+```bash
 ssh-add -l
 ```
 
 Automatiser à chaque ouverture de terminal (zsh/bash/fish) :
 
-```fish
+```bash
 ssh-add --apple-use-keychain ~/.ssh/id_rsa_perso 2>/dev/null
 ```
 
@@ -58,7 +60,7 @@ ssh-add --apple-use-keychain ~/.ssh/id_rsa_perso 2>/dev/null
 
 ## Mémo rapide (snippet)
 
-```fish
+```bash
 ssh-add --apple-use-keychain ~/.ssh/id_rsa_perso
 git push # ça fonctionne !
 ```
