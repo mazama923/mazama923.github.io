@@ -3,7 +3,7 @@ title: Home
 layout: home
 date: 2025-11-12
 nav_order: 1
-last_modified_date: Nov 12 2025
+last_modified_date: Nov 18 2025
 ---
 
 # 🚀 Bienvenue sur mon Blog
@@ -41,11 +41,5 @@ Je partagerai ici comment j'ai mis en place certains outils ainsi que des retour
 ### [{{ post.title }}]({{ post.url }})
 
 **{{ post.date | date: "%d %B %Y" }}** - {{ post.categories | join: ", " }}
-
----
-
-{{ post.excerpt }}
-
-[Lire la suite →]({{ post.url }})
 
 {% endfor %}
