@@ -8,8 +8,6 @@ tags: [ide, neovim, vi, vim, devops]
 last_modified_date: Nov 16 2025
 ---
 
-# Mon passage de VSCode à Neovim 🚀
-
 ## Pourquoi changer d’IDE ? Un déclic inattendu ⚡
 
 Un matin, j’ouvre VSCode sur mon repo préféré. Dix secondes… vingt secondes… *toujours* pas prêt.  
@@ -73,7 +71,7 @@ Je mets à dispo ma config LazyVim [GitHub](https://github.com/mazama923/lazyvim
 
 ## Conclusion : adoptez la vitesse et l’efficacité 🔥
 
-Franchement, repasser à VSCode ? Impossible.  
+Franchement, repasser à VSCode ? Impossible.
 Gagner du temps sur chaque commande, contrôler totalement mon environnement… Neovim est devenu indispensable à mon workflow DevOps.
 
 Et si tu veux tenter l’aventure, commence avec une préconfig, bidouille à ton rythme, et découvre ce que ça change au jour le jour.
