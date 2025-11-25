@@ -10,6 +10,11 @@ favicon_ico: "/assets/images/favicon.ico"
 aux_links:
   GitHub: https://github.com/mazama923
 
+aux_links_new_tab: true
+
+search:
+    focus_shortcut_key: 'k'
+
 collections:
   posts:
     output: true
