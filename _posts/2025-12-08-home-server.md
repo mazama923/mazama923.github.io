@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "La création de ce site"
+title: "Pourquoi un Home Server ?"
 date: 2025-12-08
 categories: [homelab, DIY]
 tags: [lab, home server]
@@ -62,13 +62,13 @@ Cela permet à toute la maison de profiter des services du serveur. Tout le mond
 
 Le packaging est sympa. Petite astuce bien pensée : le carton qui protège la carte peut se transformer en table de benchmark pour vos tests ou prototypages.
 
-![Package ZimaBoard](/assets/images/exploration/posts/package_zimaboard2.avif)
+![Package ZimaBoard](/assets/images/posts/package_zimaboard2.avif)
 
 La carte est livrée avec l'OS préinstallé, un câble double SATA et des adaptateurs secteur pour tous les continents. Il y a un petit ventilateur inclus, mais personnellement, je n'ai pas vu de différence de température avec ou sans lors de mes tests basiques. Je l'ai laissé car il est totalement inaudible.
 
 Le plus intéressant reste la connectique de la carte elle-même :
 
-![ZimaBoard](/assets/images/exploration/posts/zimaboard2.avif)
+![ZimaBoard](/assets/images/posts/zimaboard2.avif)
 
 On y retrouve un port Display, 2 ports LAN 2.5 GbE (parfait pour du routing) et 2 ports USB 3.0.
 
@@ -80,7 +80,7 @@ Ce NVMe est dédié à mes configurations Docker, aux volumes persistants et au 
 
 Voici à quoi ressemble l'installation finale, après avoir joué au LEGO pour tout faire rentrer dans le placard technique :
 
-![Le placard](/assets/images/exploration/posts/le_placard.avif)
+![Le placard](/assets/images/posts/le_placard.avif)
 
 L'organisation n'est pas encore optimale. Je pense par la suite ajouter un autre NVMe ou créer un stockage hybride combiné à des disques SATA. Mais pour le moment, cela répond totalement à mon besoin.
 
