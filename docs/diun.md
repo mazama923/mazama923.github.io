@@ -5,7 +5,7 @@ date: 2026-01-01
 parent: 📖 Presque une doc
 categories: [docs]
 tags: [docker, image, upgrade]
-last_modified_date: Dec 1 2026
+last_modified_date: Jan 1 2026
 ---
 
 ## Maintenir ses images Docker à jour
