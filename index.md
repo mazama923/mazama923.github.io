@@ -31,7 +31,7 @@ Je partagerai ici comment j'ai mis en place certains outils ainsi que des retour
 - ☸️ **Orchestration** : Kubernetes, Helm
 - 🏗️ **IaC** : Ansible
 - 🔄 **CI/CD** : GitLab CI, GitHub Actions
-- 📊 **Monitoring** : Prometheus, Grafana
+- 📊 **Monitoring** : Grafana
 - 🧰 **Tooling en général** : Des outils qui m'aident au quotidien
 
 ## 📚 Mes posts récents
