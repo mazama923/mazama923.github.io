@@ -2,28 +2,24 @@
 layout: null
 ---
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   {% for page in site.pages %}
   {% unless page.url contains 'assets' or page.url contains '404' %}
   <url>
-    <loc>{{ site.url }}{{ page.url }}</loc>
+    <loc>{{ site.url }}{{ page.url | relative_url }}</loc>
     {% if page.last_modified_date %}
     <lastmod>{{ page.last_modified_date | date_to_xmlschema }}</lastmod>
     {% elsif page.date %}
     <lastmod>{{ page.date | date_to_xmlschema }}</lastmod>
     {% endif %}
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
   {% endunless %}
   {% endfor %}
   
   {% for post in site.posts %}
   <url>
-    <loc>{{ site.url }}{{ post.url }}</loc>
+    <loc>{{ site.url }}{{ post.url | relative_url }}</loc>
     <lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
   </url>
   {% endfor %}
   
@@ -31,14 +27,12 @@ layout: null
   {% if collection.label != 'posts' %}
   {% for doc in collection.docs %}
   <url>
-    <loc>{{ site.url }}{{ doc.url }}</loc>
+    <loc>{{ site.url }}{{ doc.url | relative_url }}</loc>
     {% if doc.last_modified_date %}
     <lastmod>{{ doc.last_modified_date | date_to_xmlschema }}</lastmod>
     {% elsif doc.date %}
     <lastmod>{{ doc.date | date_to_xmlschema }}</lastmod>
     {% endif %}
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
   </url>
   {% endfor %}
   {% endif %}
