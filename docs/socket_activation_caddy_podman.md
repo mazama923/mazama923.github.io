@@ -157,6 +157,7 @@ http:// {
 
 # Filtre pour autoriser uniquement le réseau local
 (lan_only) {
+    @allowed remote_ip private_ranges 2001:861:514c:dd50::/64
     @denied not remote_ip private_ranges 2001:861:514c:dd50::/64
     abort @denied
 }
@@ -266,6 +267,7 @@ Si vous avez une IPv6 préfixée par votre box comme moi, ajoutez votre réseau 
 
 ```caddyfile
 (lan_only) {
+    @allowed remote_ip private_ranges 2001:861:514c:dd50::/64
     @denied not remote_ip private_ranges 2001:861:514c:dd50::/64
     abort @denied
 }
