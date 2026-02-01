@@ -28,6 +28,7 @@ Lorsqu'on utilise **Caddy dans un conteneur Podman rootless**, on rencontre un p
 ```
 
 **Conséquences** :
+
 - Impossible de filtrer les accès par IP (LAN vs Internet)
 - Les logs ne montrent pas les vraies IPs des visiteurs
 - Les directives Caddy comme `remote_ip` ne fonctionnent pas correctement
@@ -85,6 +86,7 @@ WantedBy=sockets.target
 ```
 
 **Explication** :
+
 - `BindIPv6Only=both` : Support IPv4 et IPv6
 - Les sockets sont mappés sur des file descriptors (fd/3, fd/4, fdgram/5)
 - Systemd écoute sur les ports, pas Podman
@@ -114,6 +116,7 @@ Volume=/votre_path/config:/config:Z
 ```
 
 **Points clés** :
+
 - **Pas de `PublishPort`** : Les ports sont gérés par le socket systemd
 - `ReadOnly=true` : Sécurité renforcée
 - `Notify=true` : Support de la notification systemd
@@ -176,6 +179,7 @@ jellyfin.votre-domaine.duckdns.org {
 ```
 
 **Explication des file descriptors** ([source](https://github.com/eriksjolund/podman-caddy-socket-activation)) :
+
 - `fd/3` : 1er `ListenStream` → Port 80 TCP
 - `fd/4` : 2ème `ListenStream` → Port 443 TCP
 - `fdgram/5` : 1er `ListenDatagram` → Port 443 UDP (HTTP/3)
@@ -221,6 +225,7 @@ votre-domaine.duckdns.org {
 ```
 
 Recharger :
+
 ```bash
 systemctl --user reload caddy.service
 ```
@@ -271,14 +276,18 @@ Remplacez `2001:861:514c:dd50::/64` par votre propre préfixe IPv6.
 ## Avantages de cette solution
 
 ✅ **IP source préservée** → Filtrage IP fonctionnel
+
 ✅ **Rootless** → Pas besoin de droits root
+
 ✅ **Démarrage à la demande** → Économie de ressources
+
 ✅ **Sécurité renforcée** → ReadOnly, NoNewPrivileges
+
 ✅ **Gestion systemd** → Logs, auto-restart, persistence au boot
 
 ## Conclusion
 
-La socket activation est une solution professionnelle pour utiliser Caddy en Podman rootless tout en préservant l'IP source. C'est plus complexe qu'un simple `PublishPort`, mais c'est une configuration robuste, sécurisée et maintenable pour un serveur domestique ou de production.
+La socket activation est une solution pour utiliser Caddy en Podman rootless tout en préservant l'IP source. C'est plus complexe qu'un simple `PublishPort`, mais c'est une configuration robuste, sécurisée et maintenable pour un serveur domestique ou de production.
 
 ---
 
