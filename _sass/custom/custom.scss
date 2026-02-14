@@ -1,0 +1,99 @@
+// 1) Variables Catppuccin Latte
+$ctp-rosewater: #f2d5cf;
+$ctp-flamingo : #eebebe;
+$ctp-pink     : #f4b8e4;
+$ctp-mauve    : #8839ef;
+$ctp-red      : #d20f39;
+$ctp-maroon   : #e64553;
+$ctp-peach    : #fe640b;
+$ctp-yellow   : #df8e1d;
+$ctp-green    : #40a02b;
+$ctp-teal     : #179299;
+$ctp-sky      : #04a5e5;
+$ctp-sapphire : #209fb5;
+$ctp-blue     : #1e66f5;
+$ctp-lavender : #7287fd;
+$ctp-text     : #4c4f69;
+$ctp-base     : #eff1f5;
+$ctp-mantle   : #e6e9ef;
+$ctp-crust    : #dce0e8;
+$ctp-surface0 : #ccd0da;
+
+// 2) Charger la police OpenDyslexic
+@import "../css/opendyslexic.css";
+
+body {
+  font-family: "OpenDyslexic", sans-serif !important;
+}
+
+// 3) Couleurs principales Just the Docs (Catppuccin Latte)
+$body-bg: $ctp-base;
+$text-color: $ctp-text;
+$border-color: $ctp-surface0;
+
+// Liens
+$link-color: $ctp-blue;
+$link-color-hover: darken($ctp-blue, 10);
+$accent-color: $ctp-blue;
+
+// Sidebar / menu
+$sidenav-bg: $ctp-mantle;
+$sidenav-active-bg: $ctp-crust;
+$sidenav-active-border: $ctp-blue;
+
+// Boutons
+$btn-bg: $ctp-blue;
+$btn-text: $ctp-base;
+$btn-hover-bg: darken($ctp-blue, 10);
+
+// Header
+.site-header {
+  background-color: $ctp-mantle;
+  border-bottom: 1px solid $ctp-surface0;
+}
+
+// Main content
+.site-main {
+  background-color: $ctp-base;
+  color: $ctp-text;
+}
+
+// Blocs de code + syntaxe
+.code-wrapper {
+  background-color: $ctp-base;
+  border: 1px solid $ctp-surface0;
+  border-radius: 0.5rem;
+}
+
+code {
+  font-family: "OpenDyslexic", monospace !important;
+}
+
+// Header + titre
+.site-header-title {
+  color: $ctp-text;
+}
+
+// Navigation
+.site-nav {
+  background-color: $ctp-mantle;
+}
+
+// Sidebar
+.sidebar {
+  background-color: $ctp-mantle;
+}
+
+// Table of contents
+.toc {
+  background-color: $ctp-mantle;
+}
+
+// Liens dans le contenu
+.site-main a {
+  color: $ctp-blue;
+}
+
+.site-main a:hover {
+  color: darken($ctp-blue, 10);
+}
