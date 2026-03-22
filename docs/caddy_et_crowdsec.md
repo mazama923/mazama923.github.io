@@ -1,5 +1,5 @@
 ---
-title: Sécuriser Caddy avec CrowdSec : Mon setup Podman
+title: "Sécuriser Caddy avec CrowdSec : Mon setup Podman"
 layout: default
 date: 2026-03-22
 parent: 📖 Presque une doc
