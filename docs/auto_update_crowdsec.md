@@ -1,5 +1,5 @@
 ---
-title: "Auto-update CrowdSec : 3 fichiers, zéro maintenance"
+title: Auto-update CrowdSec
 layout: default
 date: 2026-03-22
 parent: 📖 Presque une doc
@@ -10,7 +10,7 @@ last_modified_date: 2026-03-22
 
 # Auto-update CrowdSec : 3 fichiers, zéro maintenance
 
-**Un CrowdSec à jour = un CrowdSec efficace.** Suite de mon [article Caddy+CrowdSec](), voici comment je l'auto-maintient sans y penser.
+**Un CrowdSec à jour = un CrowdSec efficace.** Suite de mon [article Caddy+CrowdSec](https://mazama923.github.io/docs/securiser_caddy_avec_crowdsec/), voici comment je l'auto-maintient sans y penser.
 
 ## Le problème
 
