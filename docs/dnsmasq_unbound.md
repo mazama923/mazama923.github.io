@@ -19,7 +19,7 @@ Comme beaucoup d’entre vous, j’ai un abonnement internet chez Bouygues Telec
 - **Ralentir la navigation** : Les DNS des FAI sont souvent moins performants que des alternatives comme Quad9, Cloudflare ou Google DNS.
 - **Forcer l’IPv6** : La Bbox annonce ses propres DNS IPv6 via les *Router Advertisements* (RA), ce qui contourne mes paramètres locaux.
 
-Pour reprendre le contrôle, j’ai décidé de désactiver le DHCP de ma Bbox et de le remplacer par un serveur local sur un **ZimaBoard** (un mini-PC sous Fedora 40). Ce serveur gère :
+Pour reprendre le contrôle, j’ai décidé de désactiver le DHCP de ma Bbox et de le remplacer par un serveur local sur un **ZimaBoard** (un mini-PC sous Fedora 43). Ce serveur gère :
 
 - **Le DHCPv4 et DHCPv6** : Pour attribuer des adresses IP à tous mes appareils.
 - **Un cache DNS local** : Avec **Unbound**, pour accélérer les requêtes et bloquer les publicités.
@@ -54,7 +54,7 @@ flowchart TD
 DHCP désactivé]:::accent1
     B --> C[ZimaBoard
 192.168.1.1
-Fedora 40]:::accent2
+Fedora 43]:::accent2
     C -->|DHCPv4/DHCPv6| D[Appareils locaux
 Smartphone, PC, etc.]:::accent3
     C -->|DNS-over-TLS| E[Quad9
@@ -85,7 +85,7 @@ Smartphone, PC, etc.]:::accent3
 Avant de commencer, assurez-vous d'avoir :
 
 - Un **mini-PC** (ZimaBoard, Raspberry Pi, ou toute machine sous Linux).
-- **Fedora 40** (ou une distribution Linux récente).
+- **Fedora 43** (ou une distribution Linux récente).
 - Une **box Bouygues** (ou autre FAI, mais les commandes pour désactiver le DHCP/IPv6 peuvent varier).
 - Un **accès SSH** à votre serveur pour copier-coller les commandes.
 - **30 minutes** pour suivre ce guide tranquillement.
@@ -155,42 +155,6 @@ Installons les paquets nécessaires et configurons le pare-feu :
 
 ---
 
-## Étape 0 : Neutralisation de la Bbox
-
-La Bbox force l'annonce de ses DNS IPv6 sur le réseau. Il faut la neutraliser pour éviter les fuites.
-
-1. Depuis l'interface web de la Bbox (`192.168.1.254`), **désactive le serveur DHCP**.
-2. Depuis un terminal sur ton PC, coupe la diffusion IPv6 de la Bbox via son API locale (remplace `TON_MOT_DE_PASSE`) :
-```bash
-curl -k -XPOST https://mabbox.bytel.fr/api/v1/login --data-urlencode "password=TON_MOT_DE_PASSE" -c /tmp/token
-curl -b /tmp/token -XPUT https://mabbox.bytel.fr/api/v1/lan/ip6 -d "enable=0"
-```
-*(Note : Commande à garder de côté car Bouygues peut réactiver l'IPv6 lors d'une grosse mise à jour de la box).*
-
----
-
-## Étape 1 : Configuration de l'IP Statique du serveur
-
-D'après tes informations réseau, ton interface `enp2s0` est rattachée à la connexion nommée **`enp2s0`**. On lui attribue l'IP statique `192.168.1.1` et on force Fedora à utiliser la boucle locale pour ses requêtes DNS.
-
-```bash
-# Configuration de l'IP, masque et passerelle
-sudo nmcli con mod "enp2s0" \
-  ipv4.method manual \
-  ipv4.addresses 192.168.1.1/24 \
-  ipv4.gateway 192.168.1.254
-
-# Forcer l'utilisation du DNS local et ignorer les serveurs du FAI
-sudo nmcli con mod "enp2s0" \
-  ipv4.dns 127.0.0.1 \
-  ipv4.ignore-auto-dns yes
-
-# Appliquer la configuration (peut couper ta session SSH pendant 2 secondes)
-sudo nmcli con up "enp2s0"
-```
-
----
-
 ## Étape 2 : Préparation de Fedora (Réseau & Pare-feu)
 
 Installons les paquets nécessaires et configurons le système pour libérer le port 53, monopolisé par défaut par `systemd-resolved` :
@@ -243,10 +207,6 @@ sudo systemctl restart systemd-resolved
 ⚠️ **Problèmes courants** :
 - Si `systemctl restart systemd-resolved` échoue, vérifiez que le fichier `/etc/resolved.conf.d/unbound.conf` est correct.
 - Si le pare-feu bloque les requêtes, vérifiez les règles avec `sudo firewall-cmd --list-all`.
-
----
-
-## Étape 3 : Configuration de Dnsmasq (DHCPv4 & IPv6)
 
 ---
 
@@ -338,11 +298,6 @@ L'IP Link-Local (`fe80::...`) est générée automatiquement à partir de l'adre
 ⚠️ **Problèmes courants** :
 - Si les clients ne reçoivent pas d'adresse IPv6, vérifiez que le préfixe IPv6 est bien annoncé par la Bbox (même si le DHCPv6 est désactivé).
 - Si les logs de Dnsmasq (`/var/log/dnsmasq.log`) ne s'affichent pas, vérifiez les permissions du fichier ou redémarrez le service avec `sudo systemctl restart dnsmasq`.
-
----
-
-## Étape 4 : Configuration de Unbound (Résolveur DNS, DoT, Tailscale)
-```
 
 ---
 
@@ -500,11 +455,6 @@ J'ai choisi Quad9 pour plusieurs raisons :
 - Si Unbound ne démarre pas, vérifiez la configuration avec `sudo unbound-checkconf`.
 - Si les requêtes DNS échouent, vérifiez que le port 53 n'est pas bloqué par le pare-feu (`sudo firewall-cmd --list-all`).
 - Si les logs (`journalctl -u unbound`) montrent des erreurs DoT, vérifiez que le fichier `ca-bundle.crt` existe bien dans `/etc/pki/tls/certs/`.
-
----
-
-## Étape 5 : Automatisation de l'Adblock (Systemd)
-```
 
 ---
 
@@ -762,10 +712,15 @@ Si le serveur tombe en panne ou si vous devez le débrancher, voici comment rét
 Avec cette stack **Unbound + Dnsmasq**, j'ai repris le contrôle total sur mes DNS et mon DHCP, tout en gardant une solution légère et facile à maintenir. Voici les avantages que j'en retire :
 
 ✅ **Confidentialité** : Plus de logs chez mon FAI, mes requêtes DNS sont chiffrées (DoT).
+
 ✅ **Performance** : Le cache DNS local accélère la navigation.
+
 ✅ **Blocage des pubs** : Moins de trackers et de publicités intrusives.
+
 ✅ **IPv6 natif** : Pas besoin de désactiver l'IPv6 sur mes appareils.
+
 ✅ **Résolution locale** : Mes services Tailscale et locaux sont accessibles sans configuration manuelle.
+
 ✅ **Simplicité** : Tout tient dans quelques fichiers de configuration.
 
 ### Aller plus loin

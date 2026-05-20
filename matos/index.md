@@ -32,7 +32,7 @@ Voici la liste du matériel qui m'accompagne au quotidien pour le travail et les
 
 ## 🧰 Accesoires
 
-~~### Souris Logitech Lift~~
+~~Souris Logitech Lift~~
 
 ### Souris Logitech MX Master 4
 
