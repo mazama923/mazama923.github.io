@@ -45,40 +45,100 @@ J’ai testé plusieurs solutions avant de choisir cette stack :
 
 ## Architecture globale
 
-Voici un schéma simplifié de mon infrastructure :
+Voici l'architecture de mon infrastructure réseau locale :
 
-```mermaid
-flowchart TD
-    A[Internet]:::accent0 --> B[Bbox
-192.168.1.254
-DHCP désactivé]:::accent1
-    B --> C[ZimaBoard
-192.168.1.1
-Fedora 43]:::accent2
-    C -->|DHCPv4/DHCPv6| D[Appareils locaux
-Smartphone, PC, etc.]:::accent3
-    C -->|DNS-over-TLS| E[Quad9
-9.9.9.9]:::accent4
-    C -->|Résolution locale| F[Tailscale
-100.x.x.x]:::accent5
-
-    classDef accent0 fill:#4e79a7,stroke:#3b5b7d,color:white;
-    classDef accent1 fill:#f28e2b,stroke:#d17a25,color:white;
-    classDef accent2 fill:#e15759,stroke:#c04a4c,color:white;
-    classDef accent3 fill:#76b7b2,stroke:#639d97,color:white;
-    classDef accent4 fill:#59a14f,stroke:#4a8841,color:white;
-    classDef accent5 fill:#edc948,stroke:#d1b340,color:black;
+```
+┌───────────────────────────────────────────────────────────────────────────────┐
+│                                                                               │
+│   INTERNET                                                                    │
+│     │                                                                         │
+│     ▼                                                                         │
+│  ┌─────────────┐                     ┌───────────────────────────────────┐    │
+│  │             │                     │                               │    │
+│  │   Bbox      │                     │          ZimaBoard             │    │
+│  │ 192.168.1.254│────────────────────▶│ 192.168.1.1 (Fedora 43)        │    │
+│  │ DHCP: OFF   │                     │                               │    │
+│  │ IPv6: OFF   │                     │  ┌─────────────┐  ┌───────────┐  │    │
+│  └─────────────┘                     │  │ Dnsmasq     │  │ Unbound   │  │    │
+│                                      │  │ - DHCPv4    │  │ - Cache   │  │    │
+│                                      │  │ - DHCPv6    │  │ - DoT     │  │    │
+│                                      │  │ - RA/SLAAC  │  │ - Adblock │  │    │
+│                                      │  └─────────────┘  └───────────┘  │    │
+│                                      └───────────┬───────────────┘    │
+│                                                  │                    │
+│                                                  ▼                    │
+│  ┌─────────────────────────────────────────────────────────────────┐  │
+│  │                                                                 │  │
+│  │                     APPAREILS LOCAUX                            │  │
+│  │  (Smartphone, PC, Raspberry Pi, etc.)                          │  │
+│  │                                                                 │  │
+│  │  - IP: 192.168.1.50-200 (IPv4)                                 │  │
+│  │  - IP: [Préfixe IPv6]/64 (IPv6)                                │  │
+│  │  - DNS: 192.168.1.1 (IPv4)                                     │  │
+│  │  - DNS: fe80::1996:7a65:9450:d0be (IPv6)                       │  │
+│  └─────────────────────────────────────────────────────────────────┘  │
+│                                                  │                    │
+│                                                  ▼                    │
+│  ┌─────────────┐                     ┌───────────────────────────────┐    │
+│  │             │                     │                               │    │
+│  │  Quad9      │◀────────────────────│          ZimaBoard             │    │
+│  │ 9.9.9.9     │   DNS-over-TLS      │                               │    │
+│  │ 149.112.112.112│◀────────────────────│                               │    │
+│  └─────────────┘                     └───────────┬───────────────┘    │
+│                                                  │                    │
+│                                                  ▼                    │
+│                                      ┌─────────────────────┐          │
+│                                      │                     │          │
+│                                      │    Tailscale       │          │
+│                                      │ 100.x.x.x (MagicDNS)│          │
+│                                      │                     │          │
+│                                      └─────────────────────┘          │
+│                                                                               │
+└───────────────────────────────────────────────────────────────────────────────┘
 ```
 
-- **La Bbox** (en orange) est réduite au rôle de passerelle. Son DHCP et ses annonces IPv6 sont désactivés.
-- **Le ZimaBoard** (en rouge) gère :
-  - Le DHCPv4 et DHCPv6 (via Dnsmasq).
-  - La résolution DNS locale (via Unbound).
-  - Le chiffrement des requêtes DNS vers Quad9 (DoT).
-  - La résolution des noms Tailscale (`.ts.net`).
-- **Les appareils locaux** (en bleu-vert) reçoivent leurs adresses IP et leurs paramètres DNS directement du ZimaBoard.
-- **Quad9** (en vert) reçoit les requêtes DNS chiffrées via DNS-over-TLS.
-- **Tailscale** (en jaune) est résolu localement pour les noms `.ts.net`.
+### Détail des flux :
+
+1. **Flux Internet** :
+   ```
+   Internet → Bbox (passerelle) → ZimaBoard → Appareils locaux
+   ```
+
+2. **Flux DHCP** :
+   ```
+   ZimaBoard (Dnsmasq) → Appareils locaux
+   │
+   ├─ Attribution IPv4 (192.168.1.50-200)
+   ├─ Annonce passerelle (192.168.1.254)
+   ├─ Annonce DNS IPv4 (192.168.1.1)
+   └─ Annonce DNS IPv6 (fe80::1996:7a65:9450:d0be)
+   ```
+
+3. **Flux DNS** :
+   ```
+   Appareils locaux → ZimaBoard (Unbound) → Quad9 (DoT)
+   │
+   ├─ Requêtes normales : Résolues via Quad9 (chiffrées)
+   ├─ Requêtes .ts.net : Redirigées vers Tailscale
+   └─ Domaines malveillants : Bloqués par la liste Adblock
+   ```
+
+4. **Flux Tailscale** :
+   ```
+   Appareils locaux → ZimaBoard (Unbound) → Tailscale (MagicDNS)
+   ```
+
+### Rôles des composants :
+
+| Composant       | Rôle                                                                 | IP/Configuration               |
+|-----------------|----------------------------------------------------------------------|---------------------------------|
+| **Bbox**       | Passerelle vers Internet (DHCP/IPv6 désactivés)                     | 192.168.1.254                  |
+| **ZimaBoard**   | Serveur DHCP + DNS local                                            | 192.168.1.1                    |
+| - Dnsmasq      | Gestion du DHCPv4/DHCPv6 et annonces RA                             | Port: 0 (DNS désactivé)        |
+| - Unbound      | Résolveur DNS + cache + Adblock + DoT                                | Port: 53                       |
+| **Quad9**       | Résolveur DNS public avec chiffrement (DoT) et protection malware   | 9.9.9.9, 149.112.112.112      |
+| **Tailscale**   | Réseau VPN overlay avec résolution MagicDNS                         | 100.x.x.x                      |
+| **Appareils**   | Clients du réseau local                                             | IP: 192.168.1.50-200          |
 
 ## Prérequis
 
