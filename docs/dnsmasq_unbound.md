@@ -10,7 +10,11 @@ last_modified_date: May 20 2026
 
 # 🏠 Pourquoi et comment j’ai remplacé les DNS de mon FAI par un serveur local
 
+Dans cet article, nous allons explorer comment configurer un serveur DNS local en utilisant Dnsmasq et Unbound. Cela permet de contourner les DNS de votre FAI, améliorant ainsi la confidentialité et la performance de votre réseau local.
+
 ## Introduction : Pourquoi contourner les DNS de son FAI ?
+
+Les DNS (Domain Name System) sont essentiels pour naviguer sur Internet, mais ceux fournis par votre FAI peuvent poser des problèmes de confidentialité et de performance. En utilisant un serveur DNS local, vous pouvez améliorer la sécurité et la rapidité de votre connexion Internet.
 
 Comme beaucoup d’entre vous, j’ai un abonnement internet chez Bouygues Telecom, et comme beaucoup, je n’apprécie pas que mon fournisseur d’accès m’impose ses propres serveurs DNS. Ces serveurs peuvent :
 
@@ -28,6 +32,8 @@ Pour reprendre le contrôle, j’ai décidé de désactiver le DHCP de ma Bbox e
 
 ## Pourquoi Unbound + Dnsmasq ? Comparaison avec les alternatives
 
+Unbound est un résolveur DNS récursif qui peut être configuré pour utiliser DNS-over-TLS (DoT) pour une meilleure confidentialité. Dnsmasq, quant à lui, est un serveur DNS et DHCP léger qui peut être utilisé pour gérer les requêtes DNS locales et attribution d'adresses IP dans votre réseau local. Cette combinaison offre une solution robuste et flexible pour gérer vos besoins DNS locaux.
+
 J’ai testé plusieurs solutions avant de choisir cette stack :
 
 | Solution          | Avantages                                                                 | Inconvénients                                                                                     |
@@ -44,6 +50,16 @@ J’ai testé plusieurs solutions avant de choisir cette stack :
 **Mon choix s'est porté sur Unbound + Dnsmasq pour sa simplicité et son efficacité.** Je voulais une solution qui tienne dans quelques fichiers de configuration, sans dépendre d'une base de données ou d'une interface web. De plus, cette stack gère parfaitement l'IPv6, ce qui est crucial pour moi : je ne veux pas désactiver l'IPv6 sur mes appareils (comme mon Mac), car cela peut casser certains services modernes ou réduire les performances.
 
 ## Architecture globale
+
+L'architecture globale de notre solution DNS locale comprend les composants suivants :
+
+1. **Dnsmasq** : Gère les requêtes DNS locales et l'attribution d'adresses IP via DHCP.
+2. **Unbound** : Résout les requêtes DNS externes en utilisant DNS-over-TLS pour une meilleure confidentialité.
+3. **Tailscale** : Pour les connexions sécurisées à distance.
+
+
+
+
 
 Voici l'architecture de mon infrastructure réseau locale :
 
@@ -142,6 +158,11 @@ Voici l'architecture de mon infrastructure réseau locale :
 
 ## Prérequis
 
+Avant de commencer, assurez-vous d'avoir les éléments suivants :
+- Un serveur local avec une distribution Linux (par exemple, Fedora).
+- Des droits d'administration sur le serveur.
+- Une connexion Internet stable.
+
 Avant de commencer, assurez-vous d'avoir :
 
 - Un **mini-PC** (ZimaBoard, Raspberry Pi, ou toute machine sous Linux).
@@ -153,6 +174,12 @@ Avant de commencer, assurez-vous d'avoir :
 ---
 
 ## Étape 0 : Neutralisation de la Bbox
+
+Pour commencer, nous devons neutraliser les DNS de la Bbox pour éviter les conflits avec notre serveur DNS local. Voici les étapes à suivre :
+
+1. Connectez-vous à l'interface d'administration de votre Bbox.
+2. Naviguez vers les paramètres DNS.
+3. Désactivez les DNS de la Bbox ou configurez-les pour utiliser l'adresse IP de votre serveur local.
 
 La Bbox force l'annonce de ses DNS IPv6 sur le réseau. Pour éviter les fuites, il faut la neutraliser :
 
@@ -172,6 +199,12 @@ curl -b /tmp/token -XPUT https://mabbox.bytel.fr/api/v1/lan/ip6 -d "enable=0"
 ---
 
 ## Étape 1 : Configuration de l'IP statique du serveur
+
+Configurez une adresse IP statique pour votre serveur local. Cela garantit que votre serveur DNS sera toujours accessible à la même adresse IP.
+
+1. Modifiez le fichier de configuration réseau de votre serveur.
+2. Définissez une adresse IP statique pour votre serveur.
+3. Redémarrez le service réseau pour appliquer les modifications.
 
 On attribue une IP statique (`192.168.1.1`) à l'interface LAN du ZimaBoard (`enp2s0`) et on force Fedora à utiliser la boucle locale (`127.0.0.1`) pour ses requêtes DNS :
 
@@ -200,24 +233,11 @@ sudo nmcli con up "enp2s0"
 
 ---
 
-## Étape 2 : Préparation de Fedora (Réseau & Pare-feu)
 
-Installons les paquets nécessaires et configurons le pare-feu :
-| **Unbound + D3 / ZimaBoard)
-
-**Objectif :** Remplacer la Bbox par un ZimaBoard (Fedora 43) gérant le DHCP (IPv4/IPv6) et la résolution DNS (Cache + Adblock + DoT vers Quad9), tout en préservant la résolution locale Tailscale (`.ts.net`).
-
-**Architecture cible :**
-- **Bbox (192.168.1.254) :** DHCP et IPv6 RA désactivés. Rôle de simple passerelle.
-- **ZimaBoard (192.168.1.1) :** Interface LAN `enp2s0`. IP statique locale.
-- **Dnsmasq :** Serveur DHCPv4 et annonceur RA/SLAAC pour l'IPv6 (port DNS désactivé).
-- **Unbound :** Résolveur DNS (Port 53), bloqueur de pub et proxy DNS-over-TLS.
 
 ---
 
-## Étape 2 : Préparation de Fedora (Réseau & Pare-feu)
 
-Installons les paquets nécessaires et configurons le système pour libérer le port 53, monopolisé par défaut par `systemd-resolved` :
 
 ```bash
 # 1. Installation des paquets
@@ -783,7 +803,10 @@ Avec cette stack **Unbound + Dnsmasq**, j'ai repris le contrôle total sur mes D
 
 ✅ **Simplicité** : Tout tient dans quelques fichiers de configuration.
 
-### Aller plus loin
+## Aller plus loin
+
+Pour aller plus loin, vous pouvez consulter les articles suivants :
+- [Utilisation des DNS locaux avec Podman en rootless](file:///Users/mazama/git_repo/perso/mazama923.github.io/docs/podman-dns/README.md)
 
 Si vous voulez améliorer cette configuration, voici quelques idées :
 
