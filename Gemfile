@@ -4,7 +4,7 @@ gem "jekyll", "~> 4.4.1"
 
 gem "just-the-docs", "0.12.0"
 
-gem "jekyll-feed", "~> 0.17.0"
+gem "jekyll-feed", "~> 0.18.0"
 
 gem "jekyll-seo-tag", "~> 2.9.0"
 
