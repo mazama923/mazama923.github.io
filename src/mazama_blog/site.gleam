@@ -46,7 +46,6 @@ pub fn config() -> config.Config(Nil) {
   |> config.post(post_config)
   |> config.route("/", home_view)
   |> config.route("/blog", blog_view)
-  |> config.route("/archive", archive_view)
   |> config.rss_feed(rss_feed)
   |> config.sitemap(sitemap.new("/sitemap.xml"))
   |> config.robots(robots_config)
@@ -92,7 +91,7 @@ fn home_view(posts: List(Post(msg))) -> Element(msg) {
         html.text("Lire les notes"),
       ]),
     ]),
-    post_list("Dernières notes", sorted_posts(posts)),
+    post_list("Dernières notes", sorted_posts(posts) |> list.take(6)),
   ])
 }
 
@@ -111,24 +110,9 @@ fn blog_view(posts: List(Post(msg))) -> Element(msg) {
   ])
 }
 
-fn archive_view(posts: List(Post(msg))) -> Element(msg) {
-  page("Archives", "Historique complet des notes d'exploitation de Mazama.", [
-    html.section([attribute.class("page-intro")], [
-      html.p([attribute.class("eyebrow")], [html.text("Historique")]),
-      html.h1([], [html.text("Archives")]),
-      html.p([], [
-        html.text(
-          "Toutes les notes publiées, de la plus récente à la plus ancienne.",
-        ),
-      ]),
-    ]),
-    post_list("Toutes les notes", sorted_posts(posts)),
-  ])
-}
-
-fn post_template(post: Post(msg), all_posts: List(Post(msg))) -> Element(msg) {
+fn post_template(post: Post(msg), _all_posts: List(Post(msg))) -> Element(msg) {
   case dict.get(post.extras, "type") {
-    Ok("page") -> page_template(post, all_posts)
+    Ok("page") -> page_template(post)
     _ ->
       page(post.title, post.description, [
         html.article([attribute.class("post")], [
@@ -143,7 +127,7 @@ fn post_template(post: Post(msg), all_posts: List(Post(msg))) -> Element(msg) {
   }
 }
 
-fn page_template(post: Post(msg), all_posts: List(Post(msg))) -> Element(msg) {
+fn page_template(post: Post(msg)) -> Element(msg) {
   let article =
     html.article([attribute.class("post page")], [
       html.header([attribute.class("post-header")], [
@@ -153,14 +137,7 @@ fn page_template(post: Post(msg), all_posts: List(Post(msg))) -> Element(msg) {
       html.div([attribute.class("prose")], post.contents),
     ])
 
-  case post.slug {
-    "archive" ->
-      page(post.title, post.description, [
-        article,
-        post_list("Archives", sorted_posts(all_posts)),
-      ])
-    _ -> page(post.title, post.description, [article])
-  }
+  page(post.title, post.description, [article])
 }
 
 fn post_list(title: String, posts: List(Post(msg))) -> Element(msg) {
@@ -235,7 +212,6 @@ fn page(
           ]),
           html.nav([attribute.aria_label("Navigation principale")], [
             html.a([attribute.href("/blog")], [html.text("Blog")]),
-            html.a([attribute.href("/archive/")], [html.text("Archives")]),
             html.a([attribute.href("/about/")], [html.text("À propos")]),
           ]),
         ]),
