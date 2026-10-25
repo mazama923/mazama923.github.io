@@ -1,22 +1,43 @@
-name: CI
+name: Intégration continue
 
 on:
-  push:
-    branches: ["main"]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  # Build job
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Récupérer le dépôt
         uses: actions/checkout@v7
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3' # Not needed with a .ruby-version file
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-          cache-version: 0 # Increment this number if you need to re-download cached gems
-      - name: Build with Jekyll
-        run: bundle exec jekyll build
+          fetch-depth: 0
+
+      - name: Configurer Erlang et Gleam
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: "27"
+          gleam-version: "1.19.2"
+          rebar3-version: "3.24.0"
+
+      - name: Analyser les secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Télécharger les dépendances
+        run: gleam deps download
+
+      - name: Vérifier le formatage
+        run: gleam format --check
+
+      - name: Exécuter les tests
+        run: gleam test
+
+      - name: Valider le contenu
+        run: ./scripts/check-content.sh
+
+      - name: Générer le site
+        run: gleam run -m mazama_blog
