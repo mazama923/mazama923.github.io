@@ -3,16 +3,16 @@ set -euo pipefail
 
 usage() {
   cat >&2 <<'EOF'
-Usage: scripts/new-content.sh <post|page> <slug> <title> <description> <tags>
+Utilisation : scripts/new-content.sh <post|page> <slug> <titre> <description> <tags>
 
-Tags must be lower-case CSV values without spaces, for example:
+Les tags doivent être une liste CSV en minuscules sans espaces, par exemple :
   devops,observability
 EOF
   exit 64
 }
 
 fail() {
-  printf 'error: %s\n' "$*" >&2
+  printf 'erreur : %s\n' "$*" >&2
   exit 1
 }
 
@@ -26,22 +26,22 @@ tags=$5
 
 case "$content_type" in
   post|page) ;;
-  *) fail "content type must be post or page" ;;
+  *) fail "le type de contenu doit être post ou page" ;;
 esac
 
-[[ $slug =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]] || fail "slug must be lowercase kebab-case"
-[[ ${#slug} -le 80 ]] || fail "slug must be at most 80 characters"
-[[ -n $title && $title != *$'\n'* && $title != *$'\r'* ]] || fail "title must be a single non-empty line"
-[[ -n $description && $description != *$'\n'* && $description != *$'\r'* ]] || fail "description must be a single non-empty line"
-[[ $tags =~ ^[a-z0-9]+(-[a-z0-9]+)*(,[a-z0-9]+(-[a-z0-9]+)*)*$ ]] || fail "tags must be lower-case CSV values without spaces"
+[[ $slug =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]] || fail "le slug doit être en kebab-case minuscule"
+[[ ${#slug} -le 80 ]] || fail "le slug doit comporter au plus 80 caractères"
+[[ -n $title && $title != *$'\n'* && $title != *$'\r'* ]] || fail "le titre doit tenir sur une seule ligne non vide"
+[[ -n $description && $description != *$'\n'* && $description != *$'\r'* ]] || fail "la description doit tenir sur une seule ligne non vide"
+[[ $tags =~ ^[a-z0-9]+(-[a-z0-9]+)*(,[a-z0-9]+(-[a-z0-9]+)*)*$ ]] || fail "les tags doivent être une liste CSV en minuscules sans espaces"
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 template="$repo_root/templates/$content_type.md"
 destination_dir="$repo_root/drafts/$content_type/$slug"
 destination="$destination_dir/index.md"
 
-[[ -f $template ]] || fail "template not found: $template"
-[[ ! -e $destination_dir ]] || fail "draft already exists: $destination_dir"
+[[ -f $template ]] || fail "modèle introuvable : $template"
+[[ ! -e $destination_dir ]] || fail "le brouillon existe déjà : $destination_dir"
 
 escaped_title=${title//\\/\\\\}
 escaped_title=${escaped_title//\"/\\\"}
@@ -70,4 +70,4 @@ mkdir -p "$destination_dir"
 mv "$tmp_file" "$destination"
 trap - EXIT
 
-printf 'created draft: %s\n' "${destination#"$repo_root/"}"
+printf 'brouillon créé : %s\n' "${destination#"$repo_root/"}"

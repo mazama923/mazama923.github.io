@@ -1,0 +1,9 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Exclure les artefacts locaux régénérés à chaque build."
+paths = [
+  '''^build/''',
+  '''^dist/''',
+]

@@ -5,7 +5,8 @@ import mazama_blog/site
 
 pub fn main() {
   case blogatto.build(site.config()) {
-    Ok(Nil) -> io.println("Site built successfully!")
-    Error(err) -> io.println("Build failed: " <> error.describe_error(err))
+    Ok(Nil) -> io.println("Site généré avec succès !")
+    Error(err) ->
+      io.println("Échec de la génération : " <> error.describe_error(err))
   }
 }

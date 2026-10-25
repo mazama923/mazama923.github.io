@@ -1,44 +1,44 @@
-# Initial content catalog
+# Catalogue initial de contenu
 
-This catalog records the legacy Jekyll content converted to Blogatto. The historical source files were retired after validating the generated Blogatto routes.
+Ce catalogue recense le contenu Jekyll historique converti vers Blogatto. Les fichiers sources historiques ont été retirés après validation des routes Blogatto générées.
 
-## Posts
+## Articles
 
-| Legacy source | Proposed slug | Status |
+| Source historique | Slug proposé | État |
 | --- | --- | --- |
-| `_posts/2025-11-03-la-creation-de-ce-site.md` | `la-creation-de-ce-site` | Migrated |
-| `_posts/2025-11-18-could-not-read-from-remote-repository.md` | `could-not-read-from-remote-repository` | Migrated |
-| `_posts/2025-12-08-home-server.md` | `home-server` | Migrated |
-| `_posts/2026-02-15-ma-font.md` | `ma-font` | Migrated |
+| `_posts/2025-11-03-la-creation-de-ce-site.md` | `la-creation-de-ce-site` | Migré |
+| `_posts/2025-11-18-could-not-read-from-remote-repository.md` | `could-not-read-from-remote-repository` | Migré |
+| `_posts/2025-12-08-home-server.md` | `home-server` | Migré |
+| `_posts/2026-02-15-ma-font.md` | `ma-font` | Migré |
 
-## Documentation pages
+## Pages de documentation
 
-| Legacy source | Proposed slug | Status |
+| Source historique | Slug proposé | État |
 | --- | --- | --- |
-| `docs/auto_update_crowdsec.md` | `auto-update-crowdsec` | Migrated |
-| `docs/diun.md` | `diun` | Migrated |
-| `docs/dnsmasq_unbound.md` | `dnsmasq-unbound` | Migrated |
-| `docs/gerer_ses_dotfiles.md` | `gerer-ses-dotfiles` | Migrated |
-| `docs/podman-dns.md` | `podman-dns` | Migrated |
-| `docs/securiser_caddy_avec_crowdsec.md` | `securiser-caddy-avec-crowdsec` | Migrated |
-| `docs/socket_activation_caddy_podman.md` | `socket-activation-caddy-podman` | Migrated |
+| `docs/auto_update_crowdsec.md` | `auto-update-crowdsec` | Migré |
+| `docs/diun.md` | `diun` | Migré |
+| `docs/dnsmasq_unbound.md` | `dnsmasq-unbound` | Migré |
+| `docs/gerer_ses_dotfiles.md` | `gerer-ses-dotfiles` | Migré |
+| `docs/podman-dns.md` | `podman-dns` | Migré |
+| `docs/securiser_caddy_avec_crowdsec.md` | `securiser-caddy-avec-crowdsec` | Migré |
+| `docs/socket_activation_caddy_podman.md` | `socket-activation-caddy-podman` | Migré |
 
-## Exploration and equipment
+## Exploration et matériel
 
-| Legacy source | Proposed slug | Status |
+| Source historique | Slug proposé | État |
 | --- | --- | --- |
-| `exploration/azerty-a-qwerty.md` | `azerty-a-qwerty` | Migrated |
-| `exploration/google_a_umami.md` | `google-a-umami` | Migrated |
-| `exploration/perplexity.md` | `perplexity` | Migrated |
-| `exploration/vscode_to_neovim.md` | `vscode-to-neovim` | Migrated |
-| `matos/index.md` | `mon-matos` | Migrated |
+| `exploration/azerty-a-qwerty.md` | `azerty-a-qwerty` | Migré |
+| `exploration/google_a_umami.md` | `google-a-umami` | Migré |
+| `exploration/perplexity.md` | `perplexity` | Migré |
+| `exploration/vscode_to_neovim.md` | `vscode-to-neovim` | Migré |
+| `matos/index.md` | `mon-matos` | Migré |
 
-## Superseded navigation files
+## Fichiers de navigation remplacés
 
-| Legacy source | Replacement | Status |
+| Source historique | Remplacement | État |
 | --- | --- | --- |
-| `index.md` | Blogatto route `/` | Superseded |
-| `docs/index.md` | Blogatto route `/blog` and tags | Superseded |
-| `exploration/index.md` | Blogatto route `/blog` and tags | Superseded |
+| `index.md` | Route Blogatto `/` | Remplacé |
+| `docs/index.md` | Routes Blogatto `/blog` et tags | Remplacé |
+| `exploration/index.md` | Routes Blogatto `/blog` et tags | Remplacé |
 
-Create future content through `just draft-post` or `just draft-page`, review the draft, run `just check`, then publish it with `just publish`.
+Créez le contenu futur avec `just brouillon-article` ou `just brouillon-page`, faites relire le brouillon par un humain, exécutez `just verifier-contenu`, puis publiez-le explicitement avec `just publier`.

@@ -1,4 +1,4 @@
-name: CI
+name: Intégration continue
 
 on:
   pull_request:
@@ -10,30 +10,35 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Récupérer le dépôt
         uses: actions/checkout@v7
 
-      - name: Set up Erlang
+      - name: Configurer Erlang
         uses: erlef/setup-beam@v1
         with:
           otp-version: "27"
 
-      - name: Set up Gleam
+      - name: Configurer Gleam
         uses: gleam-lang/setup-gleam@v1
         with:
           version: "1.19.2"
 
-      - name: Download dependencies
+      - name: Analyser les secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Télécharger les dépendances
         run: gleam deps download
 
-      - name: Check formatting
+      - name: Vérifier le formatage
         run: gleam format --check
 
-      - name: Run tests
+      - name: Exécuter les tests
         run: gleam test
 
-      - name: Validate content
+      - name: Valider le contenu
         run: ./scripts/check-content.sh
 
-      - name: Build site
+      - name: Générer le site
         run: gleam run -m mazama_blog

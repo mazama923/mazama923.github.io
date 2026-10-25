@@ -1,4 +1,17 @@
-# Gleam and Blogatto build artifacts
+# Artéfacts de construction Gleam et Blogatto
 build/
 dist/
 manifest.toml
+
+# Secrets locaux
+.env
+.env.*
+!.env.example
+
+# Clés privées et certificats
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer

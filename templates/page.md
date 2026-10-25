@@ -9,4 +9,4 @@ slug: __SLUG__
 
 # __TITLE__
 
-Write the page here.
+Rédigez la page ici.

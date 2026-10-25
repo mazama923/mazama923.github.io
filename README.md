@@ -1,67 +1,74 @@
 # mazama923.github.io
 
-Personal static site built with [Blogatto 7.0.1](https://hex.pm/packages/blogatto), Gleam, and the Erlang target.
+Site statique personnel construit avec [Blogatto 7.0.1](https://hex.pm/packages/blogatto), Gleam et la cible Erlang.
 
-## Prerequisites
+## Prérequis
 
-- Erlang/OTP 27 or newer
-- Gleam 1.19 or newer
+- Erlang/OTP 27 ou version ultérieure
+- Gleam 1.19 ou version ultérieure
 - [just](https://just.systems/)
-- Bash 3.2 or newer
+- [Gitleaks](https://github.com/gitleaks/gitleaks)
+- Bash 3.2 ou version ultérieure
 
-Install dependencies with `gleam deps download`.
+Installez les dépendances avec `gleam deps download`.
 
-## Content workflow
+## Workflow de contenu
 
-Create a draft with a lower-case kebab-case slug and lower-case CSV tags:
-
-```sh
-just draft-post systemd-socket-activation \
-  "Systemd socket activation with Podman" \
-  "Run a Podman service on demand through systemd socket activation." \
-  "systemd,podman,containers"
-```
-
-Edit `drafts/post/systemd-socket-activation/index.md`, then validate and publish it:
+Créez un brouillon avec un slug en kebab-case minuscule et des tags CSV en minuscules :
 
 ```sh
-just check
-just publish post systemd-socket-activation
+just brouillon-article activation-socket-systemd \
+  "Activer un service Podman à la demande avec systemd" \
+  "Exécuter un service Podman à la demande grâce à l’activation de sockets systemd." \
+  "systemd,podman,conteneurs"
 ```
 
-A published post lives at `blog/posts/<slug>/index.md`; a published page lives at `blog/pages/<slug>/index.md`. The scripts refuse invalid slugs, malformed tags, duplicate destinations, and incomplete frontmatter.
-
-## Commands
+Modifiez ensuite `drafts/post/activation-socket-systemd/index.md`, puis validez-le :
 
 ```sh
-just draft-post <slug> <title> <description> <tags>
-just draft-page <slug> <title> <description> <tags>
-just publish <post|page> <slug>
-just check
-gleam format --check
-gleam test
-just build
-just preview
+just verifier-contenu
 ```
 
-`just build` uses `src/mazama_blog.gleam`; `just preview` uses `src/mazama_blog/dev.gleam`. Blogatto recursively reads `blog/`, so newly published content is included automatically.
+Le brouillon doit être relu et approuvé par un humain avant toute publication. Après cette approbation explicite, publiez-le :
+
+```sh
+just publier post activation-socket-systemd
+```
+
+Un article publié se trouve dans `blog/posts/<slug>/index.md` ; une page publiée se trouve dans `blog/pages/<slug>/index.md`. Les scripts refusent les slugs invalides, les tags mal formés, les destinations existantes et les frontmatters incomplets.
+
+Les agents IA suivent strictement le parcours brouillon → revue humaine → publication. Ils ne publient pas, ne déploient pas et n’effectuent aucun appel réseau sans demande explicite. Consultez [`docs/securite-ia.md`](docs/securite-ia.md) avant de partager du contenu avec un LLM cloud.
+
+## Commandes
+
+```sh
+just brouillon-article <slug> <titre> <description> <tags>
+just brouillon-page <slug> <titre> <description> <tags>
+just publier <post|page> <slug>
+just verifier-contenu
+just securite
+just verifier
+just apercu
+```
+
+`just construire` utilise `src/mazama_blog.gleam` ; `just apercu` utilise `src/mazama_blog/dev.gleam`. `just verifier` exécute le scan de secrets, le formatage, les tests, la validation du contenu et la génération. Blogatto lit récursivement `blog/`, donc le contenu nouvellement publié est inclus automatiquement.
 
 ## Architecture
 
 ```text
-blog/posts/<slug>/index.md  Published Blogatto post
-blog/pages/<slug>/index.md  Published Blogatto page
-drafts/<type>/<slug>/       Unpublished working content
-templates/                  Strict frontmatter templates
-scripts/                    Content creation, validation, and publication
-src/                        Blogatto and Lustre site implementation
-static/                     Assets copied into dist/
-dist/                       Generated site, deployed to GitHub Pages
-docs/                       Migration and editorial documentation
+blog/posts/<slug>/index.md  Article Blogatto publié
+blog/pages/<slug>/index.md  Page Blogatto publiée
+drafts/<type>/<slug>/       Contenu de travail non publié
+templates/                  Modèles de frontmatter stricts
+scripts/                    Création, validation et publication de contenu
+src/                        Implémentation du site avec Blogatto et Lustre
+static/                     Ressources copiées dans dist/
+dist/                       Site généré, déployé sur GitHub Pages
+docs/                       Documentation de migration, d’édition et de sécurité
 ```
 
-Read [`docs/architecture.md`](docs/architecture.md), [`docs/content-model.md`](docs/content-model.md), and [`docs/editorial-style.md`](docs/editorial-style.md) before extending the site.
+Lisez [`docs/architecture.md`](docs/architecture.md), [`docs/content-model.md`](docs/content-model.md), [`docs/editorial-style.md`](docs/editorial-style.md), [`docs/guide-ia.md`](docs/guide-ia.md) et [`docs/securite-ia.md`](docs/securite-ia.md) avant d’étendre le site.
 
-## Change boundaries
+## Limites de modification
 
-Automation and AI agents must not modify `src/`, `static/`, or CI workflows unless explicitly requested.
+Les automatisations et agents IA ne doivent pas modifier `src/`, `static/` ni les workflows CI sans demande explicite. Ils ne lisent ni ne divulguent de secrets ; la politique complète est décrite dans [`SECURITY.md`](SECURITY.md).

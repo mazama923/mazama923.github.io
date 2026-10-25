@@ -2,7 +2,7 @@
 set -euo pipefail
 
 usage() {
-  printf 'Usage: scripts/check-content.sh [--file path/to/index.md]\n' >&2
+  printf 'Utilisation : scripts/check-content.sh [--file chemin/vers/index.md]\n' >&2
   exit 64
 }
 
@@ -16,7 +16,7 @@ validate_file() {
     }
     NR == 1 {
       if ($0 != "---") {
-        report("frontmatter must start on the first line")
+        report("le frontmatter doit commencer à la première ligne")
         exit
       }
       in_frontmatter = 1
@@ -36,13 +36,13 @@ validate_file() {
       next
     }
     END {
-      if (!closed) report("frontmatter closing delimiter is missing")
-      if (!title) report("required title is missing or empty")
-      if (!date) report("required date must be YYYY-MM-DD HH:MM:SS with optional timezone")
-      if (!description) report("required description is missing or empty")
-      if (!content_type) report("required type must be post or page")
-      if (!tags) report("required tags must be lower-case CSV without spaces")
-      if (!slug) report("required slug must be lower-case kebab-case")
+      if (!closed) report("le délimiteur fermant du frontmatter est absent")
+      if (!title) report("le titre obligatoire est absent ou vide")
+      if (!date) report("la date obligatoire doit respecter YYYY-MM-DD HH:MM:SS avec un fuseau horaire facultatif")
+      if (!description) report("la description obligatoire est absente ou vide")
+      if (!content_type) report("le type obligatoire doit être post ou page")
+      if (!tags) report("les tags obligatoires doivent être une liste CSV en minuscules sans espaces")
+      if (!slug) report("le slug obligatoire doit être en kebab-case minuscule")
       exit invalid
     }
   ' "$file"
@@ -52,11 +52,11 @@ repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 
 if [[ $# -eq 2 && $1 == "--file" ]]; then
   [[ -f $2 ]] || {
-    printf 'error: content file not found: %s\n' "$2" >&2
+    printf 'erreur : fichier de contenu introuvable : %s\n' "$2" >&2
     exit 1
   }
   validate_file "$2"
-  printf 'content check passed: %s\n' "$2"
+  printf 'validation du contenu réussie : %s\n' "$2"
   exit 0
 fi
 
@@ -64,7 +64,7 @@ fi
 
 blog_dir="$repo_root/blog"
 if [[ ! -d $blog_dir ]]; then
-  printf 'content check passed: no blog directory yet\n'
+  printf 'validation du contenu réussie : aucun répertoire blog pour le moment\n'
   exit 0
 fi
 
@@ -78,13 +78,13 @@ while IFS= read -r -d '' file; do
 done < <(find "$blog_dir" -type f -name index.md -print0)
 
 if [[ $count -eq 0 ]]; then
-  printf 'content check passed: no published index.md files\n'
+  printf 'validation du contenu réussie : aucun fichier index.md publié\n'
   exit 0
 fi
 
 if [[ $failed -ne 0 ]]; then
-  printf 'content check failed\n' >&2
+  printf 'échec de la validation du contenu\n' >&2
   exit 1
 fi
 
-printf 'content check passed: %d file(s)\n' "$count"
+printf 'validation du contenu réussie : %d fichier(s)\n' "$count"

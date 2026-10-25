@@ -1,6 +1,6 @@
 name = "mazama923_github_io"
 version = "0.1.0"
-description = "Personal static site generated with Blogatto"
+description = "Site statique personnel généré avec Blogatto"
 licenses = ["MIT"]
 target = "erlang"
 

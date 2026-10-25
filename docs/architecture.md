@@ -1,36 +1,40 @@
 # Architecture
 
-## Runtime
+## Exécution
 
-The site targets Erlang and uses Blogatto 7.0.1 as the static-site framework. Lustre provides HTML views; `gleam_time` is available for date and time handling in the site configuration.
+Le site cible Erlang et utilise Blogatto 7.0.1 comme framework de site statique. Lustre fournit les vues HTML ; `gleam_time` est disponible pour gérer les dates et heures dans la configuration du site.
 
-The build entrypoint is `src/mazama_blog.gleam`, with `src/mazama_blog/dev.gleam` for the development server. The runtime configuration must configure Blogatto with:
+Le point d’entrée de construction est `src/mazama_blog.gleam` ; `src/mazama_blog/dev.gleam` sert au serveur de développement. La configuration d’exécution doit configurer Blogatto avec :
 
-- `blog/` as the post source path;
-- `static/` as the asset source path;
-- `dist/` as the output directory;
-- a public `route_builder`, so a post is emitted at `dist/blog/<slug>/index.html` and a content page at `dist/<slug>/index.html`.
+- `blog/` comme chemin source des contenus ;
+- `static/` comme chemin source des ressources ;
+- `dist/` comme répertoire de sortie ;
+- un `route_builder` public afin qu’un article soit généré dans `dist/blog/<slug>/index.html` et qu’une page de contenu soit générée dans `dist/<slug>/index.html`.
 
-`just preview` starts the existing development-server entrypoint.
+`just apercu` démarre le point d’entrée existant du serveur de développement.
 
-## Blogatto upgrade boundary
+## Limite de mise à niveau de Blogatto
 
-The integration uses documented public Blogatto modules only: `blogatto`, `blogatto/config`, `blogatto/config/post`, `blogatto/config/feed/rss`, `blogatto/config/robots`, `blogatto/config/sitemap`, `blogatto/dev`, and `blogatto/post`.
+L’intégration utilise uniquement les modules publics documentés de Blogatto : `blogatto`, `blogatto/config`, `blogatto/config/post`, `blogatto/config/feed/rss`, `blogatto/config/robots`, `blogatto/config/sitemap`, `blogatto/dev` et `blogatto/post`.
 
-Do not import `blogatto/internal/**` or rely on generated `dist/` details. For a dependency upgrade, use a dedicated branch, update the version constraint, run `gleam deps update`, then run `just check`, `gleam format --check`, `gleam test`, and `just build`. Review the generated route and asset layout in `dist/` before merging.
+N’importez pas `blogatto/internal/**` et ne dépendez pas des détails générés dans `dist/`. Pour mettre une dépendance à niveau, utilisez une branche dédiée, mettez à jour la contrainte de version, exécutez `gleam deps update`, puis `just verifier-contenu`, `gleam format --check`, `gleam test` et `just construire`. Vérifiez le routage généré et la disposition des ressources dans `dist/` avant de fusionner.
 
-## Content pipeline
+## Chaîne de contenu
 
 ```text
-templates -> drafts/<type>/<slug> -> validation -> blog/<type>s/<slug> -> Blogatto -> dist
+templates -> drafts/<type>/<slug> -> validation -> revue humaine -> blog/<type>s/<slug> -> Blogatto -> dist
 ```
 
-`scripts/new-content.sh` creates drafts from the canonical templates. `scripts/check-content.sh` validates published `index.md` files. `scripts/publish-draft.sh` validates a draft before moving it atomically into `blog/`.
+`scripts/new-content.sh` crée les brouillons depuis les modèles canoniques. `scripts/check-content.sh` valide les fichiers `index.md` publiés. `scripts/publish-draft.sh` valide un brouillon avant de le déplacer atomiquement dans `blog/`.
 
-## Delivery
+La publication intervient seulement après validation et revue humaine explicite. Les agents IA ne doivent pas exécuter cette étape sans demande explicite.
 
-The Pages workflow installs Erlang and Gleam, checks formatting and tests, validates content, builds `dist/`, uploads that directory, then deploys it through GitHub Pages. Pull requests run the same validation steps without deployment.
+## Livraison
 
-## Boundaries
+Le workflow Pages installe Erlang et Gleam, vérifie le formatage et les tests, valide le contenu, construit `dist/`, téléverse ce répertoire puis le déploie avec GitHub Pages. Les pull requests exécutent les mêmes étapes de validation sans déploiement.
 
-The legacy Jekyll implementation has been retired. The Blogatto runtime implementation in `src/` and assets in `static/` are intentionally not changed by content/tooling work unless explicitly requested.
+## Limites
+
+L’implémentation Jekyll historique a été retirée. L’implémentation d’exécution Blogatto dans `src/` et les ressources dans `static/` ne doivent pas être modifiées pour des travaux de contenu ou d’outillage sans demande explicite.
+
+La documentation et les contenus doivent suivre les règles de confidentialité de [`docs/securite-ia.md`](securite-ia.md). Aucun secret, identifiant interne ou extrait non expurgé ne doit être transmis à un service externe.

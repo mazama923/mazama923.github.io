@@ -11,7 +11,10 @@ pub fn main() {
     |> dev.port(3000)
     |> dev.start()
   {
-    Ok(Nil) -> io.println("Dev server stopped.")
-    Error(err) -> io.println("Dev server error: " <> error.describe_error(err))
+    Ok(Nil) -> io.println("Serveur de développement arrêté.")
+    Error(err) ->
+      io.println(
+        "Erreur du serveur de développement : " <> error.describe_error(err),
+      )
   }
 }
