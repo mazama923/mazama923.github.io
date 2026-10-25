@@ -20,6 +20,7 @@ jobs:
         with:
           otp-version: "27"
           gleam-version: "1.19.2"
+          rebar3-version: "3.24.0"
 
       - name: Analyser les secrets
         uses: gitleaks/gitleaks-action@v2
