@@ -69,6 +69,12 @@ docs/                       Documentation de migration, d’édition et de sécu
 
 Lisez [`docs/architecture.md`](docs/architecture.md), [`docs/content-model.md`](docs/content-model.md), [`docs/editorial-style.md`](docs/editorial-style.md), [`docs/guide-ia.md`](docs/guide-ia.md) et [`docs/securite-ia.md`](docs/securite-ia.md) avant d’étendre le site.
 
+## Licence
+
+- Le code, les scripts et la configuration de ce dépôt sont distribués sous [licence MIT](LICENSE).
+- Les articles, pages, images, schémas et autres contenus originaux sont distribués sous [CC BY 4.0](LICENSE-CONTENT.md).
+- Les dépendances et ressources de tiers restent soumises à leurs licences respectives.
+
 ## Limites de modification
 
 Les automatisations et agents IA ne doivent pas modifier `src/`, `static/` ni les workflows CI sans demande explicite. Ils ne lisent ni ne divulguent de secrets ; la politique complète est décrite dans [`SECURITY.md`](SECURITY.md).
