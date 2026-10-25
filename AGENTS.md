@@ -38,5 +38,5 @@ Un agent ne doit jamais déplacer seul un contenu de `drafts/` vers `blog/`, mê
 ## Validation
 
 - Exécutez `just verifier-contenu` après toute modification de contenu.
-- Avant de considérer une migration prête, exécutez `just verifier`.
+- Après toute modification qui affecte le site ou son outillage, exécutez `just verifier`.
 - Ne publiez jamais un brouillon sans l’avoir validé puis fait relire par un humain.

@@ -64,7 +64,7 @@ scripts/                    Création, validation et publication de contenu
 src/                        Implémentation du site avec Blogatto et Lustre
 static/                     Ressources copiées dans dist/
 dist/                       Site généré, déployé sur GitHub Pages
-docs/                       Documentation de migration, d’édition et de sécurité
+docs/                       Documentation d’architecture, d’édition et de sécurité
 ```
 
 Lisez [`docs/architecture.md`](docs/architecture.md), [`docs/content-model.md`](docs/content-model.md), [`docs/editorial-style.md`](docs/editorial-style.md), [`docs/guide-ia.md`](docs/guide-ia.md) et [`docs/securite-ia.md`](docs/securite-ia.md) avant d’étendre le site.

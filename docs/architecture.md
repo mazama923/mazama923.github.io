@@ -35,6 +35,6 @@ Le workflow Pages installe Erlang et Gleam, vérifie le formatage et les tests, 
 
 ## Limites
 
-L’implémentation Jekyll historique a été retirée. L’implémentation d’exécution Blogatto dans `src/` et les ressources dans `static/` ne doivent pas être modifiées pour des travaux de contenu ou d’outillage sans demande explicite.
+L’implémentation d’exécution Blogatto dans `src/` et les ressources dans `static/` ne doivent pas être modifiées pour des travaux de contenu ou d’outillage sans demande explicite.
 
 La documentation et les contenus doivent suivre les règles de confidentialité de [`docs/securite-ia.md`](securite-ia.md). Aucun secret, identifiant interne ou extrait non expurgé ne doit être transmis à un service externe.
