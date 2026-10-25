@@ -1,22 +1,39 @@
 name: CI
 
 on:
-  push:
-    branches: ["main"]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  # Build job
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+
+      - name: Set up Erlang
+        uses: erlef/setup-beam@v1
         with:
-          ruby-version: '3.3' # Not needed with a .ruby-version file
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-          cache-version: 0 # Increment this number if you need to re-download cached gems
-      - name: Build with Jekyll
-        run: bundle exec jekyll build
+          otp-version: "27"
+
+      - name: Set up Gleam
+        uses: gleam-lang/setup-gleam@v1
+        with:
+          version: "1.19.2"
+
+      - name: Download dependencies
+        run: gleam deps download
+
+      - name: Check formatting
+        run: gleam format --check
+
+      - name: Run tests
+        run: gleam test
+
+      - name: Validate content
+        run: ./scripts/check-content.sh
+
+      - name: Build site
+        run: gleam run -m mazama_blog

@@ -1,75 +1,67 @@
-# 🚀 mazama923.github.io
+# mazama923.github.io
 
-**Site personnel & blog DevOps statique, construit avec [Jekyll](https://jekyllrb.com/) et le thème [Just the Docs](https://just-the-docs.github.io/).**
+Personal static site built with [Blogatto 7.0.1](https://hex.pm/packages/blogatto), Gleam, and the Erlang target.
 
-🔗 [Accéder au site](https://mazama923.github.io)
+## Prerequisites
 
----
+- Erlang/OTP 27 or newer
+- Gleam 1.19 or newer
+- [just](https://just.systems/)
+- Bash 3.2 or newer
 
-## 👤 À propos
+Install dependencies with `gleam deps download`.
 
-Bienvenue !  
-Je suis passionné de **DevOps** et d’infrastructure moderne.  
-Ce site compile mes expériences, POCs, retours du terrain et apprentissages.  
-Il a vocation à partager plus qu’à enseigner : ici, tu trouveras avant tout des retours authentiques sur les outils, technologies et méthodes qui m’aident au quotidien.
+## Content workflow
 
----
+Create a draft with a lower-case kebab-case slug and lower-case CSV tags:
 
-## 📚 Fonctionnalités
-
-- **Articles techniques** : expérimentations, best practices, découvertes
-- **Guides/outils** : Docker, Kubernetes, Helm, Ansible, CI/CD, monitoring, etc.
-- **Blog statique** hébergé sur GitHub Pages
-- **Recherche intégrée**, navigation claire
-- **Responsive et personnalisable**
-
----
-
-## 🛠️ Tech utilisées
-
-- **Jekyll** (site statique)
-- **Just the Docs** (thème)
-- **GitHub Pages** (hébergement)
-- **Markdown** (contenu)
-
----
-
-## 💻 Mise en route locale
-
-Installe [Ruby](https://www.ruby-lang.org/fr/documentation/installation/) et [Bundler](https://bundler.io/) pour builder le site localement :
-
-```bash
-git clone https://github.com/mazama923/mazama923.github.io.git
-cd mazama923.github.io
-bundle install
-bundle exec jekyll serve
+```sh
+just draft-post systemd-socket-activation \
+  "Systemd socket activation with Podman" \
+  "Run a Podman service on demand through systemd socket activation." \
+  "systemd,podman,containers"
 ```
 
-Preview sur `http://localhost:4000`
+Edit `drafts/post/systemd-socket-activation/index.md`, then validate and publish it:
 
----
-
-## 📁 Structure du projet
-
-```tree
-.
-├── _config.yml # Configuration
-├── index.md # Home page
-├── _posts/ # Articles du blog
-├── assets/ # Images et médias
-├── README.md # Ce fichier
-├── Gemfile # Dépendances Ruby/Jekyll
-└── docs/ # Il porte super bien son nom
+```sh
+just check
+just publish post systemd-socket-activation
 ```
 
----
+A published post lives at `blog/posts/<slug>/index.md`; a published page lives at `blog/pages/<slug>/index.md`. The scripts refuse invalid slugs, malformed tags, duplicate destinations, and incomplete frontmatter.
 
-## ⚡ Personnalisation
+## Commands
 
-Pour adapter le site à ton profil, modifie `_config.yml` (titre, couleurs, liens, etc.).  
-Pour la personnalisation du thème : consulte la [doc Just the Docs](https://just-the-docs.github.io/).
+```sh
+just draft-post <slug> <title> <description> <tags>
+just draft-page <slug> <title> <description> <tags>
+just publish <post|page> <slug>
+just check
+gleam format --check
+gleam test
+just build
+just preview
+```
 
----
+`just build` uses `src/mazama_blog.gleam`; `just preview` uses `src/mazama_blog/dev.gleam`. Blogatto recursively reads `blog/`, so newly published content is included automatically.
 
-> Si tu utilises ce template ou trouves des astuces : je serais ravi d’échanger !
+## Architecture
 
+```text
+blog/posts/<slug>/index.md  Published Blogatto post
+blog/pages/<slug>/index.md  Published Blogatto page
+drafts/<type>/<slug>/       Unpublished working content
+templates/                  Strict frontmatter templates
+scripts/                    Content creation, validation, and publication
+src/                        Blogatto and Lustre site implementation
+static/                     Assets copied into dist/
+dist/                       Generated site, deployed to GitHub Pages
+docs/                       Migration and editorial documentation
+```
+
+Read [`docs/architecture.md`](docs/architecture.md), [`docs/content-model.md`](docs/content-model.md), and [`docs/editorial-style.md`](docs/editorial-style.md) before extending the site.
+
+## Change boundaries
+
+Automation and AI agents must not modify `src/`, `static/`, or CI workflows unless explicitly requested.

@@ -1,0 +1,14 @@
+name = "mazama923_github_io"
+version = "0.1.0"
+description = "Personal static site generated with Blogatto"
+licenses = ["MIT"]
+target = "erlang"
+
+[dependencies]
+blogatto = ">= 7.0.1 and < 7.0.2"
+gleam_stdlib = ">= 0.44.0 and < 2.0.0"
+gleam_time = ">= 1.7.0 and < 2.0.0"
+lustre = ">= 5.6.0 and < 6.0.0"
+
+[dev-dependencies]
+gleeunit = ">= 1.0.0 and < 2.0.0"
