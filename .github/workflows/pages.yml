@@ -21,15 +21,11 @@ jobs:
       - name: Récupérer le dépôt
         uses: actions/checkout@v7
 
-      - name: Configurer Erlang
+      - name: Configurer Erlang et Gleam
         uses: erlef/setup-beam@v1
         with:
           otp-version: "27"
-
-      - name: Configurer Gleam
-        uses: gleam-lang/setup-gleam@v1
-        with:
-          version: "1.19.2"
+          gleam-version: "1.19.2"
 
       - name: Configurer Pages
         uses: actions/configure-pages@v6
