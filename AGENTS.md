@@ -11,9 +11,10 @@
 ## Workflow éditorial obligatoire pour les agents
 
 1. Créez ou modifiez uniquement un brouillon dans `drafts/`.
-2. Validez le brouillon avec `just verifier-contenu` puis `just securite`.
-3. Demandez une revue humaine explicite.
-4. Ne publiez avec `just publier <post|page> <slug>` qu'après cette revue et une demande explicite de publication.
+2. Appliquez `docs/voix-ia.md`, `docs/editorial-style.md` et `docs/securite-ia.md` lors de toute rédaction ou modification de brouillon.
+3. Validez le brouillon avec `just verifier-contenu` puis `just securite`.
+4. Demandez une revue humaine explicite.
+5. Ne publiez avec `just publier <post|page> <slug>` qu'après cette revue et une demande explicite de publication.
 
 Un agent ne doit jamais déplacer seul un contenu de `drafts/` vers `blog/`, même si la validation réussit.
 

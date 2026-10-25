@@ -11,7 +11,10 @@ Donnez toujours à l’agent :
 3. le slug souhaité ;
 4. les tags CSV ;
 5. les sources publiques ou les notes déjà expurgées ;
-6. la consigne de créer un brouillon uniquement.
+6. la consigne de créer un brouillon uniquement ;
+7. la référence à [`voix-ia.md`](voix-ia.md).
+
+La consigne complète réutilisable est dans [`voix-ia.md`](voix-ia.md). Elle impose une écriture de note de terrain : contexte réel, choix justifié, étapes minimales, vérification et limites explicites.
 
 Exemple :
 
@@ -19,7 +22,7 @@ Exemple :
 Crée un brouillon de post dans drafts/ à partir de ces notes publiques.
 Slug : diagnostic-dns-local
 Tags : dns,linux,diagnostic
-Le contenu est en français. Ne lis aucun fichier hors de drafts/, templates/ et docs/. Ne publie pas le brouillon. Applique docs/securite-ia.md.
+Le contenu est en français. Ne lis aucun fichier hors de drafts/, templates/ et docs/. Ne publie pas le brouillon. Applique docs/voix-ia.md, docs/editorial-style.md et docs/securite-ia.md.
 ```
 
 ## Parcours obligatoire

@@ -16,19 +16,20 @@
 
 :root {
   color-scheme: dark;
-  --background: #111311;
-  --surface: #1a1d1a;
-  --surface-raised: #222622;
-  --text: #f5f2e8;
-  --muted: #c4c6bd;
-  --line: #454940;
-  --line-strong: #6b7064;
-  --accent: #f2ab3d;
-  --accent-strong: #ffc66f;
-  --focus: #ffe0a6;
-  --code: #0b0d0c;
-  --code-text: #edf4e9;
-  --shadow: 0 1.5rem 3.75rem rgb(0 0 0 / 24%);
+  --background: #000000;
+  --surface: #10091c;
+  --surface-raised: #1a0f2e;
+  --text: #faf9ff;
+  --muted: #d2cbe0;
+  --line: #43226e;
+  --line-strong: #7f3aed;
+  --violet: #7f3aed;
+  --accent: #c6ff34;
+  --accent-strong: #dcff8a;
+  --focus: #c6ff34;
+  --code: #06050a;
+  --code-text: #f5f2ff;
+  --shadow: 0 1.5rem 3.75rem rgb(0 0 0 / 54%);
   font-family: "OpenDyslexic", system-ui, sans-serif;
   font-synthesis: none;
 }
@@ -47,28 +48,29 @@ body {
   margin: 0;
   color: var(--text);
   background:
-    radial-gradient(circle at 85% -10%, rgb(242 171 61 / 14%), transparent 28rem),
-    linear-gradient(rgb(255 255 255 / 2%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 2%) 1px, transparent 1px),
+    radial-gradient(circle at 85% -10%, rgb(127 58 237 / 26%), transparent 28rem),
+    radial-gradient(circle at 0 0, rgb(198 255 52 / 22%) 0 0.075rem, transparent 0.1rem),
+    linear-gradient(rgb(198 255 52 / 7%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(198 255 52 / 7%) 1px, transparent 1px),
     var(--background);
-  background-size: auto, 2rem 2rem, 2rem 2rem, auto;
+  background-size: auto, 2rem 2rem, 2rem 2rem, 2rem 2rem, auto;
   font-size: clamp(1rem, 0.97rem + 0.15vw, 1.08rem);
   line-height: 1.7;
 }
 
 ::selection {
-  color: #17120a;
-  background: var(--accent-strong);
+  color: #000000;
+  background: var(--accent);
 }
 
 a {
-  color: var(--accent-strong);
+  color: var(--accent);
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.2em;
 }
 
 a:hover {
-  color: #fff2d7;
+  color: var(--accent-strong);
 }
 
 a:focus-visible {
@@ -86,8 +88,8 @@ a:focus-visible {
   position: sticky;
   z-index: 10;
   top: 0;
-  background: rgb(17 19 17 / 80%);
-  border-bottom: 1px solid rgb(255 255 255 / 10%);
+  background: rgb(0 0 0 / 86%);
+  border-bottom: 1px solid rgb(198 255 52 / 16%);
   backdrop-filter: blur(1.25rem) saturate(130%);
 }
 
@@ -117,9 +119,9 @@ a:focus-visible {
   height: 0.65rem;
   content: "";
   background: var(--accent);
-  border: 0.13rem solid #1a1b17;
+  border: 0.13rem solid var(--background);
   border-radius: 50%;
-  box-shadow: 0 0 0 0.13rem var(--accent);
+  box-shadow: 0 0 0 0.13rem var(--violet);
 }
 
 nav {
@@ -140,7 +142,7 @@ nav a {
 
 nav a:hover {
   color: var(--text);
-  background: rgb(255 255 255 / 9%);
+  background: rgb(127 58 237 / 30%);
 }
 
 nav a:active,
@@ -216,20 +218,20 @@ main {
   min-height: 2.75rem;
   margin-top: 0.9rem;
   padding: 0.6rem 0.9rem;
-  color: #1c160b;
+  color: #000000;
   background: var(--accent);
-  border: 1px solid #ffd78c;
+  border: 1px solid var(--accent-strong);
   border-radius: 0.28rem;
-  box-shadow: 0 0.45rem 1.5rem rgb(242 171 61 / 17%);
+  box-shadow: 0 0.45rem 1.5rem rgb(198 255 52 / 20%);
   font-weight: 700;
   text-decoration: none;
   transition: background-color 160ms ease-out, box-shadow 160ms ease-out, transform 100ms ease-out;
 }
 
 .button:hover {
-  color: #161109;
+  color: #000000;
   background: var(--accent-strong);
-  box-shadow: 0 0.65rem 2rem rgb(242 171 61 / 25%);
+  box-shadow: 0 0.65rem 2rem rgb(198 255 52 / 30%);
 }
 
 .post-list h2 {
@@ -252,10 +254,13 @@ main {
   align-items: flex-start;
   min-height: 14rem;
   padding: clamp(1.25rem, 2vw, 1.6rem);
-  background: linear-gradient(145deg, rgb(255 255 255 / 6%), transparent 44%), var(--surface);
+  background: linear-gradient(145deg, rgb(127 58 237 / 18%), transparent 44%), var(--surface);
   border: 1px solid var(--line);
   border-radius: 0.45rem;
-  box-shadow: var(--shadow);
+  box-shadow:
+    inset 0 1px rgb(198 255 52 / 11%),
+    inset 0 0 0 1px rgb(127 58 237 / 18%),
+    var(--shadow);
   transition: border-color 160ms ease-out, transform 160ms ease-out, background-color 160ms ease-out;
 }
 
@@ -268,7 +273,7 @@ main {
 
 .post-card h3 a {
   color: var(--text);
-  text-decoration-color: rgb(242 171 61 / 45%);
+  text-decoration-color: rgb(198 255 52 / 62%);
 }
 
 .post-card p {
@@ -283,7 +288,7 @@ main {
 @media (hover: hover) and (pointer: fine) {
   .post-card:hover {
     background-color: var(--surface-raised);
-    border-color: var(--line-strong);
+    border-color: var(--accent);
     transform: translateY(-0.2rem);
   }
 }
@@ -332,8 +337,8 @@ main {
   margin-inline: 0;
   padding: 0.2rem 1.1rem;
   color: var(--muted);
-  background: rgb(242 171 61 / 7%);
-  border-left: 0.28rem solid var(--accent);
+  background: rgb(127 58 237 / 14%);
+  border-left: 0.28rem solid var(--violet);
 }
 
 .prose img {
@@ -368,9 +373,9 @@ main {
 
 .prose code {
   padding: 0.12em 0.3em;
-  color: #ffe6b5;
-  background: rgb(242 171 61 / 12%);
-  border: 1px solid rgb(242 171 61 / 20%);
+  color: var(--accent-strong);
+  background: rgb(127 58 237 / 20%);
+  border: 1px solid rgb(127 58 237 / 48%);
   border-radius: 0.2rem;
   font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   font-size: 0.9em;
@@ -451,8 +456,8 @@ main {
 
 @media (prefers-contrast: more) {
   :root {
-    --line: #8d9285;
-    --muted: #e1e2da;
+    --line: #a78bfa;
+    --muted: #f1edff;
   }
 
   .post-card,
