@@ -76,14 +76,14 @@ Voici comment je l’utilise:
 
 À chaque nouvel onglet, cela m’ouvre Perplexity. Dans la barre de recherche, je garde Google, car la recherche Perplexity sur le web me résume tout à chaque fois, et parfois j’ai besoin de faire une recherche "à l’ancienne". 🔄🔎
 
-![Navigateur Comet avec Google](images/comet.avif)
+![Navigateur Comet avec Google](comet.avif)
 
 Vous pourriez me dire: "Super, mais avec un autre navigateur je peux simplement changer la page d’accueil et avoir la même chose."
 Oui, c’est vrai, mais là où Comet prend tout son sens, c’est avec leur assistance IA. 🤖
 
 À tout moment, je peux l’appeler, et il peut lire ce que je vois, interagir avec ma page, faire des actions dessus ou juste me l’expliquer. 👀👆
 
-![Assistant Comet](images/comet_assistant.avif)
+![Assistant Comet](comet_assistant.avif)
 
 C’est vraiment un confort supplémentaire, car l’assistant a le même contexte que moi, il peut tout de suite m’aider sans que j’aie besoin de lui expliquer toute la page. 🧠✨
 

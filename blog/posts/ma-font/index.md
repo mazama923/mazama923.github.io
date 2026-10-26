@@ -21,7 +21,7 @@ Chaque lettre a une forme unique. Ainsi, chaque lettre dispose d’un effet de g
 
 Voici des exemples de typographies différentes :
 
-![image de différentes typographies vs OpenDyslexic](images/font-compare.avif)
+![image de différentes typographies vs OpenDyslexic](font-compare.avif)
 
 ---
 
@@ -39,4 +39,4 @@ Si vous êtes vous aussi dans ce cas, je vous conseille vivement de tester cette
 
 Merci de m’avoir lu jusqu’ici. Et qui sait, comme moi, cette font pourra peut‑être vous aider.
 
-**Ka‑chow** 🚀
+**Ka-chow** 🚀

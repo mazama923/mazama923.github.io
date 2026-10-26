@@ -29,7 +29,7 @@ Il peut aussi tracer le nombre de clics avec des liens de redirection ou des pix
 
 Pour les curieux, voici à quoi ressemble l’interface :
 
-![Interface d'Umami](images/umami.avif)
+![Interface d'Umami](umami.avif)
 
 ## Comment je l’ai mis en place ?
 
