@@ -23,7 +23,7 @@ jobs:
           rebar3-version: "3.24.0"
 
       - name: Analyser les secrets
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
