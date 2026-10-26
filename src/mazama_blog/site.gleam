@@ -5,12 +5,16 @@ import blogatto/config/robots
 import blogatto/config/sitemap
 import blogatto/post.{type Post, type PostMetadata}
 import gleam/dict
+import gleam/int
 import gleam/list
 import gleam/string
+import gleam/time/calendar
 import gleam/time/timestamp
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
+import tzif/tzcalendar
+import zones
 
 const site_url = "https://mazama923.github.io"
 
@@ -122,6 +126,7 @@ fn post_template(post: Post(msg), all_posts: List(Post(msg))) -> Element(msg) {
           html.header([attribute.class("post-header")], [
             html.p([attribute.class("eyebrow")], [html.text("Note de terrain")]),
             html.h1([], [html.text(post.title)]),
+            publication_date(post),
             html.p([attribute.class("lede")], [html.text(post.description)]),
             tag_list(tags_for(post)),
           ]),
@@ -168,10 +173,49 @@ fn post_card(post: Post(msg)) -> Element(msg) {
       html.h3([], [
         html.a([attribute.href(post_path)], [html.text(post.title)]),
       ]),
+      publication_date(post),
       html.p([], [html.text(post.description)]),
       tag_list(tags),
     ],
   )
+}
+
+fn publication_date(post: Post(msg)) -> Element(msg) {
+  html.p([attribute.class("publication-date")], [
+    html.text("Publié le " <> formatted_publication_date(post.date)),
+  ])
+}
+
+fn formatted_publication_date(timestamp: timestamp.Timestamp) -> String {
+  let #(date, _) = case
+    tzcalendar.to_calendar(timestamp, "Europe/Paris", zones.database())
+  {
+    Ok(calendar) -> calendar
+    Error(_) -> timestamp.to_calendar(timestamp, calendar.utc_offset)
+  }
+
+  int.to_string(date.day)
+  <> " "
+  <> french_month(date.month)
+  <> " "
+  <> int.to_string(date.year)
+}
+
+fn french_month(month: calendar.Month) -> String {
+  case month {
+    calendar.January -> "janvier"
+    calendar.February -> "février"
+    calendar.March -> "mars"
+    calendar.April -> "avril"
+    calendar.May -> "mai"
+    calendar.June -> "juin"
+    calendar.July -> "juillet"
+    calendar.August -> "août"
+    calendar.September -> "septembre"
+    calendar.October -> "octobre"
+    calendar.November -> "novembre"
+    calendar.December -> "décembre"
+  }
 }
 
 fn tags_for(post: Post(msg)) -> List(String) {

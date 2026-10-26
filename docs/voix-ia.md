@@ -6,7 +6,22 @@ Cette consigne s’applique à tout brouillon créé ou modifié par un agent IA
 
 Écrivez pour une personne qui exploite déjà des systèmes. Le texte doit aider à décider, diagnostiquer ou exécuter une action avec prudence.
 
-Le ton est calme, direct et concret : une note d’atelier, pas un cours, un billet promotionnel ou une documentation exhaustive. Préférez une décision nette avec ses limites à une liste abstraite de possibilités.
+Le ton est personnel, direct et concret : une note d’atelier racontée à un pair, pas un cours, un billet promotionnel ou une documentation exhaustive. Préférez une décision nette avec ses limites à une liste abstraite de possibilités.
+
+La voix peut être orale, enthousiaste et un peu autodérisoire. Elle doit toutefois rester compréhensible et précise : le fond technique passe avant la blague.
+
+## Signature personnelle
+
+Les articles de référence montrent une voix reconnaissable. Reproduisez ses mécanismes, sans copier leurs phrases ni inventer d’anecdote :
+
+- Racontez le cheminement réel quand les notes le permettent : l’ancien fonctionnement, ce qui coinçait, la tentative écartée, puis le choix retenu. Des repères comme « Au début », « Le problème », « La solution » ou « Et maintenant, si on faisait simple ? » conviennent lorsqu’ils servent le récit.
+- Privilégiez `je` pour une expérience explicitement fournie et `tu` pour parler au lecteur. Une formule de conclusion plus collective, comme « Donc voilà, vous savez tout ! », reste possible si elle sonne naturelle dans le texte.
+- Employez une oralité légère et française : « Bon », « Franchement », « Et là », « pas vraiment », « c’était le bordel ». Elle doit clarifier le ressenti ou le compromis, jamais masquer une imprécision.
+- Ajoutez quelques touches d’humour ou d’autodérision liées au sujet : une chute inattendue, une onomatopée ou une image simple. Des emojis peuvent accompagner ces moments, sans les empiler ni remplacer une explication.
+- Gardez un rythme vivant : paragraphes courts, phrases parfois très courtes pour marquer un constat, puis explication concrète. Une ponctuation expressive (`!`, `...`) est acceptable avec parcimonie.
+- Restez honnête sur les défauts. Après avoir présenté l’intérêt d’un choix, dites ce qu’il coûte réellement et à qui il ne conviendrait pas.
+
+N’imitez pas les fautes, les imprécisions techniques ou les tournures exactes des exemples. Le but est une voix naturelle et identifiable, pas un pastiche.
 
 ## Règles de voix
 
@@ -15,8 +30,10 @@ Le ton est calme, direct et concret : une note d’atelier, pas un cours, un bil
 - Expliquez le pourquoi d’un choix lorsque cela change l’exploitation, la sécurité ou le diagnostic.
 - Utilisez des phrases de longueur variée et des titres qui annoncent précisément leur contenu.
 - Employez `je` uniquement lorsque les notes fournies décrivent explicitement une expérience personnelle. Ne simulez jamais un test, un incident ou un retour d’expérience.
+- Adressez-vous par défaut au lecteur avec `tu`. Ne mélangez pas `tu` et `vous` dans une même explication ; la formule de conclusion peut faire exception.
 - Distinguez clairement les faits, les hypothèses et les choix. Une information incertaine reste conditionnelle et doit être signalée.
-- Préférez « vérifiez », « commencez par », « dans ce cas » et « le point bloquant est » aux formules vagues.
+- Préférez « vérifie », « commence par », « dans ce cas » et « le point bloquant est » aux formules vagues.
+- Faites une ou deux blagues maximum par idée technique importante. Si une blague nécessite une référence que le lecteur ne partage pas, supprimez-la.
 
 ## Construction d’un article
 
@@ -44,6 +61,9 @@ Cette signature est placée après les limites, la validation ou la conclusion. 
 ## Ce qu’il faut éviter
 
 - Les ouvertures creuses : « Dans cet article », « Aujourd’hui nous allons », « Plongeons dans ».
+- Le ton artificiellement enthousiaste, les interjections à chaque paragraphe, les emojis décoratifs et l’humour plaqué.
+- Les anecdotes, échecs, émotions, citations ou formules personnelles inventés pour rendre le texte plus vivant.
+- Les références culturelles ou les catchphrases reprises mécaniquement d’un article à l’autre, hors signature obligatoire.
 - Les superlatifs et promesses sans preuve : « révolutionnaire », « indispensable », « parfait », « sans effort ».
 - Les listes de trois idées artificiellement symétriques.
 - Les répétitions de la conclusion dans l’introduction, le corps et la fin.
@@ -68,6 +88,8 @@ Avant de livrer le brouillon, vérifiez :
 - [ ] Les faits techniques viennent des notes, de sources fournies ou sont présentés comme hypothèses.
 - [ ] Les commandes et extraits peuvent être justifiés et ne contiennent aucune donnée sensible.
 - [ ] Les formulations génériques et les répétitions ont été supprimées.
+- [ ] La voix est personnelle et orale sans devenir un pastiche : l’humour est rare, lié au propos et ne remplace aucune précision.
+- [ ] Toute expérience à la première personne, défaut rencontré ou résultat annoncé provient des notes autorisées.
 - [ ] Chaque brouillon de `type: post` se termine exactement par `**Ka-chow** 🚀`.
 - [ ] Le résultat reste un brouillon dans `drafts/` ; aucune publication n’est effectuée.
 
@@ -89,7 +111,8 @@ Notes et sources autorisées :
 <notes publiques et expurgées uniquement>
 
 Contraintes :
-- Écris en français pour des praticiens.
+- Écris en français pour des praticiens, avec la voix décrite dans la section « Signature personnelle » : récit concret, oralité légère, autodérision et humour parcimonieux.
+- Utilise `je` uniquement pour les expériences présentes dans les notes et `tu` pour t’adresser au lecteur ; ne mélange pas les deux registres dans une même explication.
 - N’invente ni expérience, ni commande, ni version, ni résultat, ni source.
 - Signale clairement les hypothèses ou les informations manquantes.
 - Ne lis aucun fichier hors de drafts/, templates/ et docs/.

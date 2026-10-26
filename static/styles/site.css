@@ -474,6 +474,20 @@ main {
   text-transform: uppercase;
 }
 
+.publication-date {
+  margin: 0.75rem 0 0;
+  color: var(--subtle);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+.post-card .publication-date {
+  margin: 0.55rem 0 0;
+}
+
 .lede,
 .hero > p:not(.eyebrow),
 .page-intro > p:not(.eyebrow) {
