@@ -6,6 +6,7 @@ import blogatto/config/sitemap
 import blogatto/post.{type Post, type PostMetadata}
 import gleam/dict
 import gleam/list
+import gleam/string
 import gleam/time/timestamp
 import lustre/attribute
 import lustre/element.{type Element}
@@ -91,7 +92,7 @@ fn home_view(posts: List(Post(msg))) -> Element(msg) {
         html.text("Lire les notes"),
       ]),
     ]),
-    post_list("Dernières notes", sorted_posts(posts) |> list.take(6)),
+    post_list("Dernières notes", sorted_posts(posts) |> list.take(6), False),
   ])
 }
 
@@ -106,7 +107,7 @@ fn blog_view(posts: List(Post(msg))) -> Element(msg) {
         ),
       ]),
     ]),
-    post_list("Toutes les notes", sorted_posts(posts)),
+    post_list("Toutes les notes", sorted_posts(posts), True),
   ])
 }
 
@@ -120,6 +121,7 @@ fn post_template(post: Post(msg), _all_posts: List(Post(msg))) -> Element(msg) {
             html.p([attribute.class("eyebrow")], [html.text("Note de terrain")]),
             html.h1([], [html.text(post.title)]),
             html.p([attribute.class("lede")], [html.text(post.description)]),
+            tag_list(tags_for(post)),
           ]),
           html.div([attribute.class("prose")], post.contents),
         ]),
@@ -140,23 +142,123 @@ fn page_template(post: Post(msg)) -> Element(msg) {
   page(post.title, post.description, [article])
 }
 
-fn post_list(title: String, posts: List(Post(msg))) -> Element(msg) {
-  html.section([attribute.class("post-list")], [
-    html.h2([], [html.text(title)]),
-    html.div([attribute.class("post-grid")], list.map(posts, post_card)),
-  ])
+fn post_list(
+  title: String,
+  posts: List(Post(msg)),
+  with_search: Bool,
+) -> Element(msg) {
+  let cards =
+    html.div([attribute.class("post-grid")], list.map(posts, post_card))
+
+  case with_search {
+    True ->
+      html.section([attribute.class("post-list")], [
+        search_controls(),
+        html.h2([], [html.text(title)]),
+        cards,
+      ])
+    False ->
+      html.section([attribute.class("post-list")], [
+        html.h2([], [html.text(title)]),
+        cards,
+      ])
+  }
+}
+
+fn search_controls() -> Element(msg) {
+  html.section(
+    [
+      attribute.class("search-panel"),
+      attribute.attribute("data-search-controls", ""),
+      attribute.id("recherche"),
+    ],
+    [
+      html.label(
+        [
+          attribute.class("search-label"),
+          attribute.attribute("for", "site-search"),
+        ],
+        [html.text("Rechercher une note")],
+      ),
+      html.input([
+        attribute.id("site-search"),
+        attribute.attribute("type", "search"),
+        attribute.attribute("autocomplete", "off"),
+        attribute.placeholder("Titre, description ou tag…"),
+      ]),
+      html.div([attribute.class("search-feedback")], [
+        html.p(
+          [
+            attribute.attribute("aria-live", "polite"),
+            attribute.attribute("data-search-status", ""),
+          ],
+          [],
+        ),
+        html.button(
+          [
+            attribute.class("search-clear"),
+            attribute.attribute("data-clear-tag", ""),
+            attribute.attribute("type", "button"),
+          ],
+          [html.text("Effacer le tag")],
+        ),
+      ]),
+    ],
+  )
 }
 
 fn post_card(post: Post(msg)) -> Element(msg) {
-  html.article([attribute.class("post-card")], [
-    html.h3([], [
-      html.a([attribute.href(post.url)], [html.text(post.title)]),
-    ]),
-    html.p([], [html.text(post.description)]),
-    html.a([attribute.class("text-link"), attribute.href(post.url)], [
-      html.text("Lire la note →"),
-    ]),
-  ])
+  let tags = tags_for(post)
+
+  html.article(
+    [
+      attribute.class("post-card"),
+      attribute.data(
+        "search",
+        post.title <> " " <> post.description <> " " <> string.join(tags, " "),
+      ),
+      attribute.data("tags", string.join(tags, ",")),
+    ],
+    [
+      html.h3([], [
+        html.a([attribute.href(post.url)], [html.text(post.title)]),
+      ]),
+      html.p([], [html.text(post.description)]),
+      tag_list(tags),
+      html.a([attribute.class("text-link"), attribute.href(post.url)], [
+        html.text("Lire la note →"),
+      ]),
+    ],
+  )
+}
+
+fn tags_for(post: Post(msg)) -> List(String) {
+  case dict.get(post.extras, "tags") {
+    Ok(tags) ->
+      tags
+      |> string.split(",")
+      |> list.map(string.trim)
+      |> list.filter(fn(tag) { tag != "" })
+    Error(_) -> []
+  }
+}
+
+fn tag_list(tags: List(String)) -> Element(msg) {
+  html.div(
+    [attribute.class("tag-list"), attribute.aria_label("Tags")],
+    list.map(tags, tag_link),
+  )
+}
+
+fn tag_link(tag: String) -> Element(msg) {
+  html.a(
+    [
+      attribute.class("tag"),
+      attribute.href("/blog?tag=" <> tag),
+      attribute.attribute("data-filter-tag", tag),
+    ],
+    [html.text(tag)],
+  )
 }
 
 fn page(
@@ -192,6 +294,13 @@ fn page(
       ]),
       html.script(
         [
+          attribute.attribute("defer", ""),
+          attribute.src("/assets/js/search.js"),
+        ],
+        "",
+      ),
+      html.script(
+        [
           attribute.attribute("async", ""),
           attribute.attribute("defer", ""),
           attribute.attribute(
@@ -212,6 +321,7 @@ fn page(
           ]),
           html.nav([attribute.aria_label("Navigation principale")], [
             html.a([attribute.href("/blog")], [html.text("Les notes")]),
+            html.a([attribute.href("/blog#recherche")], [html.text("Recherche")]),
             html.a([attribute.href("/about/")], [html.text("À propos")]),
           ]),
         ]),
