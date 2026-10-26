@@ -211,7 +211,7 @@ fn page(
             html.text("Mazama"),
           ]),
           html.nav([attribute.aria_label("Navigation principale")], [
-            html.a([attribute.href("/blog")], [html.text("Blog")]),
+            html.a([attribute.href("/blog")], [html.text("Les notes")]),
             html.a([attribute.href("/about/")], [html.text("À propos")]),
           ]),
         ]),
