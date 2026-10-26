@@ -112,7 +112,6 @@ Voici l'architecture cible de ce réseau :
 Avant de commencer, assurez-vous d'avoir les éléments suivants :
 - Un serveur local avec une distribution Linux (par exemple, Fedora).
 - Des droits d'administration sur le serveur.
-- Une connexion Internet stable.
 
 Avant de commencer, assurez-vous d'avoir :
 
