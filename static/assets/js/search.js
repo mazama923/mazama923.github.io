@@ -6,9 +6,8 @@
   }
 
   const input = controls.querySelector("#site-search");
-  const feedback = controls.querySelector(".search-feedback");
   const status = controls.querySelector("[data-search-status]");
-  const clearTagButton = controls.querySelector("[data-clear-tag]");
+  const resetButton = controls.querySelector("[data-clear-search]");
   const suggestions = controls.querySelector("[data-search-suggestions]");
   const cards = Array.from(
     document.querySelectorAll("[data-search-index] .post-card[data-search]"),
@@ -28,6 +27,13 @@
       .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase();
 
+  const hasActiveFilter = () => Boolean(input.value.trim() || selectedTag);
+
+  const setSuggestionsVisible = visible => {
+    suggestions.hidden = !visible;
+    input.setAttribute("aria-expanded", String(visible));
+  };
+
   const updateUrl = query => {
     const url = new URL(window.location.href);
 
@@ -46,11 +52,17 @@
     window.history.replaceState(null, "", url);
   };
 
-  const renderSuggestions = (matches, query) => {
+  const renderSuggestions = matches => {
     suggestions.replaceChildren();
-    suggestions.hidden = !query;
 
-    matches.slice(0, 5).forEach(card => {
+    const summary = document.createElement("p");
+    const noteLabel = matches.length > 1 ? "notes" : "note";
+
+    summary.className = "search-summary";
+    summary.textContent = `${matches.length} ${noteLabel} trouvée${matches.length > 1 ? "s" : ""}`;
+    suggestions.append(summary);
+
+    matches.slice(0, 4).forEach(card => {
       const titleLink = card.querySelector("h3 a");
       const description = card.querySelector("p");
       const suggestion = document.createElement("a");
@@ -91,28 +103,54 @@
       }
     });
 
-    const parts = [`${matches.length} note${matches.length > 1 ? "s" : ""}`];
+    const active = hasActiveFilter();
+    const filters = [];
+
+    if (input.value.trim()) {
+      filters.push(`recherche : « ${input.value.trim()} »`);
+    }
 
     if (selectedTag) {
-      parts.push(`tag : ${selectedTag}`);
+      filters.push(`tag : ${selectedTag}`);
     }
 
-    if (query) {
-      parts.push(`recherche : « ${input.value.trim()} »`);
-    }
-
-    status.textContent = parts.join(" · ");
-    feedback.hidden = !query && !selectedTag;
-    clearTagButton.hidden = !selectedTag;
-    renderSuggestions(matches, query);
+    status.textContent = `${matches.length} note${matches.length > 1 ? "s" : ""}${filters.length ? ` · ${filters.join(" · ")}` : ""}`;
+    resetButton.hidden = !active;
+    renderSuggestions(matches);
+    setSuggestionsVisible(active);
     updateUrl(input.value.trim());
   };
 
   input.addEventListener("input", filterCards);
 
-  clearTagButton.addEventListener("click", () => {
+  input.addEventListener("focus", () => {
+    setSuggestionsVisible(hasActiveFilter());
+  });
+
+  input.addEventListener("keydown", event => {
+    if (event.key !== "Escape" || !hasActiveFilter()) {
+      return;
+    }
+
+    event.preventDefault();
+    input.value = "";
     selectedTag = "";
     filterCards();
+  });
+
+  input.addEventListener("blur", () => {
+    window.setTimeout(() => {
+      if (!controls.contains(document.activeElement)) {
+        setSuggestionsVisible(false);
+      }
+    }, 120);
+  });
+
+  resetButton.addEventListener("click", () => {
+    input.value = "";
+    selectedTag = "";
+    filterCards();
+    input.focus();
   });
 
   document.addEventListener("click", event => {
@@ -123,7 +161,7 @@
     }
 
     event.preventDefault();
-    selectedTag = tag.dataset.filterTag || "";
+    selectedTag = (tag.dataset.filterTag || "").toLowerCase();
     filterCards();
     input.focus();
   });

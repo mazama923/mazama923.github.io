@@ -226,27 +226,31 @@ fn site_search() -> Element(msg) {
         attribute.attribute("name", "q"),
         attribute.attribute("type", "search"),
         attribute.attribute("autocomplete", "off"),
+        attribute.attribute("aria-controls", "search-suggestions"),
+        attribute.attribute("aria-expanded", "false"),
         attribute.placeholder("Rechercher une note…"),
       ]),
-      html.div([attribute.class("search-feedback"), attribute.hidden(True)], [
-        html.p(
-          [
-            attribute.attribute("aria-live", "polite"),
-            attribute.attribute("data-search-status", ""),
-          ],
-          [],
-        ),
-        html.button(
-          [
-            attribute.class("search-clear"),
-            attribute.attribute("data-clear-tag", ""),
-            attribute.attribute("type", "button"),
-          ],
-          [html.text("Effacer le tag")],
-        ),
-      ]),
+      html.button(
+        [
+          attribute.class("search-reset"),
+          attribute.attribute("aria-label", "Effacer la recherche"),
+          attribute.attribute("data-clear-search", ""),
+          attribute.attribute("type", "button"),
+          attribute.hidden(True),
+        ],
+        [html.text("×")],
+      ),
+      html.p(
+        [
+          attribute.class("visually-hidden"),
+          attribute.attribute("aria-live", "polite"),
+          attribute.attribute("data-search-status", ""),
+        ],
+        [],
+      ),
       html.div(
         [
+          attribute.id("search-suggestions"),
           attribute.class("search-suggestions"),
           attribute.attribute("data-search-suggestions", ""),
           attribute.hidden(True),
