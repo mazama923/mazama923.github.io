@@ -21,15 +21,17 @@ Voici la liste du matériel qui m'accompagne au quotidien pour le travail et les
 
 ## 🖥️ Écran
 
-### LG UltraWide 29WP60G-B
+~~LG UltraWide 29WP60G-B~~
 
-> UWFHD (2560x1080)
+### LG Ultrafine 27UP85NP-W
+
+> 4K 27 (3840x2160)
 
 > 5ms
 
-> 75Hz
+> 60Hz
 
-> USB-C
+> USB-C (90W)
 
 ## 🧰 Accessoires
 
@@ -41,6 +43,4 @@ Voici la liste du matériel qui m'accompagne au quotidien pour le travail et les
 
 ### Lunette Meta Oakley
 
-> À ma vue
-
-> Qui me sert de casque et de micro pour les réunions et autres.
+> À ma vue && Qui me sert de casque et de micro pour les réunions et autres.
