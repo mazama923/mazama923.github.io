@@ -60,57 +60,9 @@ L'architecture globale de notre solution DNS locale comprend les composants suiv
 
 
 
-Voici l'architecture de mon infrastructure réseau locale :
+Voici l'architecture cible de ce réseau :
 
-```
-┌───────────────────────────────────────────────────────────────────────────────┐
-│                                                                               │
-│   INTERNET                                                                    │
-│     │                                                                         │
-│     ▼                                                                         │
-│  ┌─────────────┐                     ┌───────────────────────────────────┐    │
-│  │             │                     │                               │    │
-│  │   Bbox      │                     │          ZimaBoard             │    │
-│  │ 192.168.50.254│────────────────────▶│ 192.168.50.1 (Fedora 43)        │    │
-│  │ DHCP: OFF   │                     │                               │    │
-│  │ IPv6: OFF   │                     │  ┌─────────────┐  ┌───────────┐  │    │
-│  └─────────────┘                     │  │ Dnsmasq     │  │ Unbound   │  │    │
-│                                      │  │ - DHCPv4    │  │ - Cache   │  │    │
-│                                      │  │ - DHCPv6    │  │ - DoT     │  │    │
-│                                      │  │ - RA/SLAAC  │  │ - Adblock │  │    │
-│                                      │  └─────────────┘  └───────────┘  │    │
-│                                      └───────────┬───────────────┘    │
-│                                                  │                    │
-│                                                  ▼                    │
-│  ┌─────────────────────────────────────────────────────────────────┐  │
-│  │                                                                 │  │
-│  │                     APPAREILS LOCAUX                            │  │
-│  │  (Smartphone, PC, Raspberry Pi, etc.)                          │  │
-│  │                                                                 │  │
-│  │  - IP: 192.168.50.50-200 (IPv4)                                 │  │
-│  │  - IP: [Préfixe IPv6]/64 (IPv6)                                │  │
-│  │  - DNS: 192.168.50.1 (IPv4)                                     │  │
-│  │  - DNS: fe80::1 (IPv6)                       │  │
-│  └─────────────────────────────────────────────────────────────────┘  │
-│                                                  │                    │
-│                                                  ▼                    │
-│  ┌─────────────┐                     ┌───────────────────────────────┐    │
-│  │             │                     │                               │    │
-│  │  Quad9      │◀────────────────────│          ZimaBoard             │    │
-│  │ 9.9.9.9     │   DNS-over-TLS      │                               │    │
-│  │ 149.112.112.112│◀────────────────────│                               │    │
-│  └─────────────┘                     └───────────┬───────────────┘    │
-│                                                  │                    │
-│                                                  ▼                    │
-│                                      ┌─────────────────────┐          │
-│                                      │                     │          │
-│                                      │    Tailscale       │          │
-│                                      │ 100.x.x.x (MagicDNS)│          │
-│                                      │                     │          │
-│                                      └─────────────────────┘          │
-│                                                                               │
-└───────────────────────────────────────────────────────────────────────────────┘
-```
+![Architecture du DNS local : les appareils reçoivent leur configuration de Dnsmasq, interrogent Unbound, puis Unbound utilise Quad9 via DNS-over-TLS ou Tailscale pour les zones .ts.net.](/assets/diagrams/post/dnsmasq-unbound/architecture.svg)
 
 ### Détail des flux :
 
@@ -123,10 +75,10 @@ Voici l'architecture de mon infrastructure réseau locale :
    ```
    ZimaBoard (Dnsmasq) → Appareils locaux
    │
-   ├─ Attribution IPv4 (192.168.50.50-200)
-   ├─ Annonce passerelle (192.168.50.254)
-   ├─ Annonce DNS IPv4 (192.168.50.1)
-   └─ Annonce DNS IPv6 (fe80::1)
+   ├─ Attribution IPv4 (192.0.2.50-200)
+   ├─ Annonce passerelle (192.0.2.254)
+   ├─ Annonce DNS IPv4 (192.0.2.1)
+   └─ Annonce DNS IPv6 (2001:db8::1)
    ```
 
 3. **Flux DNS** :
@@ -147,13 +99,13 @@ Voici l'architecture de mon infrastructure réseau locale :
 
 | Composant       | Rôle                                                                 | IP/Configuration               |
 |-----------------|----------------------------------------------------------------------|---------------------------------|
-| **Bbox**       | Passerelle vers Internet (DHCP/IPv6 désactivés)                     | 192.168.50.254                  |
-| **ZimaBoard**   | Serveur DHCP + DNS local                                            | 192.168.50.1                    |
+| **Bbox**       | Passerelle vers Internet (DHCP/IPv6 désactivés)                     | 192.0.2.254                  |
+| **ZimaBoard**   | Serveur DHCP + DNS local                                            | 192.0.2.1                    |
 | - Dnsmasq      | Gestion du DHCPv4/DHCPv6 et annonces RA                             | Port: 0 (DNS désactivé)        |
 | - Unbound      | Résolveur DNS + cache + Adblock + DoT                                | Port: 53                       |
 | **Quad9**       | Résolveur DNS public avec chiffrement (DoT) et protection malware   | 9.9.9.9, 149.112.112.112      |
 | **Tailscale**   | Réseau VPN overlay avec résolution MagicDNS                         | 100.x.x.x                      |
-| **Appareils**   | Clients du réseau local                                             | IP: 192.168.50.50-200          |
+| **Appareils**   | Clients du réseau local                                             | IP: 192.0.2.50-200          |
 
 ## Prérequis
 
@@ -182,7 +134,7 @@ Pour commencer, nous devons neutraliser les DNS de la Bbox pour éviter les conf
 
 La Bbox force l'annonce de ses DNS IPv6 sur le réseau. Pour éviter les fuites, il faut la neutraliser :
 
-1. Depuis l'interface web de la Bbox (`192.168.50.254`), **désactivez le serveur DHCP**.
+1. Depuis l'interface web de la Bbox (`192.0.2.254`), **désactivez le serveur DHCP**.
 2. Depuis un terminal, désactivez l'IPv6 sur la Bbox via son API locale (remplacez `TON_MOT_DE_PASSE` par votre mot de passe) :
 
 ```bash
@@ -205,18 +157,18 @@ Configurez une adresse IP statique pour votre serveur local. Cela garantit que v
 2. Définissez une adresse IP statique pour votre serveur.
 3. Redémarrez le service réseau pour appliquer les modifications.
 
-On attribue une IP statique (`192.168.50.1`) à l'interface LAN du ZimaBoard (`enp2s0`) et on force Fedora à utiliser la boucle locale (`127.0.0.1`) pour ses requêtes DNS :
+On attribue une IP statique (`192.0.2.1`) à l'interface LAN du ZimaBoard (`enp2s0`) et on force Fedora à utiliser la boucle locale (`[LOOPBACK_ADDRESS]`) pour ses requêtes DNS :
 
 ```bash
 # Configuration de l'IP, masque et passerelle
 sudo nmcli con mod "enp2s0" \
   ipv4.method manual \
-  ipv4.addresses 192.168.50.1/24 \
-  ipv4.gateway 192.168.50.254
+  ipv4.addresses 192.0.2.1/24 \
+  ipv4.gateway 192.0.2.254
 
 # Forcer l'utilisation du DNS local et ignorer les serveurs du FAI
 sudo nmcli con mod "enp2s0" \
-  ipv4.dns 127.0.0.1 \
+  ipv4.dns [LOOPBACK_ADDRESS] \
   ipv4.ignore-auto-dns yes
 
 # Appliquer la configuration
@@ -225,9 +177,9 @@ sudo nmcli con up "enp2s0"
 
 💡 **Explications** :
 - `ipv4.method manual` : Configure une IP statique.
-- `ipv4.addresses 192.168.50.1/24` : Définit l'IP et le masque de sous-réseau.
-- `ipv4.gateway 192.168.50.254` : La Bbox reste la passerelle par défaut.
-- `ipv4.dns 127.0.0.1` : Force le système à utiliser Unbound comme résolveur DNS.
+- `ipv4.addresses 192.0.2.1/24` : Définit l'IP et le masque de sous-réseau.
+- `ipv4.gateway 192.0.2.254` : La Bbox reste la passerelle par défaut.
+- `ipv4.dns [LOOPBACK_ADDRESS]` : Force le système à utiliser Unbound comme résolveur DNS.
 - `ipv4.ignore-auto-dns yes` : Ignore les DNS annoncés par le FAI.
 
 ---
@@ -248,14 +200,14 @@ sudo firewall-cmd --add-service={dns,dhcp,dhcpv6} --permanent
 sudo firewall-cmd --reload
 
 # 3. Désactiver le stub listener de systemd-resolved
-# systemd-resolved écoute par défaut sur 127.0.0.53:53, ce qui bloque Unbound
+# systemd-resolved écoute par défaut sur [LOOPBACK_ADDRESS]:53, ce qui bloque Unbound
 sudo mkdir -p /etc/systemd/resolved.conf.d/
-echo -e "[Resolve]\nDNSStubListener=no\nDNS=127.0.0.1" | sudo tee /etc/systemd/resolved.conf.d/unbound.conf
+echo -e "[Resolve]\nDNSStubListener=no\nDNS=[LOOPBACK_ADDRESS]" | sudo tee /etc/systemd/resolved.conf.d/unbound.conf
 
 # 4. Configurer le résolveur DNS système
-# On force le système à utiliser Unbound (127.0.0.1) comme résolveur
+# On force le système à utiliser Unbound ([LOOPBACK_ADDRESS]) comme résolveur
 sudo rm -f /etc/resolv.conf
-echo -e "nameserver 127.0.0.1\nsearch lan\nsearch tailnet-exemple.ts.net" | sudo tee /etc/resolv.conf
+echo -e "nameserver [LOOPBACK_ADDRESS]\nsearch lan\nsearch tailnet-exemple.ts.net" | sudo tee /etc/resolv.conf
 
 # 5. Redémarrer systemd-resolved pour appliquer les changements
 sudo systemctl restart systemd-resolved
@@ -274,12 +226,12 @@ sudo systemctl restart systemd-resolved
    - `dhcpv6` : Autorise les requêtes DHCPv6 (ports 546 et 547 UDP).
 
 3. **systemd-resolved** :
-   Par défaut, `systemd-resolved` écoute sur `127.0.0.53:53` et agit comme un *stub resolver*. Pour utiliser Unbound à la place :
+   Par défaut, `systemd-resolved` écoute sur `[LOOPBACK_ADDRESS]:53` et agit comme un *stub resolver*. Pour utiliser Unbound à la place :
    - On désactive `DNSStubListener` pour libérer le port 53.
-   - On configure `systemd-resolved` pour utiliser `127.0.0.1` comme résolveur.
+   - On configure `systemd-resolved` pour utiliser `[LOOPBACK_ADDRESS]` comme résolveur.
 
 4. **Fichier `/etc/resolv.conf`** :
-   - `nameserver 127.0.0.1` : Utilise Unbound comme résolveur DNS.
+   - `nameserver [LOOPBACK_ADDRESS]` : Utilise Unbound comme résolveur DNS.
    - `search lan` : Ajoute le domaine `.lan` aux requêtes non qualifiées (ex: `ping serveur` → `ping serveur.lan`).
    - `search tailnet-exemple.ts.net` : Permet de résoudre les noms Tailscale sans suffixe.
 
@@ -292,9 +244,9 @@ sudo systemctl restart systemd-resolved
 ## Étape 3 : Configuration de Dnsmasq (DHCPv4 & IPv6)
 
 Dnsmasq va gérer :
-- **L'attribution des adresses IPv4** (plage `192.168.50.50` à `192.168.50.200`).
+- **L'attribution des adresses IPv4** (plage `192.0.2.50` à `192.0.2.200`).
 - **Les annonces Router Advertisements (RA)** pour l'IPv6 (SLAAC).
-- **La diffusion de l'IP du serveur DNS local** (`192.168.50.1` pour IPv4 et `fe80::1` pour IPv6).
+- **La diffusion de l'IP du serveur DNS local** (`192.0.2.1` pour IPv4 et `2001:db8::1` pour IPv6).
 
 Voici le fichier de configuration (`/etc/dnsmasq.conf`) :
 
@@ -306,15 +258,15 @@ interface=enp2s0
 bind-dynamic
 
 # --- DHCP IPv4 ---
-# Plage d'adresses IPv4 à attribuer (de 192.168.50.50 à 192.168.50.200)
+# Plage d'adresses IPv4 à attribuer (de 192.0.2.50 à 192.0.2.200)
 # Masque de sous-réseau : 255.255.255.0, durée de bail : 24h
-dhcp-range=192.168.50.50,192.168.50.200,255.255.255.0,24h
+dhcp-range=192.0.2.50,192.0.2.200,255.255.255.0,24h
 
 # Option 3 : Passerelle par défaut (Bbox)
-dhcp-option=3,192.168.50.254
+dhcp-option=3,192.0.2.254
 
 # Option 6 : Serveur DNS (ZimaBoard)
-dhcp-option=6,192.168.50.1
+dhcp-option=6,192.0.2.1
 
 # --- IPv6 (SLAAC / RA) ---
 # Activer les annonces Router Advertisements (RA)
@@ -329,7 +281,7 @@ dhcp-range=::,constructor:enp2s0,ra-names,slaac,64,24h
 
 # Annonce l'IP Link-Local du ZimaBoard comme DNS IPv6
 # option6:dns-server : Définit le serveur DNS IPv6 pour les clients
-dhcp-option=option6:dns-server,[fe80::1]
+dhcp-option=option6:dns-server,[2001:db8::1]
 
 # Journalisation
 log-queries    # Journalise les requêtes DNS (désactivé ici car port=0)
@@ -350,9 +302,9 @@ sudo systemctl restart dnsmasq
    - `bind-dynamic` : Permet de binder dynamiquement les interfaces.
 
 2. **DHCPv4** :
-   - `dhcp-range=192.168.50.50,192.168.50.200,255.255.255.0,24h` : Définit la plage d'adresses IPv4 à attribuer.
-   - `dhcp-option=3,192.168.50.254` : Annonce la Bbox comme passerelle par défaut.
-   - `dhcp-option=6,192.168.50.1` : Annonce le ZimaBoard comme serveur DNS.
+   - `dhcp-range=192.0.2.50,192.0.2.200,255.255.255.0,24h` : Définit la plage d'adresses IPv4 à attribuer.
+   - `dhcp-option=3,192.0.2.254` : Annonce la Bbox comme passerelle par défaut.
+   - `dhcp-option=6,192.0.2.1` : Annonce le ZimaBoard comme serveur DNS.
 
 3. **IPv6 (SLAAC/RA)** :
    - `enable-ra` : Active les annonces *Router Advertisements* pour l'auto-configuration IPv6 (SLAAC).
@@ -362,14 +314,14 @@ sudo systemctl restart dnsmasq
      - `slaac` : Utilise SLAAC pour attribuer des adresses IPv6.
      - `64` : Longueur du préfixe IPv6.
      - `24h` : Durée de validité des annonces.
-   - `dhcp-option=option6:dns-server,[fe80::1]` : Annonce l'IP Link-Local du ZimaBoard comme serveur DNS IPv6.
+   - `dhcp-option=option6:dns-server,[2001:db8::1]` : Annonce l'IP Link-Local du ZimaBoard comme serveur DNS IPv6.
 
 4. **Journalisation** :
    - `log-dhcp` : Journalise les requêtes DHCP (utile pour le débogage).
    - `log-facility=/var/log/dnsmasq.log` : Redirige les logs vers un fichier dédié.
 
 💡 **Pourquoi utiliser l'IP Link-Local pour IPv6 ?**
-L'IP Link-Local (`fe80::...`) est générée automatiquement à partir de l'adresse MAC de l'interface. Elle présente plusieurs avantages :
+L'IP Link-Local (`[PRIVATE_IPV6_ADDRESS]...`) est générée automatiquement à partir de l'adresse MAC de l'interface. Elle présente plusieurs avantages :
 - **Stabilité** : Elle ne change pas, même si le préfixe IPv6 global est modifié par le FAI.
 - **Accessibilité** : Elle est toujours accessible sur le réseau local, sans dépendre d'une configuration manuelle.
 - **Simplicité** : Pas besoin de configurer une IP globale statique pour le DNS.
@@ -421,18 +373,18 @@ server:
     log-servfail: yes     # Journalise les erreurs SERVFAIL
 
     # Contrôle d'accès (ACL) : Qui peut interroger le DNS ?
-    access-control: 127.0.0.0/8 allow          # Boucle locale
-    access-control: 192.168.50.0/24 allow       # Réseau local IPv4
-    access-control: fe80::/10 allow            # Réseau local IPv6 (Link-Local)
-    access-control: 10.0.2.0/24 allow          # Passerelle Podman rootless (slirp4netns)
+    access-control: [LOOPBACK_ADDRESS]/8 allow          # Boucle locale
+    access-control: 192.0.2.0/24 allow       # Réseau local IPv4
+    access-control: [PRIVATE_IPV6_ADDRESS]/10 allow            # Réseau local IPv6 (Link-Local)
+    access-control: [PRIVATE_IPV4_ADDRESS]/24 allow          # Passerelle Podman rootless (slirp4netns)
     access-control: 169.254.0.0/16 allow       # Plage utilisée par pasta (Podman)
-    access-control: 10.88.0.0/16 allow         # Réseaux bridge de Podman
-    access-control: 10.89.0.0/24 allow         # Réseau "caddy-bridge"
+    access-control: [PRIVATE_IPV4_ADDRESS]/16 allow         # Réseaux bridge de Podman
+    access-control: [PRIVATE_IPV4_ADDRESS]/24 allow         # Réseau "caddy-bridge"
     access-control: 100.64.0.0/10 allow         # Réseau Tailscale
     access-control: 2001:861::/32 allow         # Préfixes IPv6 Bouygues Telecom
 
     # Résolution locale pour la Bbox
-    local-data: "mabbox.bytel.fr. IN A 192.168.50.254"
+    local-data: "mabbox.bytel.fr. IN A 192.0.2.254"
 
     # Paramètres d'optimisation et de sécurité
     do-ip4: yes
@@ -467,7 +419,7 @@ forward-zone:
 # Contrôle distant (pour recharger la configuration sans redémarrer)
 remote-control:
     control-enable: yes
-    control-interface: 127.0.0.1
+    control-interface: [LOOPBACK_ADDRESS]
     control-port: 8953
     server-key-file: "/etc/unbound/unbound_server.key"
     server-cert-file: "/etc/unbound/unbound_server.pem"
@@ -497,13 +449,13 @@ sudo systemctl restart unbound
 
 2. **Contrôle d'accès (`access-control`)** :
    Définit quels réseaux peuvent interroger Unbound. J'ai inclus :
-   - Le réseau local (`192.168.50.0/24` et `fe80::/10`).
-   - Les plages utilisées par Podman (`10.88.0.0/16`, `10.89.0.0/24`, etc.).
+   - Le réseau local (`192.0.2.0/24` et `[PRIVATE_IPV6_ADDRESS]/10`).
+   - Les plages utilisées par Podman (`[PRIVATE_IPV4_ADDRESS]/16`, `[PRIVATE_IPV4_ADDRESS]/24`, etc.).
    - Le réseau Tailscale (`100.64.0.0/10`).
    - Les préfixes IPv6 de Bouygues Telecom (`2001:861::/32`).
 
 3. **Résolution locale** :
-   - `local-data: "mabbox.bytel.fr. IN A 192.168.50.254"` : Redirige `mabbox.bytel.fr` vers l'IP de la Bbox.
+   - `local-data: "mabbox.bytel.fr. IN A 192.0.2.254"` : Redirige `mabbox.bytel.fr` vers l'IP de la Bbox.
    - Le fichier `/etc/unbound/blocklist.conf` (généré automatiquement) bloque les domaines malveillants.
 
 4. **Optimisation et sécurité** :
@@ -646,13 +598,13 @@ Voici comment vérifier que tout fonctionne correctement :
 **Test de résolution DNS** :
 ```bash
 # Résoudre un domaine public (doit retourner une IP)
-dig @127.0.0.1 fedoraproject.org
+dig @[LOOPBACK_ADDRESS] fedoraproject.org
 ```
 → **Résultat attendu** : Une réponse avec `status: NOERROR` et une IP publique (ex: `152.19.134.198`).
 
 **Test de blocage des publicités** :
 ```bash
-dig @127.0.0.1 doubleclick.net
+dig @[LOOPBACK_ADDRESS] doubleclick.net
 ```
 → **Résultat attendu** : `status: NXDOMAIN` (domaine bloqué).
 
@@ -667,9 +619,9 @@ dig @127.0.0.1 doubleclick.net
 **Vérification des baux DHCP** :
 - Sur un smartphone ou un PC, oubliez puis reconnectez-vous au réseau Wi-Fi.
 - Vérifiez que l'appareil reçoit :
-  - Une IP dans la plage `192.168.50.50-200` (IPv4).
+  - Une IP dans la plage `192.0.2.50-200` (IPv4).
   - Une IP IPv6 avec le préfixe de votre FAI.
-  - Le DNS `192.168.50.1` (IPv4) et `fe80::1` (IPv6).
+  - Le DNS `192.0.2.1` (IPv4) et `2001:db8::1` (IPv6).
 
 **Sur Linux** :
 ```bash
@@ -696,22 +648,18 @@ Pour vérifier que vos requêtes DNS ne fuient pas vers votre FAI :
 2. Lancez le **test étendu**.
 3. **Résultat attendu** : Seul **Quad9** doit apparaître dans la liste.
 
-📸 **Exemple de résultat** :
-![Exemple de test DNS Leak](https://www.dnsleaktest.com/images/results-quad9.png)
-*(Seul Quad9 doit apparaître, pas votre FAI.)*
-
 ### 4. Test de performance
 
 **Mesurer le temps de réponse DNS** :
 ```bash
-dig @127.0.0.1 fedoraproject.org | grep "Query time"
+dig @[LOOPBACK_ADDRESS] fedoraproject.org | grep "Query time"
 ```
 → **Résultat attendu** : Un temps de réponse < 50ms après la première requête (grâce au cache).
 
 **Comparaison avec les DNS du FAI** :
 ```bash
 time dig @8.8.8.8 fedoraproject.org  # Google DNS
-time dig @192.168.50.1 fedoraproject.org  # Votre Unbound
+time dig @192.0.2.1 fedoraproject.org  # Votre Unbound
 ```
 → **Résultat attendu** : Votre Unbound doit être plus rapide après la première requête.
 
@@ -781,7 +729,7 @@ Si le serveur tombe en panne ou si vous devez le débrancher, voici comment rét
    ```
 
 3. **Sur la Bbox** :
-   - Réactivez le serveur DHCP depuis l'interface web (`192.168.50.254`).
+   - Réactivez le serveur DHCP depuis l'interface web (`192.0.2.254`).
    - Redémarrez la box électriquement pour relancer les annonces IPv6.
 
 ---
@@ -843,7 +791,7 @@ Si vous voulez améliorer cette configuration, voici quelques idées :
 **Q : Puis-je utiliser cette configuration avec un autre FAI que Bouygues ?**
 R : Oui ! La plupart des étapes sont génériques. Il faudra adapter :
 - La désactivation du DHCP et de l'IPv6 sur votre box.
-- Les plages d'IP si votre réseau local n'est pas en `192.168.50.0/24`.
+- Les plages d'IP si votre réseau local n'est pas en `192.0.2.0/24`.
 
 **Q : Comment déboguer si ça ne marche pas ?**
 R : Voici les commandes utiles :
@@ -853,14 +801,14 @@ journalctl -u unbound -f
 journalctl -u dnsmasq -f
 
 # Tester la connectivité
-ping 192.168.50.1
-ping6 fe80::1
+ping 192.0.2.1
+ping6 2001:db8::1
 
 # Vérifier les ports ouverts
 ss -tulnp | grep -E "53|67|68|546|547"
 
 # Tester la résolution DNS
-dig @127.0.0.1 example.com
+dig @[LOOPBACK_ADDRESS] example.com
 ```
 
 **Q : Puis-je utiliser un Raspberry Pi au lieu d'un ZimaBoard ?**
@@ -869,7 +817,7 @@ R : Oui ! Un Raspberry Pi 3/4/5 avec Raspberry Pi OS ou Ubuntu Server fera très
 **Q : Comment ajouter un domaine local ?**
 R : Ajoutez une ligne `local-data` dans `/etc/unbound/unbound.conf` :
 ```
-local-data: "mon-serveur.lan. IN A 192.168.50.10"
+local-data: "mon-serveur.lan. IN A 192.0.2.10"
 ```
 Puis rechargez Unbound :
 ```bash

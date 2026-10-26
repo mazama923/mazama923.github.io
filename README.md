@@ -9,6 +9,7 @@ Site statique personnel construit avec [Blogatto 7.0.1](https://hex.pm/packages/
 - [just](https://just.systems/)
 - [Gitleaks](https://github.com/gitleaks/gitleaks)
 - Bash 3.2 ou version ultérieure
+- Mermaid CLI (`mmdc`) 12.0.0 ou compatible et Google Chrome ou Chromium local, lorsque le contenu utilise des diagrammes
 
 Installez les dépendances avec `gleam deps download`.
 
@@ -47,11 +48,12 @@ just brouillon-page <slug> <titre> <description> <tags>
 just publier <post|page> <slug>
 just verifier-contenu
 just securite
+just diagrammes
 just verifier
 just apercu
 ```
 
-`just construire` utilise `src/mazama_blog.gleam` ; `just apercu` utilise `src/mazama_blog/dev.gleam`. `just verifier` exécute le scan de secrets, le formatage, les tests, la validation du contenu et la génération. Blogatto lit récursivement `blog/`, donc le contenu nouvellement publié est inclus automatiquement.
+`just diagrammes` génère les SVG depuis les sources Mermaid des brouillons et des contenus publiés. `just construire` régénère automatiquement les diagrammes publiés lorsque Mermaid CLI est disponible ; sinon, il utilise les SVG versionnés et échoue seulement si un fichier est absent, puis utilise `src/mazama_blog.gleam`. `just apercu` utilise `src/mazama_blog/dev.gleam`. `just verifier` exécute le scan de secrets, le formatage, les tests, la validation du contenu et la génération. Blogatto lit récursivement `blog/`, donc le contenu nouvellement publié est inclus automatiquement. Consultez [`docs/diagrammes.md`](docs/diagrammes.md) pour la convention de contenu.
 
 ## Architecture
 
@@ -67,7 +69,7 @@ dist/                       Site généré, déployé sur GitHub Pages
 docs/                       Documentation d’architecture, d’édition et de sécurité
 ```
 
-Lisez [`docs/architecture.md`](docs/architecture.md), [`docs/content-model.md`](docs/content-model.md), [`docs/editorial-style.md`](docs/editorial-style.md), [`docs/guide-ia.md`](docs/guide-ia.md) et [`docs/securite-ia.md`](docs/securite-ia.md) avant d’étendre le site.
+Lisez [`docs/architecture.md`](docs/architecture.md), [`docs/content-model.md`](docs/content-model.md), [`docs/diagrammes.md`](docs/diagrammes.md), [`docs/editorial-style.md`](docs/editorial-style.md), [`docs/guide-ia.md`](docs/guide-ia.md) et [`docs/securite-ia.md`](docs/securite-ia.md) avant d’étendre le site.
 
 ## Licence
 

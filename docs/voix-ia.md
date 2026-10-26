@@ -77,7 +77,7 @@ Donnez ce bloc à l’agent avec les notes publiques et expurgées nécessaires 
 
 ```text
 Crée ou améliore uniquement un brouillon de post dans drafts/.
-Applique docs/voix-ia.md, docs/editorial-style.md et docs/securite-ia.md.
+Applique docs/voix-ia.md, docs/editorial-style.md, docs/securite-ia.md et, si nécessaire, docs/diagrammes.md.
 
 Objectif : <objectif éditorial en une phrase>
 Slug : <slug>
@@ -93,6 +93,7 @@ Contraintes :
 - N’invente ni expérience, ni commande, ni version, ni résultat, ni source.
 - Signale clairement les hypothèses ou les informations manquantes.
 - Ne lis aucun fichier hors de drafts/, templates/ et docs/.
+- Pour un diagramme d’architecture, crée un fichier Mermaid `.mmd`, génère un SVG local et référence ce SVG ; n’utilise pas d’ASCII art.
 - Ne modifie pas src/, static/, .github/ ou la configuration.
 - Ne publie pas et n’effectue aucun appel réseau.
 - Si `type: post`, termine le brouillon exactement par `**Ka-chow** 🚀`, sans texte après.

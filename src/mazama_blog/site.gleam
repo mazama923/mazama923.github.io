@@ -153,6 +153,7 @@ fn post_list(title: String, posts: List(Post(msg))) -> Element(msg) {
 
 fn post_card(post: Post(msg)) -> Element(msg) {
   let tags = tags_for(post)
+  let post_path = post.url |> string.replace(site_url, "")
 
   html.article(
     [
@@ -165,11 +166,11 @@ fn post_card(post: Post(msg)) -> Element(msg) {
     ],
     [
       html.h3([], [
-        html.a([attribute.href(post.url)], [html.text(post.title)]),
+        html.a([attribute.href(post_path)], [html.text(post.title)]),
       ]),
       html.p([], [html.text(post.description)]),
       tag_list(tags),
-      html.a([attribute.class("text-link"), attribute.href(post.url)], [
+      html.a([attribute.class("text-link"), attribute.href(post_path)], [
         html.text("Lire la note →"),
       ]),
     ],
