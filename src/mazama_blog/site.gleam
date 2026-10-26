@@ -73,7 +73,7 @@ fn sorted_posts(posts: List(Post(msg))) -> List(Post(msg)) {
 }
 
 fn home_view(posts: List(Post(msg))) -> Element(msg) {
-  page("Accueil", "Notes de terrain DevOps de Mazama.", [
+  page("Accueil", "Notes de terrain DevOps de Mazama.", posts, [
     html.section([attribute.class("hero")], [
       html.p([attribute.class("eyebrow")], [
         html.text("Carnet d'atelier DevOps"),
@@ -97,7 +97,7 @@ fn home_view(posts: List(Post(msg))) -> Element(msg) {
 }
 
 fn blog_view(posts: List(Post(msg))) -> Element(msg) {
-  page("Blog", "Toutes les notes d'exploitation publiées par Mazama.", [
+  page("Blog", "Toutes les notes d'exploitation publiées par Mazama.", posts, [
     html.section([attribute.class("page-intro")], [
       html.p([attribute.class("eyebrow")], [html.text("Journal de bord")]),
       html.h1([], [html.text("Notes d'exploitation")]),
@@ -113,11 +113,11 @@ fn blog_view(posts: List(Post(msg))) -> Element(msg) {
   ])
 }
 
-fn post_template(post: Post(msg), _all_posts: List(Post(msg))) -> Element(msg) {
+fn post_template(post: Post(msg), all_posts: List(Post(msg))) -> Element(msg) {
   case dict.get(post.extras, "type") {
-    Ok("page") -> page_template(post)
+    Ok("page") -> page_template(post, all_posts)
     _ ->
-      page(post.title, post.description, [
+      page(post.title, post.description, all_posts, [
         html.article([attribute.class("post")], [
           html.header([attribute.class("post-header")], [
             html.p([attribute.class("eyebrow")], [html.text("Note de terrain")]),
@@ -131,7 +131,7 @@ fn post_template(post: Post(msg), _all_posts: List(Post(msg))) -> Element(msg) {
   }
 }
 
-fn page_template(post: Post(msg)) -> Element(msg) {
+fn page_template(post: Post(msg), all_posts: List(Post(msg))) -> Element(msg) {
   let article =
     html.article([attribute.class("post page")], [
       html.header([attribute.class("post-header")], [
@@ -141,7 +141,7 @@ fn page_template(post: Post(msg)) -> Element(msg) {
       html.div([attribute.class("prose")], post.contents),
     ])
 
-  page(post.title, post.description, [article])
+  page(post.title, post.description, all_posts, [article])
 }
 
 fn post_list(title: String, posts: List(Post(msg))) -> Element(msg) {
@@ -224,6 +224,7 @@ fn site_search() -> Element(msg) {
         attribute.attribute("name", "q"),
         attribute.attribute("type", "search"),
         attribute.attribute("autocomplete", "off"),
+        attribute.attribute("aria-autocomplete", "list"),
         attribute.attribute("aria-controls", "search-suggestions"),
         attribute.attribute("aria-expanded", "false"),
         attribute.placeholder("Rechercher une note…"),
@@ -251,6 +252,7 @@ fn site_search() -> Element(msg) {
           attribute.id("search-suggestions"),
           attribute.class("search-suggestions"),
           attribute.attribute("data-search-suggestions", ""),
+          attribute.attribute("role", "listbox"),
           attribute.hidden(True),
         ],
         [],
@@ -259,9 +261,43 @@ fn site_search() -> Element(msg) {
   )
 }
 
+fn search_index(posts: List(Post(msg))) -> Element(msg) {
+  html.div(
+    [attribute.attribute("data-search-sources", ""), attribute.hidden(True)],
+    sorted_posts(posts) |> list.map(search_source),
+  )
+}
+
+fn search_source(post: Post(msg)) -> Element(msg) {
+  let tags = tags_for(post)
+  let post_path = post.url |> string.replace(site_url, "")
+
+  html.div(
+    [
+      attribute.attribute("data-search-source", ""),
+      attribute.data(
+        "search",
+        post.title <> " " <> post.description <> " " <> string.join(tags, " "),
+      ),
+      attribute.data("tags", string.join(tags, ",")),
+    ],
+    [
+      html.a(
+        [
+          attribute.href(post_path),
+          attribute.attribute("data-search-title", ""),
+        ],
+        [html.text(post.title)],
+      ),
+      html.p([], [html.text(post.description)]),
+    ],
+  )
+}
+
 fn page(
   title: String,
   description: String,
+  posts: List(Post(msg)),
   content: List(Element(msg)),
 ) -> Element(msg) {
   html.html([attribute.lang("fr")], [
@@ -315,6 +351,13 @@ fn page(
       html.a([attribute.class("skip-link"), attribute.href("#main-content")], [
         html.text("Aller au contenu"),
       ]),
+      html.div(
+        [
+          attribute.class("reading-progress"),
+          attribute.attribute("aria-hidden", "true"),
+        ],
+        [html.span([attribute.attribute("data-reading-progress", "")], [])],
+      ),
       html.header([attribute.class("site-header")], [
         html.div([attribute.class("shell header-inner")], [
           html.a([attribute.class("site-name"), attribute.href("/")], [
@@ -327,6 +370,7 @@ fn page(
           ]),
         ]),
       ]),
+      search_index(posts),
       html.main(
         [attribute.class("shell"), attribute.id("main-content")],
         content,
