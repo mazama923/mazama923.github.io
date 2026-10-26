@@ -33,9 +33,11 @@
   --focus: #e2ffac;
   --code: #10131d;
   --code-text: #f7f8fc;
-  --radius-sm: 0.5rem;
-  --radius-md: 0.9rem;
-  --radius-lg: 1.25rem;
+  --grid-line: rgb(183 245 91 / 7%);
+  --grid-dot: rgb(183 245 91 / 20%);
+  --radius-sm: 0.25rem;
+  --radius-md: 0.55rem;
+  --radius-lg: 0.8rem;
   --shadow-sm: 0 0.4rem 1rem rgb(0 0 0 / 18%);
   --shadow-md: 0 1rem 2.5rem rgb(0 0 0 / 28%);
   font-family: "OpenDyslexic", system-ui, sans-serif;
@@ -58,7 +60,11 @@ body {
   background:
     radial-gradient(circle at 85% -15%, rgb(156 140 255 / 14%), transparent 29rem),
     radial-gradient(circle at 0 20rem, rgb(183 245 91 / 6%), transparent 24rem),
+    radial-gradient(circle at 0 0, var(--grid-dot) 0 0.07rem, transparent 0.09rem),
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
     linear-gradient(145deg, var(--background) 0%, var(--background-deep) 100%);
+  background-size: auto, auto, 2rem 2rem, 2rem 2rem, 2rem 2rem, auto;
   font-size: clamp(1rem, 0.97rem + 0.15vw, 1.08rem);
   line-height: 1.7;
   overflow-wrap: break-word;
@@ -126,8 +132,20 @@ a:hover {
   z-index: 10;
   top: 0;
   background: rgb(9 11 18 / 76%);
+  border-bottom: 1px solid rgb(183 245 91 / 16%);
   box-shadow: 0 0.5rem 1.25rem rgb(6 7 11 / 15%);
   backdrop-filter: blur(1.25rem) saturate(135%);
+}
+
+.site-header::after {
+  position: absolute;
+  right: max(1rem, calc((100% - 74rem) / 2));
+  bottom: -1px;
+  width: clamp(5rem, 14vw, 11rem);
+  height: 2px;
+  content: "";
+  background: var(--accent);
+  box-shadow: 0 0 0.7rem rgb(183 245 91 / 44%);
 }
 
 .header-inner {
@@ -359,11 +377,15 @@ main {
   padding: clamp(1.5rem, 4vw, 3.25rem);
   overflow: hidden;
   background:
-    linear-gradient(135deg, rgb(156 140 255 / 13%), transparent 52%),
-    rgb(20 24 37 / 64%);
+    linear-gradient(135deg, rgb(156 140 255 / 14%), transparent 52%),
+    radial-gradient(circle at 0 0, rgb(183 245 91 / 24%) 0 0.06rem, transparent 0.08rem),
+    linear-gradient(rgb(183 245 91 / 7%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(183 245 91 / 7%) 1px, transparent 1px),
+    rgb(20 24 37 / 78%);
+  background-size: auto, 1.5rem 1.5rem, 1.5rem 1.5rem, 1.5rem 1.5rem, auto;
   border: 1px solid rgb(98 112 143 / 70%);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md), inset 0 1px rgb(255 255 255 / 8%);
+  box-shadow: var(--shadow-md), inset 0 1px rgb(255 255 255 / 8%), inset 0 0 0 1px rgb(183 245 91 / 5%);
 }
 
 .hero::after {
@@ -490,10 +512,12 @@ main {
   padding: clamp(1.2rem, 2vw, 1.6rem);
   background:
     linear-gradient(145deg, rgb(156 140 255 / 11%), transparent 50%),
+    linear-gradient(90deg, rgb(183 245 91 / 4%) 1px, transparent 1px),
     var(--surface);
+  background-size: auto, 1rem 1rem, auto;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
-  box-shadow: inset 0 1px rgb(255 255 255 / 5%), var(--shadow-sm);
+  box-shadow: inset 0 1px rgb(255 255 255 / 5%), inset 0 0 0 1px rgb(183 245 91 / 3%), var(--shadow-sm);
   transition: border-color 160ms ease-out, box-shadow 160ms ease-out, transform 160ms ease-out;
 }
 
