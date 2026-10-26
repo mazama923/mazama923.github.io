@@ -92,7 +92,7 @@ fn home_view(posts: List(Post(msg))) -> Element(msg) {
         html.text("Lire les notes"),
       ]),
     ]),
-    post_list("Dernières notes", sorted_posts(posts) |> list.take(6), False),
+    post_list("Dernières notes", sorted_posts(posts) |> list.take(6)),
   ])
 }
 
@@ -107,7 +107,9 @@ fn blog_view(posts: List(Post(msg))) -> Element(msg) {
         ),
       ]),
     ]),
-    post_list("Toutes les notes", sorted_posts(posts), True),
+    html.div([attribute.attribute("data-search-index", "")], [
+      post_list("Toutes les notes", sorted_posts(posts)),
+    ]),
   ])
 }
 
@@ -142,69 +144,11 @@ fn page_template(post: Post(msg)) -> Element(msg) {
   page(post.title, post.description, [article])
 }
 
-fn post_list(
-  title: String,
-  posts: List(Post(msg)),
-  with_search: Bool,
-) -> Element(msg) {
-  let cards =
-    html.div([attribute.class("post-grid")], list.map(posts, post_card))
-
-  case with_search {
-    True ->
-      html.section([attribute.class("post-list")], [
-        search_controls(),
-        html.h2([], [html.text(title)]),
-        cards,
-      ])
-    False ->
-      html.section([attribute.class("post-list")], [
-        html.h2([], [html.text(title)]),
-        cards,
-      ])
-  }
-}
-
-fn search_controls() -> Element(msg) {
-  html.section(
-    [
-      attribute.class("search-panel"),
-      attribute.attribute("data-search-controls", ""),
-      attribute.id("recherche"),
-    ],
-    [
-      html.label(
-        [
-          attribute.class("search-label"),
-          attribute.attribute("for", "site-search"),
-        ],
-        [html.text("Rechercher une note")],
-      ),
-      html.input([
-        attribute.id("site-search"),
-        attribute.attribute("type", "search"),
-        attribute.attribute("autocomplete", "off"),
-        attribute.placeholder("Titre, description ou tag…"),
-      ]),
-      html.div([attribute.class("search-feedback")], [
-        html.p(
-          [
-            attribute.attribute("aria-live", "polite"),
-            attribute.attribute("data-search-status", ""),
-          ],
-          [],
-        ),
-        html.button(
-          [
-            attribute.class("search-clear"),
-            attribute.attribute("data-clear-tag", ""),
-            attribute.attribute("type", "button"),
-          ],
-          [html.text("Effacer le tag")],
-        ),
-      ]),
-    ],
-  )
+fn post_list(title: String, posts: List(Post(msg))) -> Element(msg) {
+  html.section([attribute.class("post-list")], [
+    html.h2([], [html.text(title)]),
+    html.div([attribute.class("post-grid")], list.map(posts, post_card)),
+  ])
 }
 
 fn post_card(post: Post(msg)) -> Element(msg) {
@@ -258,6 +202,58 @@ fn tag_link(tag: String) -> Element(msg) {
       attribute.attribute("data-filter-tag", tag),
     ],
     [html.text(tag)],
+  )
+}
+
+fn site_search() -> Element(msg) {
+  html.form(
+    [
+      attribute.class("site-search"),
+      attribute.attribute("action", "/blog"),
+      attribute.attribute("data-search-controls", ""),
+      attribute.attribute("role", "search"),
+    ],
+    [
+      html.label(
+        [
+          attribute.class("visually-hidden"),
+          attribute.attribute("for", "site-search"),
+        ],
+        [html.text("Rechercher une note")],
+      ),
+      html.input([
+        attribute.id("site-search"),
+        attribute.attribute("name", "q"),
+        attribute.attribute("type", "search"),
+        attribute.attribute("autocomplete", "off"),
+        attribute.placeholder("Rechercher une note…"),
+      ]),
+      html.div([attribute.class("search-feedback"), attribute.hidden(True)], [
+        html.p(
+          [
+            attribute.attribute("aria-live", "polite"),
+            attribute.attribute("data-search-status", ""),
+          ],
+          [],
+        ),
+        html.button(
+          [
+            attribute.class("search-clear"),
+            attribute.attribute("data-clear-tag", ""),
+            attribute.attribute("type", "button"),
+          ],
+          [html.text("Effacer le tag")],
+        ),
+      ]),
+      html.div(
+        [
+          attribute.class("search-suggestions"),
+          attribute.attribute("data-search-suggestions", ""),
+          attribute.hidden(True),
+        ],
+        [],
+      ),
+    ],
   )
 }
 
@@ -319,9 +315,9 @@ fn page(
           html.a([attribute.class("site-name"), attribute.href("/")], [
             html.text("Mazama"),
           ]),
+          site_search(),
           html.nav([attribute.aria_label("Navigation principale")], [
-            html.a([attribute.href("/blog")], [html.text("Les notes")]),
-            html.a([attribute.href("/blog#recherche")], [html.text("Recherche")]),
+            html.a([attribute.href("/blog")], [html.text("Blog")]),
             html.a([attribute.href("/about/")], [html.text("À propos")]),
           ]),
         ]),
