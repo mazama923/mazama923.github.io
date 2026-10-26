@@ -6,13 +6,21 @@
   }
 
   const input = controls.querySelector("#site-search");
+  const feedback = controls.querySelector(".search-feedback");
   const status = controls.querySelector("[data-search-status]");
   const clearTagButton = controls.querySelector("[data-clear-tag]");
-  const cards = Array.from(document.querySelectorAll(".post-card[data-search]"));
+  const suggestions = controls.querySelector("[data-search-suggestions]");
+  const cards = Array.from(
+    document.querySelectorAll("[data-search-index] .post-card[data-search]"),
+  );
   const parameters = new URLSearchParams(window.location.search);
   let selectedTag = (parameters.get("tag") || "").trim().toLowerCase();
 
   input.value = parameters.get("q") || "";
+
+  if (cards.length === 0) {
+    return;
+  }
 
   const normalize = value =>
     value
@@ -38,9 +46,37 @@
     window.history.replaceState(null, "", url);
   };
 
+  const renderSuggestions = (matches, query) => {
+    suggestions.replaceChildren();
+    suggestions.hidden = !query;
+
+    matches.slice(0, 5).forEach(card => {
+      const titleLink = card.querySelector("h3 a");
+      const description = card.querySelector("p");
+      const suggestion = document.createElement("a");
+      const title = document.createElement("strong");
+      const summary = document.createElement("span");
+
+      suggestion.className = "search-suggestion";
+      suggestion.href = titleLink.href;
+      title.textContent = titleLink.textContent;
+      summary.textContent = description.textContent;
+      suggestion.append(title, summary);
+      suggestions.append(suggestion);
+    });
+
+    if (matches.length === 0) {
+      const empty = document.createElement("p");
+
+      empty.className = "search-empty";
+      empty.textContent = "Aucune note ne correspond à cette recherche.";
+      suggestions.append(empty);
+    }
+  };
+
   const filterCards = () => {
     const query = normalize(input.value.trim());
-    let visibleCount = 0;
+    const matches = [];
 
     cards.forEach(card => {
       const matchesQuery = !query || normalize(card.dataset.search || "").includes(query);
@@ -51,11 +87,11 @@
       card.hidden = !visible;
 
       if (visible) {
-        visibleCount += 1;
+        matches.push(card);
       }
     });
 
-    const parts = [`${visibleCount} note${visibleCount > 1 ? "s" : ""}`];
+    const parts = [`${matches.length} note${matches.length > 1 ? "s" : ""}`];
 
     if (selectedTag) {
       parts.push(`tag : ${selectedTag}`);
@@ -66,7 +102,9 @@
     }
 
     status.textContent = parts.join(" · ");
+    feedback.hidden = !query && !selectedTag;
     clearTagButton.hidden = !selectedTag;
+    renderSuggestions(matches, query);
     updateUrl(input.value.trim());
   };
 
