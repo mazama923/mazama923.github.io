@@ -234,6 +234,104 @@ main {
   box-shadow: 0 0.65rem 2rem rgb(198 255 52 / 30%);
 }
 
+.search-panel {
+  max-width: 46rem;
+  margin: 0 0 2.5rem;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  background: rgb(127 58 237 / 14%);
+  border: 1px solid var(--line);
+  border-radius: 0.45rem;
+}
+
+.search-label {
+  display: block;
+  margin-bottom: 0.55rem;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.search-panel input {
+  width: 100%;
+  min-height: 2.9rem;
+  padding: 0.65rem 0.8rem;
+  color: var(--text);
+  background: var(--code);
+  border: 1px solid var(--line-strong);
+  border-radius: 0.28rem;
+  font: inherit;
+}
+
+.search-panel input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.search-panel input:focus-visible {
+  outline: 0.2rem solid var(--focus);
+  outline-offset: 0.2rem;
+}
+
+.search-feedback {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.85rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.search-feedback p {
+  margin: 0;
+}
+
+.search-clear {
+  padding: 0.35rem 0.55rem;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 0.28rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.search-clear:hover {
+  color: #000000;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 1rem;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.85rem;
+  padding: 0.2rem 0.55rem;
+  color: var(--accent-strong);
+  background: rgb(127 58 237 / 24%);
+  border: 1px solid rgb(127 58 237 / 55%);
+  border-radius: 999px;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.tag:hover {
+  color: #000000;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
 .post-list h2 {
   margin: 0 0 1.2rem;
   color: var(--text);
@@ -278,6 +376,10 @@ main {
 
 .post-card p {
   color: var(--muted);
+}
+
+.post-card .tag-list {
+  margin: 0.2rem 0 1.1rem;
 }
 
 .post-card .text-link {
@@ -425,6 +527,11 @@ main {
 
   .post-grid {
     grid-template-columns: 1fr;
+  }
+
+  .search-feedback {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .hero h1,
