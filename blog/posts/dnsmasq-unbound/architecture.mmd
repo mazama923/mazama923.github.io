@@ -1,0 +1,24 @@
+flowchart TB
+    internet((Internet)) --> bbox["Bbox — passerelle"]
+    bbox --- lan["LAN"]
+    lan --- devices["Appareils locaux"]
+
+    subgraph zimaboard["ZimaBoard"]
+        direction TB
+        dnsmasq["Dnsmasq — DHCPv4, DHCPv6, RA/SLAAC"]
+        unbound["Unbound — DNS, cache, adblock"]
+    end
+
+    lan --- dnsmasq
+    dnsmasq -->|"DHCP et RA"| devices
+    devices -->|"Requêtes DNS :53"| unbound
+    unbound -->|"DNS-over-TLS :853"| quad9["Quad9"]
+    unbound -->|"Zones .ts.net"| tailscale["Tailscale MagicDNS"]
+
+    classDef network fill:#1f2937,stroke:#9ca3af,color:#f9fafb,stroke-width:2px
+    classDef service fill:#312e81,stroke:#a78bfa,color:#f9fafb,stroke-width:2px
+    classDef external fill:#14532d,stroke:#86efac,color:#f9fafb,stroke-width:2px
+
+    class internet,bbox,lan,devices network
+    class dnsmasq,unbound service
+    class quad9,tailscale external

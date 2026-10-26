@@ -16,6 +16,14 @@ publier type slug:
 verifier-contenu:
     ./scripts/check-content.sh
 
+# Générer les diagrammes Mermaid des brouillons et des contenus publiés.
+diagrammes:
+    ./scripts/render-diagrams.sh --all
+
+# Générer les diagrammes Mermaid des contenus publiés.
+diagrammes-publics:
+    ./scripts/render-diagrams.sh --published
+
 # Vérifier le formatage du code Gleam.
 formater:
     gleam format --check
@@ -38,6 +46,7 @@ verifier:
 
 # Générer le site statique dans dist/.
 construire:
+    ./scripts/render-diagrams.sh --published
     gleam run -m mazama_blog
 
 # Lancer un aperçu local avec rechargement automatique.

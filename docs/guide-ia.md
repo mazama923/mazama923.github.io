@@ -12,7 +12,7 @@ Donnez toujours à l’agent :
 4. les tags CSV ;
 5. les sources publiques ou les notes déjà expurgées ;
 6. la consigne de créer un brouillon uniquement ;
-7. la référence à [`voix-ia.md`](voix-ia.md).
+7. la référence à [`voix-ia.md`](voix-ia.md) et, lorsqu’un schéma est nécessaire, à [`diagrammes.md`](diagrammes.md).
 
 La consigne complète réutilisable est dans [`voix-ia.md`](voix-ia.md). Elle impose une écriture de note de terrain : contexte réel, choix justifié, étapes minimales, vérification et limites explicites.
 
@@ -22,7 +22,7 @@ Exemple :
 Crée un brouillon de post dans drafts/ à partir de ces notes publiques.
 Slug : diagnostic-dns-local
 Tags : dns,linux,diagnostic
-Le contenu est en français. Ne lis aucun fichier hors de drafts/, templates/ et docs/. Ne publie pas le brouillon. Applique docs/voix-ia.md, docs/editorial-style.md et docs/securite-ia.md.
+Le contenu est en français. Ne lis aucun fichier hors de drafts/, templates/ et docs/. Ne publie pas le brouillon. Applique docs/voix-ia.md, docs/editorial-style.md, docs/securite-ia.md et, si nécessaire, docs/diagrammes.md.
 ```
 
 ## Parcours obligatoire
@@ -53,6 +53,7 @@ just publier post diagnostic-dns-local
 - Ne demandez pas une refonte générale lorsque seule une page doit être créée.
 - Fournissez un slug, un titre, une description et des tags à l’avance si possible.
 - Demandez à l’agent de lister les hypothèses, plutôt que de les inventer.
+- Pour un schéma d’architecture, demandez un fichier Mermaid `.mmd`, un SVG généré localement et une référence Markdown vers ce SVG ; proscrivez l’ASCII art.
 - Interdisez toute modification de `src/`, `static/`, `.github/` et de la publication sans instruction explicite.
 - Donnez seulement les extraits nécessaires et déjà expurgés.
 

@@ -9,7 +9,7 @@
 | Article publié | `blog/posts/<slug>/index.md` |
 | Page publiée | `blog/pages/<slug>/index.md` |
 
-Blogatto découvre récursivement les fichiers `index.md` sous `blog/`. Les ressources placées à côté d’un `index.md` sont copiées avec la page générée.
+Blogatto découvre récursivement les fichiers `index.md` sous `blog/`. Les ressources publiques sont placées dans `static/` ; les diagrammes suivent la convention décrite dans [`diagrammes.md`](diagrammes.md).
 
 ## Frontmatter requis
 
