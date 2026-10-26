@@ -170,9 +170,6 @@ fn post_card(post: Post(msg)) -> Element(msg) {
       ]),
       html.p([], [html.text(post.description)]),
       tag_list(tags),
-      html.a([attribute.class("text-link"), attribute.href(post_path)], [
-        html.text("Lire la note →"),
-      ]),
     ],
   )
 }
@@ -315,6 +312,9 @@ fn page(
       ),
     ]),
     html.body([], [
+      html.a([attribute.class("skip-link"), attribute.href("#main-content")], [
+        html.text("Aller au contenu"),
+      ]),
       html.header([attribute.class("site-header")], [
         html.div([attribute.class("shell header-inner")], [
           html.a([attribute.class("site-name"), attribute.href("/")], [
@@ -327,7 +327,10 @@ fn page(
           ]),
         ]),
       ]),
-      html.main([attribute.class("shell")], content),
+      html.main(
+        [attribute.class("shell"), attribute.id("main-content")],
+        content,
+      ),
       html.footer([attribute.class("site-footer")], [
         html.div([attribute.class("shell")], [
           html.p([], [html.text("Mazama · Carnet d'atelier DevOps")]),
