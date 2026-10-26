@@ -9,9 +9,10 @@
   const status = controls.querySelector("[data-search-status]");
   const resetButton = controls.querySelector("[data-clear-search]");
   const suggestions = controls.querySelector("[data-search-suggestions]");
-  const cards = Array.from(
-    document.querySelectorAll("[data-search-index] .post-card[data-search]"),
-  );
+  const visibleCards = Array.from(document.querySelectorAll(".post-card[data-search]"));
+  const cards = visibleCards.length > 0
+    ? visibleCards
+    : Array.from(document.querySelectorAll("[data-search-source]"));
   const parameters = new URLSearchParams(window.location.search);
   let selectedTag = (parameters.get("tag") || "").trim().toLowerCase();
 
@@ -32,6 +33,40 @@
   const setSuggestionsVisible = visible => {
     suggestions.hidden = !visible;
     input.setAttribute("aria-expanded", String(visible));
+  };
+
+  const suggestionLinks = () =>
+    Array.from(suggestions.querySelectorAll(".search-suggestion"));
+
+  const focusSuggestion = index => {
+    suggestionLinks()[index]?.focus();
+  };
+
+  const bindSuggestionNavigation = () => {
+    suggestionLinks().forEach((suggestion, index) => {
+      suggestion.addEventListener("keydown", event => {
+        if (event.key === "ArrowDown") {
+          event.preventDefault();
+          focusSuggestion(index + 1);
+        }
+
+        if (event.key === "ArrowUp") {
+          event.preventDefault();
+
+          if (index === 0) {
+            input.focus();
+          } else {
+            focusSuggestion(index - 1);
+          }
+        }
+
+        if (event.key === "Escape") {
+          event.preventDefault();
+          setSuggestionsVisible(false);
+          input.focus();
+        }
+      });
+    });
   };
 
   const updateUrl = query => {
@@ -63,17 +98,22 @@
     suggestions.append(summary);
 
     matches.slice(0, 4).forEach(card => {
-      const titleLink = card.querySelector("h3 a");
+      const titleLink = card.querySelector("[data-search-title], h3 a");
       const description = card.querySelector("p");
       const suggestion = document.createElement("a");
       const title = document.createElement("strong");
       const summary = document.createElement("span");
+      const tags = document.createElement("span");
+      const tagList = (card.dataset.tags || "").split(",").filter(Boolean);
 
       suggestion.className = "search-suggestion";
       suggestion.href = titleLink.href;
+      suggestion.setAttribute("role", "option");
       title.textContent = titleLink.textContent;
       summary.textContent = description.textContent;
-      suggestion.append(title, summary);
+      tags.className = "search-suggestion-tags";
+      tags.textContent = tagList.slice(0, 3).join(" · ");
+      suggestion.append(title, summary, tags);
       suggestions.append(suggestion);
     });
 
@@ -84,6 +124,8 @@
       empty.textContent = "Aucune note ne correspond à cette recherche.";
       suggestions.append(empty);
     }
+
+    bindSuggestionNavigation();
   };
 
   const filterCards = () => {
@@ -96,7 +138,9 @@
       const matchesTag = !selectedTag || tags.includes(selectedTag);
       const visible = matchesQuery && matchesTag;
 
-      card.hidden = !visible;
+      if (visibleCards.length > 0) {
+        card.hidden = !visible;
+      }
 
       if (visible) {
         matches.push(card);
@@ -128,6 +172,18 @@
   });
 
   input.addEventListener("keydown", event => {
+    if (event.key === "ArrowDown" && hasActiveFilter()) {
+      event.preventDefault();
+      focusSuggestion(0);
+      return;
+    }
+
+    if (event.key === "ArrowUp" && hasActiveFilter()) {
+      event.preventDefault();
+      focusSuggestion(suggestionLinks().length - 1);
+      return;
+    }
+
     if (event.key !== "Escape" || !hasActiveFilter()) {
       return;
     }
@@ -167,4 +223,33 @@
   });
 
   filterCards();
+})();
+
+
+(() => {
+  const indicator = document.querySelector("[data-reading-progress]");
+
+  if (!indicator) {
+    return;
+  }
+
+  let frame = null;
+
+  const updateProgress = () => {
+    const maximum = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = maximum > 0 ? Math.min(window.scrollY / maximum, 1) : 0;
+
+    indicator.style.transform = `scaleX(${progress})`;
+    frame = null;
+  };
+
+  const requestUpdate = () => {
+    if (frame === null) {
+      frame = window.requestAnimationFrame(updateProgress);
+    }
+  };
+
+  document.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
+  updateProgress();
 })();
