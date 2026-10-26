@@ -12,7 +12,7 @@ tags: exploration,outils,neovim
 Un matin, j’ouvre VSCode sur mon repo préféré. Dix secondes… vingt secondes… *toujours* pas prêt.
 C’est là que j’ai eu le déclic : est-ce vraiment normal de démarrer sa journée avec autant d’attente ? Moi qui optimise chaque commande, chaque déploiement, il était temps de trouver **un outil qui me ressemblait**.
 
-![Ouverture de VSCode](images/open_vscode.gif)
+![Ouverture de VSCode](open_vscode.gif)
 
 ## VSCode : une belle histoire, mais…
 
@@ -54,7 +54,7 @@ Je jongle entre des dizaines de projets par jour : Neovim démarre à la vitesse
 
 Et **les Vim motions** : sur les serveurs, il n’y a que vi/vim. Les maîtriser, c’est un gain de productivité colossal.
 
-![Ka-chow](images/Mcqueen.gif)
+![Ka-chow](Mcqueen.gif)
 
 ## Et l’IA ? 😎
 
@@ -65,7 +65,7 @@ Aujourd’hui, j’utilise codecompanion pour Copilot, et tout fonctionne aussi 
 
 Je mets à dispo ma config LazyVim [GitHub](https://github.com/mazama923/lazyvim) — clone, `:Lazy sync` et c’est parti.
 
-![Capture de mon Neovim](images/my_neovim.avif)
+![Capture de mon Neovim](my_neovim.avif)
 
 ## Conclusion : adoptez la vitesse et l’efficacité 🔥
 
