@@ -7,9 +7,11 @@ type: post
 tags: crowdsec,systemd,security,automation
 ---
 
-# Auto-update CrowdSec : 3 fichiers, zéro maintenance
+## Auto-update CrowdSec : 3 fichiers, zéro maintenance
 
 **Un CrowdSec à jour = un CrowdSec efficace.** Suite de mon [article Caddy + CrowdSec](/blog/securiser-caddy-avec-crowdsec/), voici comment je l'auto-maintient sans y penser.
+
+Pour Caddy en conteneur rootless, j’ai aussi détaillé [l’activation de sockets avec Podman](/blog/socket-activation-caddy-podman/).
 
 ## Le problème
 
@@ -64,4 +66,4 @@ systemctl list-timers | grep crowdsec
 > `journalctl -u crowdsec-hub-update.timer -f` pour suivre les mises à jour en live.
 
 ---
-Ka-chow 🚀
+**Ka-chow** 🚀

@@ -7,7 +7,6 @@ tags: dns,podman,containers,rootless
 slug: podman-dns
 ---
 
-# DNS local et Podman rootless : l’adresse ne suffit pas
 
 Un nom de ton réseau se résout sur l’hôte, mais pas dans un conteneur Podman rootless. Le premier réflexe est souvent de recopier l’adresse du DNS dans la configuration. Sauf que connaître l’adresse ne suffit pas : le conteneur doit aussi pouvoir joindre ce résolveur depuis son propre réseau.
 
@@ -16,6 +15,8 @@ Un nom de ton réseau se résout sur l’hôte, mais pas dans un conteneur Podma
 Un conteneur a son propre espace réseau. Son adresse de loopback désigne le conteneur, pas l’hôte. Si ton résolveur écoute uniquement sur l’interface de loopback de la machine, indiquer cette adresse dans le conteneur ne le rend pas accessible.
 
 Un DNS installé sur une autre machine du LAN pose une question différente : le réseau rootless doit pouvoir acheminer les requêtes vers cette machine, et le pare-feu doit laisser passer DNS en UDP et TCP sur le port 53. Le backend réseau utilisé par Podman — par exemple `pasta` ou `slirp4netns` — et sa version peuvent changer le chemin. Évite donc de recopier une adresse ou une configuration trouvée pour une autre installation sans vérifier ce que voit ton conteneur.
+
+Pour le contexte sur le résolveur du LAN, tu peux aussi lire [la configuration d’un DNS local avec Dnsmasq et Unbound](/blog/dnsmasq-unbound/).
 
 Autre point : attribuer une adresse statique au serveur Podman n’est pas un prérequis DNS en soi. Cela ne devient pertinent que si le résolveur tourne sur cette machine et que d’autres systèmes doivent pouvoir l’atteindre durablement.
 

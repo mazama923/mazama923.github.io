@@ -36,7 +36,9 @@ Le brouillon doit être relu et approuvé par un humain avant toute publication.
 just publier post activation-socket-systemd
 ```
 
-Un article publié se trouve dans `blog/posts/<slug>/index.md` ; une page publiée se trouve dans `blog/pages/<slug>/index.md`. Les scripts refusent les slugs invalides, les tags mal formés, les destinations existantes et les frontmatters incomplets.
+Un article publié se trouve dans `blog/posts/<slug>/index.md` ; une page publiée se trouve dans `blog/pages/<slug>/index.md`.
+
+To update an existing article after human review, use `just publier post <slug> --replace`. Replacement validates the draft, keeps existing published assets, and refuses drafts containing additional files. Without `--replace`, existing content is never overwritten. The publisher checks the draft individually; `just verifier-contenu` checks published content only.
 
 Les agents IA suivent strictement le parcours brouillon → revue humaine → publication. Ils ne publient pas, ne déploient pas et n’effectuent aucun appel réseau sans demande explicite. Consultez [`docs/securite-ia.md`](docs/securite-ia.md) avant de partager du contenu avec un LLM cloud.
 
@@ -45,7 +47,7 @@ Les agents IA suivent strictement le parcours brouillon → revue humaine → pu
 ```sh
 just brouillon-article <slug> <titre> <description> <tags>
 just brouillon-page <slug> <titre> <description> <tags>
-just publier <post|page> <slug>
+just publier <post|page> <slug> [--replace]
 just verifier-contenu
 just securite
 just diagrammes
