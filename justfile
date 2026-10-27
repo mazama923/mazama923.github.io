@@ -8,9 +8,9 @@ brouillon-article slug titre description tags:
 brouillon-page slug titre description tags:
     ./scripts/new-content.sh page "{{slug}}" "{{titre}}" "{{description}}" "{{tags}}"
 
-# Publier un brouillon validé après revue humaine : just publier <post|page> <slug>
-publier type slug:
-    ./scripts/publish-draft.sh "{{type}}" "{{slug}}"
+# Publier après revue humaine ; ajouter --replace pour mettre à jour un contenu existant.
+publier type slug option="":
+    ./scripts/publish-draft.sh "{{type}}" "{{slug}}" "{{option}}"
 
 # Vérifier le frontmatter et la structure du contenu publié.
 verifier-contenu:
@@ -31,6 +31,7 @@ formater:
 # Exécuter les tests Gleam.
 tester:
     gleam test
+    bash test/publish_draft_test.sh
 
 # Analyser les fichiers suivis et non générés à la recherche de secrets.
 securite:

@@ -1,5 +1,5 @@
 ---
-title: "Gérer ses dotfiles"
+title: "Gérer et déployer ses dotfiles avec GNU Stow"
 date: 2025-11-07 00:00:00 Europe/Paris
 description: "Organiser et déployer des dotfiles versionnés avec GNU Stow."
 slug: gerer-ses-dotfiles

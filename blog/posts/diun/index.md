@@ -1,5 +1,5 @@
 ---
-title: "Maintenir ses images Docker à jour"
+title: "Surveiller les mises à jour des images Docker avec Diun"
 date: 2026-01-01 00:00:00 Europe/Paris
 description: "Surveiller les mises à jour d’images Docker avec Diun sans automatiser leur déploiement."
 slug: diun
@@ -61,4 +61,4 @@ Il existe plusieurs alternatives à Diun, mais si vous avez une infrastructure s
 ---
 Voilà, un petit article rapide, mais qui vous permettra de mieux gérer l’obsolescence de vos images Docker sans prise de tête.
 
-Ka-chow 🚀
+**Ka-chow** 🚀

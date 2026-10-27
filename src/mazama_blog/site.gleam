@@ -18,6 +18,10 @@ import zones
 
 const site_url = "https://mazama923.github.io"
 
+const home_route = "/"
+
+const blog_route = "/blog"
+
 pub fn config() -> config.Config(Nil) {
   let post_config =
     post_config.default()
@@ -49,8 +53,8 @@ pub fn config() -> config.Config(Nil) {
   |> config.output_dir("./dist")
   |> config.static_dir("./static")
   |> config.post(post_config)
-  |> config.route("/", home_view)
-  |> config.route("/blog", blog_view)
+  |> config.route(home_route, home_view)
+  |> config.route(blog_route, blog_view)
   |> config.rss_feed(rss_feed)
   |> config.sitemap(sitemap.new("/sitemap.xml"))
   |> config.robots(robots_config)
@@ -77,51 +81,63 @@ fn sorted_posts(posts: List(Post(msg))) -> List(Post(msg)) {
 }
 
 fn home_view(posts: List(Post(msg))) -> Element(msg) {
-  page("Accueil", "Notes de terrain DevOps de Mazama.", posts, [
-    html.section([attribute.class("hero")], [
-      html.p([attribute.class("eyebrow")], [
-        html.text("Carnet d'atelier DevOps"),
+  page(
+    "DevOps : observabilité, automatisation et exploitation",
+    "Notes de terrain sur l'observabilité, l'automatisation et les pratiques d'exploitation DevOps.",
+    site_url <> home_route,
+    posts,
+    [
+      html.section([attribute.class("hero")], [
+        html.p([attribute.class("eyebrow")], [
+          html.text("Carnet d'atelier DevOps"),
+        ]),
+        html.h1([], [
+          html.text(
+            "Des systèmes qui tournent rond, des notes qui vont droit au but.",
+          ),
+        ]),
+        html.p([], [
+          html.text(
+            "Observabilité, automatisation et pratiques d'exploitation qui tiennent dans la durée.",
+          ),
+        ]),
+        html.a([attribute.class("button"), attribute.href("/blog")], [
+          html.text("Lire les notes"),
+        ]),
       ]),
-      html.h1([], [
-        html.text(
-          "Des systèmes qui tournent rond, des notes qui vont droit au but.",
-        ),
-      ]),
-      html.p([], [
-        html.text(
-          "Observabilité, automatisation et pratiques d'exploitation qui tiennent dans la durée.",
-        ),
-      ]),
-      html.a([attribute.class("button"), attribute.href("/blog")], [
-        html.text("Lire les notes"),
-      ]),
-    ]),
-    post_list("Dernières notes", sorted_posts(posts) |> list.take(6)),
-  ])
+      post_list("Dernières notes", sorted_posts(posts) |> list.take(6)),
+    ],
+  )
 }
 
 fn blog_view(posts: List(Post(msg))) -> Element(msg) {
-  page("Blog", "Toutes les notes d'exploitation publiées par Mazama.", posts, [
-    html.section([attribute.class("page-intro")], [
-      html.p([attribute.class("eyebrow")], [html.text("Journal de bord")]),
-      html.h1([], [html.text("Notes d'exploitation")]),
-      html.p([], [
-        html.text(
-          "Des repères concrets pour opérer, diagnostiquer et automatiser sans bruit inutile.",
-        ),
+  page(
+    "Blog",
+    "Toutes les notes d'exploitation publiées par Mazama.",
+    site_url <> blog_route,
+    posts,
+    [
+      html.section([attribute.class("page-intro")], [
+        html.p([attribute.class("eyebrow")], [html.text("Journal de bord")]),
+        html.h1([], [html.text("Notes d'exploitation")]),
+        html.p([], [
+          html.text(
+            "Des repères concrets pour opérer, diagnostiquer et automatiser sans bruit inutile.",
+          ),
+        ]),
       ]),
-    ]),
-    html.div([attribute.attribute("data-search-index", "")], [
-      post_list("Toutes les notes", sorted_posts(posts)),
-    ]),
-  ])
+      html.div([attribute.attribute("data-search-index", "")], [
+        post_list("Toutes les notes", sorted_posts(posts)),
+      ]),
+    ],
+  )
 }
 
 fn post_template(post: Post(msg), all_posts: List(Post(msg))) -> Element(msg) {
   case dict.get(post.extras, "type") {
     Ok("page") -> page_template(post, all_posts)
-    _ ->
-      page(post.title, post.description, all_posts, [
+    _ -> {
+      page(post.title, post.description, post.url, all_posts, [
         html.article([attribute.class("post")], [
           html.header([attribute.class("post-header")], [
             html.p([attribute.class("eyebrow")], [html.text("Note de terrain")]),
@@ -130,9 +146,10 @@ fn post_template(post: Post(msg), all_posts: List(Post(msg))) -> Element(msg) {
             html.p([attribute.class("lede")], [html.text(post.description)]),
             tag_list(tags_for(post)),
           ]),
-          html.div([attribute.class("prose")], post.contents),
+          html.div([attribute.class("prose")], post_contents(post)),
         ]),
       ])
+    }
   }
 }
 
@@ -143,10 +160,33 @@ fn page_template(post: Post(msg), all_posts: List(Post(msg))) -> Element(msg) {
         html.h1([], [html.text(post.title)]),
         html.p([attribute.class("lede")], [html.text(post.description)]),
       ]),
-      html.div([attribute.class("prose")], post.contents),
+      html.div([attribute.class("prose")], post_contents(post)),
     ])
 
-  page(post.title, post.description, all_posts, [article])
+  page(post.title, post.description, post.url, all_posts, [article])
+}
+
+fn post_contents(post: Post(msg)) -> List(Element(msg)) {
+  let heading = html.h1([], [html.text(post.title)]) |> element.to_string
+  remove_duplicate_heading(post.contents, heading)
+}
+
+fn remove_duplicate_heading(
+  contents: List(Element(msg)),
+  heading: String,
+) -> List(Element(msg)) {
+  case contents {
+    [first, ..rest] -> {
+      let rendered = element.to_string(first)
+      case rendered {
+        // Blogatto renders blank lines as empty elements before the first block.
+        "" -> [first, ..remove_duplicate_heading(rest, heading)]
+        _ if rendered == heading -> rest
+        _ -> contents
+      }
+    }
+    [] -> []
+  }
 }
 
 fn post_list(title: String, posts: List(Post(msg))) -> Element(msg) {
@@ -341,6 +381,7 @@ fn search_source(post: Post(msg)) -> Element(msg) {
 fn page(
   title: String,
   description: String,
+  canonical_url: String,
   posts: List(Post(msg)),
   content: List(Element(msg)),
 ) -> Element(msg) {
@@ -354,6 +395,10 @@ fn page(
       html.meta([
         attribute.name("description"),
         attribute.content(description),
+      ]),
+      html.link([
+        attribute.rel("canonical"),
+        attribute.href(canonical_url),
       ]),
       html.link([
         attribute.rel("icon"),
