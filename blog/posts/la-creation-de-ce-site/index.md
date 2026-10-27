@@ -1,34 +1,34 @@
 ---
 title: "La création de ce site"
 date: 2025-11-03 00:00:00 Europe/Paris
-description: "Pourquoi ce blog DevOps existe et ce que son auteur souhaite y partager."
-slug: la-creation-de-ce-site
+description: "Retour sur la création du blog et son évolution vers un site statique construit avec Gleam et Blogatto."
 type: post
-tags: devops,blog
+tags: devops,blog,gleam,blogatto
+slug: la-creation-de-ce-site
 ---
 
-## La création de ce site
+# La création de ce site
 
-Bienvenue déjà, si tu es nouveau !
+Bienvenue si tu es nouveau par ici ! Ce premier billet explique pourquoi j’ai créé ce site et comment il a évolué depuis.
 
-Ceci est mon premier post. Je voudrais ici expliquer pourquoi j'ai créé ce site.
+## Qui suis-je ?
 
-### Qui suis-je ?
+Je me présente rapidement : je suis **Software Engineer DevOps** — un titre bien long pour ne pas dire juste « DevOps » ! :)
 
-Je me présente rapidement : je suis **Software Engineer DevOps** — un titre bien long pour ne pas dire juste "DevOps" ! :)
+## Pourquoi ce site ?
 
-### Pourquoi ce site ?
+Depuis plusieurs années, je m’inspire du travail des autres. J’avais envie de rendre la pareille et de partager à mon tour les idées, les outils et les sujets qui m’intéressent. Si ça peut donner un peu d’inspiration à quelqu’un qui cherche de nouvelles pistes, tant mieux.
 
-Cela fait plusieurs années que je m'inspire des travaux des autres, et aujourd'hui j'ai décidé de rendre la pareille. Pour que peut-être des personnes comme moi, qui au début cherchaient de l'inspiration ou juste de nouveaux outils à se mettre sous la main, soient rassasiées.
+## D’un thème prêt à l’emploi à Gleam et Blogatto
 
-### Pourquoi GitLab Pages ?
+À la création du site, j’avais choisi GitLab Pages et le thème [Just the Docs](https://github.com/just-the-docs/just-the-docs). Je voulais publier facilement, sans passer mon temps sur la mise en page.
 
-J'ai choisi le format de **GitLab Pages** pour sa simplicité. Je ne veux pas passer du temps à la mise en page, mais plutôt partager rapidement ce qui m'inspire ou m'emballe en ce moment.
+Le site a évolué depuis. Aujourd’hui, c’est un site statique construit avec Gleam, Blogatto 7.0.1 et la cible Erlang. Les articles et les pages restent écrits en Markdown, dans `blog/posts/` et `blog/pages/`. Blogatto lit le contenu de `blog/` pour générer le site, qui est déployé sur GitHub Pages.
 
-Toujours sur le chemin de la simplicité, j'utilise le thème de [**Just the Docs**](https://github.com/just-the-docs/just-the-docs) pour son format minimaliste. Ce n'est pas ici que tu trouveras des animations léchées... Ou du moins, pas encore ! 😄
+L’objectif reste le même : partager rapidement ce qui m’inspire, sans faire de la mise en page le sujet principal. La différence, c’est que le site a maintenant son propre code et son outillage à maintenir. Pas de magie, donc — juste une autre façon de garder le contrôle sur sa construction.
 
 ---
 
-Donc voilà ! Merci d'avoir lu ces quelques lignes et bonne visite. N'hésite pas à revenir régulièrement pour voir ce que je partage.
+Merci d’avoir lu ces quelques lignes et bonne visite ! N’hésite pas à revenir voir ce que je partage.
 
 **Ka-chow** 🚀
