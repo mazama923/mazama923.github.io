@@ -7,50 +7,42 @@ tags: lunettes
 slug: meta-oakley
 ---
 
-## Pourquoi j’ai choisi des lunettes connectées
+À force de sortir mes AirPods pour chaque appel, j’ai fini par chercher une solution que j’aurais déjà sur moi. Je porte des lunettes de vue toute la journée ; intégrer le son aux lunettes semblait donc être le raccourci idéal. Après presque un an avec les Meta Oakley, elles ont effectivement remplacé mes écouteurs dans bien des situations. Mais le confort a fini par peser plus lourd que leurs fonctions.
 
-Avant les Meta Oakley, j’avais des lunettes de vue classiques et des AirPods que j’utilisais partout : au travail comme à la maison. Pas forcément pour écouter de la musique, mais surtout pour les appels et les réunions. Je ne cherchais donc pas le son le plus fidèle du marché ; je voulais un kit mains libres toujours avec moi.
+## Le besoin avant le produit
 
-Les AirPods sont de très bons produits, rien à redire là-dessus. Mais je voulais éviter de devoir sortir mes écouteurs à chaque appel. Depuis quelque temps, les lunettes Meta me faisaient de l’œil. J’espérais aussi qu’Apple finirait par sortir les siennes, mais les années passaient et il n’y avait toujours rien. Je n’ai pas craqué tout de suite : l’autonomie ne me semblait pas encore suffisante.
+Avant les Meta Oakley, j’avais des lunettes de vue classiques et des AirPods. Je les utilisais partout, au travail comme à la maison, surtout pour les appels et les réunions, la musique venait après. Je ne cherchais pas le son le plus fidèle du marché : je voulais simplement un kit mains libres toujours avec moi.
 
-## Pourquoi les Meta Oakley
+Les AirPods me convenaient, mais je voulais éviter de devoir les sortir à chaque appel. Les lunettes Meta me faisaient de l’œil depuis un moment. J’espérais aussi qu’Apple finirait par sortir les siennes, mais les années passaient et il n’y avait toujours rien. Je n’ai pas craqué tout de suite : l’autonomie ne me semblait pas encore suffisante.
 
-Puis sont arrivées les Meta Ray-Ban de deuxième génération et les Meta Oakley. Avec huit heures d’autonomie annoncées, je me suis dit que je pourrais enfin les utiliser toute la journée.
+## Pourquoi les Oakley ?
 
-J’ai choisi les Oakley plutôt que les Ray-Ban parce que je fais de la moto. Leurs branches droites, sans courbure à l’extrémité, s’enfilent plus facilement sous mon casque malgré leur épaisseur.
+Meta a ensuite sorti les Ray-Ban de deuxième génération, puis les Oakley. Les Oakley annonçaient huit heures d’autonomie ; je pensais donc pouvoir les utiliser toute la journée.
 
-Tout content de mon nouveau joujou, j’ai vendu mes AirPods et décidé de tout faire avec les lunettes. Alors, après presque un an d’utilisation, qu’est-ce que j’en pense ?
+J’ai choisi les Oakley parce que je fais de la moto. Leurs branches droites, sans courbure à l’extrémité, s’enfilent plus facilement sous mon casque, malgré leur épaisseur. J’ai vendu mes AirPods et décidé de tout faire avec les lunettes. C’était le plan, en tout cas.
 
-## Ce qui me plaît
+## Ce qui a changé au quotidien
 
-Comme j’ai une vue de taupe, je porte toujours mes lunettes. Les écouteurs sont donc toujours avec moi, que ce soit pour écouter de la musique ou prendre un appel. C’est un vrai kit mains libres.
+Le principal avantage, c’est qu’elles sont déjà avec moi : comme j’ai une vue de taupe, je porte toujours mes lunettes. Je peux donc écouter de la musique ou prendre un appel sans penser à emporter mes écouteurs.
 
-À moto, c’est aussi un vrai plus : j’entends le GPS sans avoir quelque chose qui bloque mes oreilles, et sans avoir besoin de regarder mon téléphone.
+Au travail, la connexion Bluetooth multipoint me permet de suivre le son de mon PC et de mon téléphone en même temps. Et à moto, j’entends le GPS sans avoir quelque chose qui bloque mes oreilles ni besoin de regarder mon téléphone.
 
-Au travail, c’est pratique aussi. Je n’ai pas besoin de sortir mes écouteurs ni mon casque ; la connexion Bluetooth multipoint me permet de suivre le son de mon PC et de mon téléphone en même temps.
+J’ai aussi recommencé à prendre des photos, alors que je n’en prends presque jamais. L’appareil est toujours sous la main, pour garder un souvenir ou filmer quelque chose sans les mains.
 
-Je me suis même surpris à reprendre des photos, alors que je n’en prends presque jamais. L’appareil est toujours sous la main, que ce soit pour garder un souvenir ou filmer quelque chose sans les mains.
+Les fonctions d’IA sont encore perfectibles, mais elles m’ont parfois été utiles. Je peux demander des informations sur une statue, une œuvre ou un autre élément que je regarde. Elles peuvent aussi traduire à la volée le texte que j’ai sous les yeux. Enfin, la mémoire peut me retrouver une photo et m’en donner la date ou le lieu ; une demande vocale assez vague suffit parfois à retrouver celle que je cherche.
 
-L’IA est encore perfectible, mais elle peut se montrer utile. Je peux lui demander des informations sur une statue, une œuvre ou un autre élément que je regarde. Elle peut aussi traduire à la volée le texte que j’ai sous les yeux.
+## Là où ça coince
 
-Enfin, sa mémoire peut retrouver le moment d’une photo et m’en donner la date ou le lieu. Avec une demande vocale assez vague, elle peut aussi ressortir la photo que je cherche.
+Les huit heures annoncées ne correspondent pas à mon usage en appel : pendant les réunions Teams, je ne dépasse jamais quatre heures avant que les lunettes passent en mode économie d’énergie.
 
-## Ce qui me plaît moins
+La recharge demande aussi un peu d’attention. Il arrive que les broches du boîtier se positionnent mal et que les lunettes ne chargent pas. Comme ce sont mes lunettes de vue, je ne peux pas simplement remettre ça à plus tard. Il faut prendre de nouvelles habitudes, par exemple les mettre en charge pendant qu’on prend sa douche. Et elles ne sont pas étanches : la baignade est exclue.
 
-Même avec huit heures d’autonomie annoncées, je ne dépasse jamais quatre heures d’appel notamment pendant les réunions Teams avant que les lunettes passent en mode économie d’énergie.
+Mais le vrai point noir, pour moi, c’est le confort. J’ai les oreilles proches de la tête et l’épaisseur des branches finit par me cisailler le haut des oreilles. Je ne sais pas si ce problème est fréquent, mais je les porte toute la journée et cette gêne a fini par l’emporter sur les avantages.
 
-Le boîtier de recharge est lui aussi perfectible. Parfois, les broches ne se positionnent pas correctement et les lunettes ne chargent pas. Et comme ce sont mes lunettes de vue, je ne peux pas simplement remettre la recharge à plus tard.
+## Alors, est-ce que je les recommande ?
 
-Il faut également prendre le pli de recharger ses lunettes : au début, ça demande de nouvelles habitudes, comme les mettre en charge pendant qu’on prend sa douche.
+Elles m’ont simplifié les appels, les réunions et la navigation à moto. J’apprécie aussi de pouvoir prendre une photo ou demander une traduction sans sortir un autre appareil. Mais l’autonomie en appel reste loin de ce que j’espérais, la recharge n’est pas toujours fiable et, surtout, les branches me font mal.
 
-Elles ne sont pas étanches : pas question de les emmener à la baignade.
-
-Mais le principal point noir, pour moi, c’est le confort. J’ai les oreilles proches de la tête et l’épaisseur des branches finit par me cisailler le haut des oreilles. Je ne sais pas si le problème est fréquent, mais je les porte toute la journée et c’est pour cette raison que je ne les conseillerais pas sans les avoir essayées avant.
-
-## Mon bilan
-
-Ces lunettes m’ont simplifié les appels, les réunions et quelques usages à moto. J’apprécie aussi de pouvoir prendre une photo ou demander une traduction sans sortir un autre appareil. Mais l’autonomie réelle en appel, la recharge parfois capricieuse et surtout l’inconfort des branches pèsent dans la balance.
-
-Ce retour ne vaut que pour mon usage et ma façon de les porter. Je ne suis pas testeur professionnel et je n’ai aucun partenariat avec Meta ou Oakley : c’est simplement mon expérience après presque un an.
+Je ne les conseillerais donc pas sans les avoir essayées : le confort est trop important pour un objet qu’on porte toute la journée. C’est mon expérience, avec ma vue et ma façon de les utiliser ; je ne suis pas testeur professionnel et je n’ai aucun partenariat avec Meta ou Oakley.
 
 **Ka-chow** 🚀
