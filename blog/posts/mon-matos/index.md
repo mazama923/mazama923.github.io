@@ -1,6 +1,6 @@
 ---
 title: "Mon matos"
-date: 2026-11-08 21:46:14s
+date: 2026-11-08 21:46:14 Europe/Paris
 description: "Le matériel qui m'accompagne au quotidien pour le travail et les loisirs."
 slug: mon-matos
 type: post

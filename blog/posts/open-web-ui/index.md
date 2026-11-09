@@ -1,6 +1,6 @@
 ---
 title: "IA locale avec Open WebUI"
-date: 2026-11-09 22:26:00
+date: 2026-11-09 22:26:00 Europe/Paris
 description: "Retour d’expérience sur Open WebUI avec Ollama, une authentification OIDC via Pocket ID et un reverse proxy Caddy."
 type: post
 tags: open-web-ui,pocket-id,caddy,oidc,passkeys,home-server
