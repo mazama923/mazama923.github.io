@@ -1,173 +1,154 @@
 ---
-title: "IA locale avec OpenWebUI"
+title: "IA locale avec Open WebUI"
 date: 2026-11-09 22:26:00
-description: "Retour d’expérience sur l’installation d’OpenWebUI sur un serveur personnel avec authentification OIDC via PocketID et configuration de Caddy."
+description: "Retour d’expérience sur Open WebUI avec Ollama, une authentification OIDC via Pocket ID et un reverse proxy Caddy."
 type: post
 tags: open-web-ui,pocket-id,caddy,oidc,passkeys,home-server
 slug: open-web-ui
 ---
 
-Apres de monbreuse utilisation de chat IA avec de multiple services differents, J'ai voulu mieux comprendre comment cela fonctionne et comment fonctionne les interation avec les differents provider.
+Après avoir utilisé plusieurs services de chat IA, j’ai voulu mieux comprendre les interactions entre une interface et différents fournisseurs de modèles. J’ai donc installé Open WebUI sur mon serveur personnel, avec Ollama sur mon MacBook pour faire tourner des modèles localement.
 
-Meme si dans ce article je montre ma connection avec ollama, je ne fais pas cette installation pour avoir plus de privatie donc je ne me ferme pas le connecter a des provider de model frontiere que je ne pourrais pas faire tourner sur mon grille pain euuh mon home serveur.
+La confidentialité n’est pas la seule raison de cette installation : je garde aussi la possibilité de connecter des fournisseurs cloud pour utiliser des modèles que mon grille-pain… pardon, mon serveur personnel ne pourrait pas faire tourner. Dans ce cas, les données envoyées au fournisseur quittent évidemment mon réseau.
 
 ## Architecture
 
-J ai fait le choix d'OpenWebUi par rapport a librechat juste car je chercher quelle chose de deja prevue a etre conencter a ollama par rapport a librechat qui est plus prevu pour se connecter a des modeles cloud.
+J’ai choisi Open WebUI plutôt que LibreChat parce que l’intégration avec Ollama correspondait à mon besoin. Ce choix ne signifie pas que LibreChat se limite aux modèles cloud : vérifie les possibilités de chaque projet selon les fournisseurs que tu veux utiliser.
+
+![Architecture reliant le navigateur à Open WebUI via Caddy, avec Pocket ID pour l’authentification et Ollama sur un MacBook. Les fournisseurs cloud restent optionnels.](/assets/diagrams/post/open-web-ui/architecture.svg)
+
+Caddy reçoit les connexions HTTPS et les transmet à Open WebUI, installé dans un conteneur LXC sur Proxmox. Pocket ID gère l’authentification OIDC et les passkeys. Open WebUI contacte ensuite Ollama sur le MacBook via le réseau local ; un fournisseur cloud peut aussi être configuré séparément.
 
 ## Installation
 
-### Configuration de Caddy
+Cette configuration suppose que Proxmox, Caddy et Pocket ID sont déjà en place, et que les services peuvent communiquer entre eux. Remplace les domaines et les valeurs entre chevrons par les tiens. Les exemples ci-dessous utilisent des domaines fictifs.
 
-Plus tot simple je reste sur une config minal pour mon config caddy:
+### Configurer Caddy
 
-```bash
-openwebui.<ton-domaine> {
-	tls {
-		dns duckdns {env.DUCKDNS_TOKEN} # Si tu utilise duckdns pour ton certificat
-	}
+Je garde une configuration minimale pour le reverse proxy :
 
-	reverse_proxy <ip-de-ton-conteneur>:8080
+```caddyfile
+openwebui.example.invalid {
+    tls {
+        dns duckdns {env.DUCKDNS_TOKEN}
+    }
+
+    reverse_proxy <OPEN_WEBUI_HOST>:8080
 }
 ```
 
-### Configuration de PocketID
+Le bloc `dns duckdns` correspond à mon usage de DuckDNS pour le challenge DNS des certificats ; adapte-le ou retire-le selon ton fournisseur et ta méthode de validation. Le module DNS DuckDNS doit être disponible dans ton installation de Caddy et le token doit être fourni à son environnement, sans être ajouté au fichier de configuration.
 
-Pour ma part je vais utiliser PocketID pour l'authentification OIDC, car je l'utilise deja pour d'autre service et je peux donc me connecter avec mon compte existant.
-Cette partie et pas obligatoire mais cela simplie grandement la gestion des comptes et de l'authentification pour toute la famille.
+### Configurer Pocket ID
 
-Avantage OpenWebUi supporte l'authentification OIDC avec les passkeys donc pas besoin de faire la configuration dans caddy on pourra l'ajouter directement dans OpenWebUI.
+J’utilise déjà Pocket ID pour d’autres services : l’intégration OIDC me permet donc de réutiliser les comptes existants, notamment pour ma famille. Elle reste facultative si tu préfères gérer les comptes directement dans Open WebUI.
 
-Du coup dans votre pocketId cree un nouveau client OIDC pour OpenWebUI et recupere le client_id et le client_secret.
-Pour l'url callback ajoute `https://openwebui.<ton-domaine>/oauth/oidc/callback`.
-Puis ajouter votre groupe de user dans le client OIDC pour que seul les user de ce groupe puisse se connecter a OpenWebUI.
+Crée un client OIDC dans Pocket ID et récupère son identifiant et son secret. Configure cette URL de redirection en remplaçant le domaine fictif :
 
-### Installation d'OpenWebUI
+```text
+https://openwebui.example.invalid/oauth/oidc/callback
+```
 
-Pour une question de simpliciter j'utilise le [script maintenue par la communauter proxmox pour cree un conteneur LXC avec OpenWebUI.](https://community-scripts.org/scripts/openwebui)
+Associe au client le groupe autorisé à se connecter. Pocket ID gère les passkeys lors de l’authentification ; il n’est pas nécessaire d’ajouter une couche d’authentification OIDC dans Caddy pour ce parcours.
 
-Directement dans host de votre noeud Proxmox:
+### Installer Open WebUI
+
+Pour simplifier l’installation, j’ai utilisé le [script Open WebUI maintenu par la communauté Proxmox](https://community-scripts.org/scripts/openwebui), qui crée un conteneur LXC. Avant de l’exécuter sur l’hôte Proxmox, consulte le script et sa provenance : cette commande télécharge et exécute du code distant avec les droits de l’utilisateur courant.
+
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/ct/openwebui.sh)"
 ```
 
-> Bon a savoir: Pour vos future update de OpenWebUI, le script integre directement dans le contneur un fonction upgdate. Donc pour update aller dans la console du conteneur et taper update et suiver les instructions.
+Le script installe également une commande `update` dans le conteneur. Pour une mise à jour, sauvegarde d’abord le conteneur et les données, puis consulte les instructions proposées par cette commande.
 
-Une fois installer on va configurer l'authentification OIDC dans OpenWebUI. Pour cela on va editer le fichier .env du conteneur OpenWebUI:
+### Activer l’authentification OIDC
 
-```bash
-WEBUI_URL=https://openwebui.<ton-domaine>
-OPENID_REDIRECT_URI=https://openwebui.<ton-domaine>/oauth/oidc/callback
-OPENID_PROVIDER_URL=https://pocketid.<ton-domaine>/well-known/openid-configuration
+Dans mon installation, la configuration d’Open WebUI se trouve dans le fichier `.env` du conteneur. Ajoute ou adapte les variables suivantes, sans publier le secret du client :
 
-OAUTH_CLIENT_ID=<client_id>
-OAUTH_CLIENT_SECRET=<client_secret>
+```dotenv
+WEBUI_URL=https://openwebui.example.invalid
+OPENID_REDIRECT_URI=https://openwebui.example.invalid/oauth/oidc/callback
+OPENID_PROVIDER_URL=https://pocketid.example.invalid/.well-known/openid-configuration
+
+OAUTH_CLIENT_ID=<CLIENT_ID>
+OAUTH_CLIENT_SECRET=[SECRET_REDACTED]
 OAUTH_PROVIDER_NAME=PocketID
 OAUTH_SCOPES="openid email profile"
 ENABLE_OAUTH_SIGNUP=true
 ```
 
-Puis restarter et connecter vous a l'interface OpenWebUI avec votre compte PocketID.
+L’URL de découverte ci-dessus suppose que Pocket ID est servi à la racine du domaine ; vérifie-la dans sa configuration. Redémarre ensuite Open WebUI selon la méthode utilisée par ton installation et teste la connexion avec un compte Pocket ID autorisé. Vérifie aussi qu’un compte hors du groupe autorisé ne peut pas se connecter.
 
-Pour ma part je me suis connecter a l'interface OpenWebUI avant de configurer l'authentification OIDC, et j ai cree un compte local.
-Une fois apres avoir configurer l'authentification OIDC, je donne les droits admin a mon user cree et lier avec PocketID Je test si celui-ci fonctionne bien puis  je me retouve donc avec un compte admin que je ne veux plus. 
+### Gérer le premier compte administrateur
 
-Le probleme c'est que mon compte admin local a pour date de creeation la premiere dans la base de donnees donc mon compte pocketid n'a pas les droits pour supprimer le compte admin local.
+Dans mon cas, j’avais créé un compte administrateur local avant d’activer OIDC. Après avoir donné les droits d’administration à mon compte Pocket ID et vérifié sa connexion, je souhaitais supprimer le compte local. L’interface ne me permettait pas de supprimer ce premier compte administrateur.
 
-Pour resoudre ce probleme on va donc modifier la base de donnees sqlite pour changer la date de creeation du compte local pour que celui-ci soit plus recent que le compte pocketid.
+J’ai alors modifié son rôle et sa date de création directement dans la base SQLite. C’est une manipulation risquée et dépendante de la version d’Open WebUI : elle peut rendre la base incohérente ou compliquer la récupération du service. Je ne la recommande pas comme procédure générale. Avant toute intervention sur la base, vérifie les options prises en charge par ta version, arrête le service et réalise une sauvegarde restaurable. Conserver un compte local de secours peut aussi être utile si Pocket ID devient indisponible.
 
-```bash
-apt update && apt install sqlite3 -y
-```
+Une fois le compte Pocket ID administrateur vérifié, j’ai désactivé le formulaire de connexion local dans **Settings > Authentication > Login Form**. Attention : cela retire aussi cette voie d’accès en cas de panne OIDC. Prévois et teste une procédure de récupération adaptée à ton installation avant de la désactiver.
 
-```bash
-sqlite3 /root/.open-webui/webui.db
-```
+## Faire tourner les modèles avec Ollama
 
-```bash
-UPDATE user SET role = 'user' WHERE email = '<e-mai_du_compte_a_supprimer>';
+L’interface et l’authentification sont en place, mais il faut encore un moteur et un modèle pour discuter. J’utilise Ollama sur mon MacBook pour sa simplicité et son fonctionnement sans interface graphique.
 
-UPDATE user SET created_at = created_at + 100000, updated_at = updated_at + 100000 WHERE email = '<e-mai_du_compte_a_supprimer>';
+### Installer et configurer Ollama sur macOS
 
-.exit
-```
-
-Pour ma part je supprime la connection avec part fomulaire pour etre sur que uniqument pocketid est utiliser pour se connecter a OpenWebUI.
-
-j'ai donc decocher la case **Login Form** dans l'interface OpenWebUI dans:
-**Setting > Authentication > Login Form**
-
-## Ollama
-
-Bon super on a une interface et une authentifiaction mais on peu toujours pas chatter.
-Pour ma part j'ai choisi d'utiliser Ollama pour faire tourner les modeles localement sur mon MacBook il a bien autre outils pour faire cela mais j'utilise ollama pour sa simpliciter et sont headless.
-
-### installation sur le MacBook
-
-#### Installation de Ollama et configuration
+Installe Ollama avec Homebrew :
 
 ```bash
 brew install ollama
 ```
 
-```bash
-brew services stop ollama
-```
+Pour qu’Open WebUI puisse le joindre, Ollama doit écouter sur une adresse accessible depuis le conteneur, et pas seulement sur l’interface locale du MacBook. Dans ma configuration, les variables à adapter sont les suivantes :
 
-On va donc configurer l'interface pour que OpenWebUI puisse se connecter a Ollama sur le MacBook.
-
-```bash
-mkdir -p ~/.homebrew/services/
-vi ~/.homebrew/services/ollama.env
-```
-et ajouter les variables d'environnement suivantes:
-
-```ollama.env
+```dotenv
 OLLAMA_HOST=0.0.0.0
-OLLAMA_ORIGINS=https://openwebui.<ton-domaine>
+OLLAMA_ORIGINS=https://openwebui.example.invalid
 ```
 
-```bash
-brew services start ollama
-```
+`0.0.0.0` expose le service sur toutes les interfaces réseau du MacBook : préfère une adresse spécifique si possible et filtre les accès réseau. `OLLAMA_ORIGINS` concerne les origines autorisées pour les requêtes des navigateurs ; ce n’est ni une authentification ni un pare-feu, et cela ne protège pas l’API contre les clients réseau.
 
-#### Configuration du pare-feu sur MacOS
+Le chargement des variables dépend de la manière dont le service Ollama est lancé. La présence d’un fichier `~/.homebrew/services/ollama.env` ne garantit pas que Homebrew le charge : ce point reste à vérifier pour la version et le service utilisés. Vérifie la méthode propre à ton installation, redémarre le service, puis contrôle son adresse d’écoute avant de continuer. Assure-toi également qu’un modèle est disponible dans Ollama.
 
-Ajouter ollama au pare-feu:
+### Configurer le pare-feu macOS
+
+Sur mon MacBook Apple Silicon, j’ai ajouté Ollama au pare-feu applicatif et autorisé les connexions entrantes :
+
 ```bash
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /opt/homebrew/bin/ollama
-```
-
-Autoriser les connexions entrantes:
-```bash
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --unblockapp /opt/homebrew/bin/ollama
 ```
 
-Vérifier:
+Vérifie ensuite son état :
+
 ```bash
 /usr/libexec/ApplicationFirewall/socketfilterfw --getappblocked /opt/homebrew/bin/ollama
 ```
 
-#### Disponibilité de Ollama sur le réseau local
+Le chemin `/opt/homebrew/bin/ollama` dépend de l’installation Homebrew. Cette autorisation concerne l’application, pas uniquement Open WebUI : utilise aussi les règles réseau disponibles pour limiter les clients qui peuvent joindre le port `11434`.
 
-Mon Macbook dispose d'une IP fixe sur mon réseau local, donc il est accessible depuis mon home serveur. Mais il va ce mettre en veille et je ne veux pas selement utiliser OpenWebUI quand mon MacBook est allumer. Donc je vais utiliser [Amphetamine](https://apps.apple.com/us/app/amphetamine/id937984704) pour garder mon MacBook allumer et accessible sur le réseau local.
-Et je vais autoriser l endormisement uniquement de mon ecran pour que mon MacBook reste allumer et accessible sur le réseau local.
+### Garder Ollama disponible sur le réseau local
 
-### Relier OpenWebUI a Ollama
+Mon MacBook dispose d’une adresse IP fixe sur le réseau local. Pour qu’Ollama reste accessible même lorsque je n’utilise pas le MacBook, j’utilise [Amphetamine](https://apps.apple.com/us/app/amphetamine/id937984704) pour empêcher la mise en veille de la machine tout en laissant l’écran s’éteindre.
 
-Aller dans l'interface OpenWebUI dans:
+Ce choix consomme de l’énergie et suppose que le MacBook reste allumé et connecté au réseau. S’il dort ou s’il est éteint, les modèles locaux ne seront pas disponibles.
 
-**Settings > AI > Connections >  Manage Ollama API Connections**
+### Relier Open WebUI à Ollama
 
-Puis ajouter http://<IP_DE_VOTRE_MACBOOK>:11434
+Dans Open WebUI, ouvre **Settings > AI > Connections > Manage Ollama API Connections**, puis ajoute l’URL suivante en remplaçant l’adresse par celle du MacBook :
 
-### Petit rappel sur la sécurité
+```text
+http://<MACBOOK_IP>:11434
+```
 
-N'ouvrer par en directe sur le port 11434 de votre MacBook sur internet.
-Ajouter des regle firewall dans proxmox pour faire communiquer votre conteneur caddy avec OpenWebUI
-Limiter auu maximum les ports ouvert vers internet.
+Les intitulés peuvent varier selon la version. Vérifie que le conteneur Open WebUI peut joindre ce port, que le modèle apparaît dans l’interface et qu’une requête reçoit une réponse. Si aucun modèle n’apparaît, contrôle d’abord l’adresse d’écoute, le pare-feu et les modèles installés sur Ollama.
 
----
-Merci d'avoir pris le temps de lire cet article, j'espere que cela pourra aider certain a mieux comprendre comment fonctionne OpenWebUI et comment l'installer sur un home serveur avec une authentification OIDC via PocketID et configuration de Caddy.
+## Limites de sécurité
+
+- N’expose pas directement le port Ollama `11434` sur Internet. Limite son accès aux machines autorisées du réseau local : le filtrage des origines navigateur ne remplace pas un contrôle d’accès.
+- Limite les flux entre Caddy et Open WebUI ainsi qu’entre Open WebUI et Ollama, notamment avec les règles de pare-feu Proxmox et celles du réseau.
+- Protège le secret OIDC et limite les ports exposés. L’accès à un modèle local ne garantit pas la confidentialité si tu sélectionnes ensuite un fournisseur cloud.
+
+Cette installation me donne une interface commune pour mes modèles locaux, avec la possibilité d’ajouter des fournisseurs externes. Le compromis reste la disponibilité du MacBook et de Pocket ID : garde une solution de récupération avant de rendre l’authentification locale inaccessible.
 
 **Ka-chow** 🚀
