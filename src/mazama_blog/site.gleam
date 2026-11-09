@@ -409,6 +409,10 @@ fn page(
         attribute.rel("stylesheet"),
         attribute.href("/styles/site.css"),
       ]),
+      html.style(
+        [],
+        ".site-footer .support-widget, .site-footer .support-widget * { color: #172006 !important; }",
+      ),
       html.link([
         attribute.rel("alternate"),
         attribute.type_("application/rss+xml"),
@@ -468,6 +472,20 @@ fn page(
         html.div([attribute.class("shell")], [
           html.p([], [html.text("Mazama · Carnet d'atelier DevOps")]),
           html.a([attribute.href("/rss.xml")], [html.text("Flux RSS")]),
+          html.div([attribute.class("support-widget")], [
+            html.script(
+              [
+                attribute.src(
+                  "https://storage.ko-fi.com/cdn/widget/Widget_2.js",
+                ),
+              ],
+              "",
+            ),
+            html.script(
+              [],
+              "kofiwidget2.init('Soutenir mon travail', '#B7F55B', 'R6R01UBBFD');kofiwidget2.draw();",
+            ),
+          ]),
         ]),
       ]),
     ]),
