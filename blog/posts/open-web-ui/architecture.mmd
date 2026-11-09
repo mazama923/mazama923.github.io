@@ -1,0 +1,14 @@
+flowchart TB
+    user["Utilisateur et navigateur"]
+    caddy["Caddy — reverse proxy HTTPS"]
+    webui["Open WebUI — conteneur LXC"]
+    pocketid["Pocket ID — fournisseur OIDC"]
+    ollama["Ollama — MacBook sur le réseau local"]
+    cloud["Fournisseurs de modèles cloud — optionnels"]
+
+    user -->|"HTTPS"| caddy
+    caddy -->|"HTTP :8080"| webui
+    user -->|"Authentification et passkey"| pocketid
+    webui -->|"OIDC"| pocketid
+    webui -->|"API Ollama :11434"| ollama
+    webui -.->|"API, si configurée"| cloud

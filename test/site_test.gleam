@@ -246,6 +246,38 @@ pub fn static_routes_have_sitemap_canonicals_test() {
   string.contains(home, description) |> should.be_true
 }
 
+pub fn support_widget_is_in_the_footer_on_all_page_types_test() {
+  let contents = [html.p([], [html.text("A paragraph.")])]
+  let documents = [
+    render_route("/"),
+    render_route("/blog"),
+    render_post(sample_post("post", "sample-post", contents)),
+    render_post(sample_post("page", "sample-page", contents)),
+  ]
+  let script_url = "https://storage.ko-fi.com/cdn/widget/Widget_2.js"
+  let initialization =
+    "kofiwidget2.init('Soutenir mon travail', '#B7F55B', 'R6R01UBBFD');kofiwidget2.draw();"
+
+  documents
+  |> list.each(fn(document) {
+    occurrences(document, script_url) |> should.equal(1)
+    occurrences(document, initialization) |> should.equal(1)
+    let footer =
+      document
+      |> string.split("<footer")
+      |> list.drop(1)
+      |> list.first
+      |> should.be_ok
+      |> string.split("</footer>")
+      |> list.first
+      |> should.be_ok
+    string.contains(footer, "class=\"support-widget\"") |> should.be_true
+    string.contains(footer, script_url) |> should.be_true
+    string.contains(footer, initialization) |> should.be_true
+    string.contains(document, "color: #172006 !important") |> should.be_true
+  })
+}
+
 pub fn content_canonicals_follow_configured_routes_test() {
   let contents = [html.p([], [html.text("A paragraph.")])]
   let post = sample_post("post", "sample-post", contents)
