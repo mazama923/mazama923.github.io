@@ -21,7 +21,7 @@ Caddy reçoit les connexions HTTPS et les transmet à Open WebUI, installé dans
 
 ## Installation
 
-Cette configuration suppose que Proxmox, Caddy et Pocket ID sont déjà en place, et que les services peuvent communiquer entre eux. Remplace les domaines et les valeurs entre chevrons par les tiens. Les exemples ci-dessous utilisent des domaines fictifs.
+Cette configuration suppose que Proxmox, Caddy et Pocket ID sont déjà en place, et que les services peuvent communiquer entre eux. Remplace les domaines et les valeurs entre chevrons par ceux de ton installation. Les exemples ci-dessous utilisent des domaines fictifs.
 
 ### Configurer Caddy
 
@@ -37,7 +37,7 @@ openwebui.example.invalid {
 }
 ```
 
-Le bloc `dns duckdns` correspond à mon usage de DuckDNS pour le challenge DNS des certificats ( adapte-le ou retire-le selon ton fournisseur et ta méthode de validation). Le module DNS DuckDNS doit être disponible dans ton installation de Caddy et le token doit être fourni à son environnement, sans être ajouté au fichier de configuration.
+Le bloc `dns duckdns` correspond à mon usage de DuckDNS pour le challenge DNS des certificats (adapte-le ou retire-le selon ton fournisseur et ta méthode de validation). Le module DNS DuckDNS doit être disponible dans ton installation de Caddy et le token doit être fourni à son environnement, sans être ajouté au fichier de configuration.
 
 ### Configurer Pocket ID
 
@@ -146,7 +146,7 @@ http://<MACBOOK_IP>:11434
 
 ## Limites de sécurité
 
-- N’expose pas directement le port Ollama `11434` sur Internet. Limite son accès aux machines autorisées du réseau local : le filtrage des origines navigateur ne remplace pas un contrôle d’accès.
+- N’expose pas directement le port Ollama `11434` sur Internet. Limite son accès aux machines autorisées du réseau local : le filtrage des origines des requêtes du navigateur ne remplace pas un contrôle d’accès.
 - Limite les flux entre Caddy et Open WebUI ainsi qu’entre Open WebUI et Ollama, notamment avec les règles de pare-feu Proxmox et celles du réseau.
 - Protège le secret OIDC et limite les ports exposés. L’accès à un modèle local ne garantit pas la confidentialité si tu sélectionnes ensuite un fournisseur cloud.
 
