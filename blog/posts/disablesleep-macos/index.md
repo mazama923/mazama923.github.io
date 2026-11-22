@@ -1,6 +1,6 @@
 ---
 title: "Désactiver la mise en veille d’un Mac avec pmset"
-date: 2026-03-22 00:39:00 Europe/Paris
+date: 2026-11-22 00:39:00 Europe/Paris
 description: "Empêcher la mise en veille d’un Mac sous macOS avec pmset pour garder Ollama disponible, puis rétablir les réglages de veille."
 slug: disablesleep-macos
 type: post
